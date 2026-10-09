@@ -1,0 +1,62 @@
+# Controlled vocabulary for component roles. A component may carry 1-3 roles.
+# Roles make components comparable across repositories: names are local, roles are shared.
+# `implemented_by` lists signal subcategories that can implement the role; only those count as
+# the role's implementation in cross-repository comparisons (an S3 client inside an LLM adapter
+# component is not how that component adapts LLMs).
+interface-cli:
+  definition: "Command-line entry surface; parses arguments and dispatches to the rest of the system."
+  implemented_by: []
+interface-http-api:
+  definition: "HTTP/RPC API surface (routes, request/response models)."
+  implemented_by: [http-server, rpc, websocket]
+interface-ui:
+  definition: "Graphical or web user interface rendered for humans."
+  implemented_by: []
+orchestration:
+  definition: "Coordinates multi-step workflows, pipelines or agent loops across other components."
+  implemented_by: [llm-orchestration-framework, task-queue, agent-tool-protocol]
+llm-provider-adapter:
+  definition: "Wraps a hosted model API (OpenAI, Anthropic, ...) behind an internal interface."
+  implemented_by: [llm-provider-api, llm-gateway, local-model-runtime, model-library]
+model-runtime:
+  definition: "Runs models locally (inference engines, tensor frameworks)."
+  implemented_by: [local-model-runtime, model-library, tensor-framework]
+ingestion:
+  definition: "Reads and parses external sources (files, web, databases) into internal documents."
+  implemented_by: [nlp, tabular-data, columnar-file, browser-automation, http-client]
+chunking-indexing:
+  definition: "Splits content and builds indexes or embeddings for later lookup."
+  implemented_by: [nlp, embeddings, vector-index, text-features, tokenization, dimensionality-reduction]
+retrieval:
+  definition: "Finds relevant items for a query (vector, lexical, graph or hybrid search)."
+  implemented_by: [vector-store, vector-index, lexical-retrieval, llm-orchestration-framework, string-matching]
+knowledge-graph:
+  definition: "Builds or analyzes an explicit graph of entities and relations."
+  implemented_by: [graph]
+generation:
+  definition: "Builds prompts and turns model outputs into the product's answers or artifacts."
+  implemented_by: [llm-provider-api, llm-gateway, llm-orchestration-framework, tokenization]
+tool-execution:
+  definition: "Defines, sandboxes or executes tools/functions on behalf of a model."
+  implemented_by: [agent-tool-protocol, shell, browser-automation, dynamic-code]
+persistence:
+  definition: "Stores and loads state (databases, logs, caches, files)."
+  implemented_by: [relational-store, orm, document-store, key-value-store, object-store, analytical-store, columnar-file, scientific-file, serialization, vector-store]
+plugin-host:
+  definition: "Discovers, loads and registers extensions."
+  implemented_by: [plugin-system, dynamic-import]
+domain-model:
+  definition: "Core data types and abstractions other components build on."
+  implemented_by: []
+background-jobs:
+  definition: "Workers, queues and scheduled tasks."
+  implemented_by: [task-queue, message-queue, key-value-store]
+configuration:
+  definition: "Settings, environment handling, dependency injection."
+  implemented_by: []
+observability:
+  definition: "Logging, tracing, metrics, events."
+  implemented_by: []
+utilities:
+  definition: "Shared helpers with no domain responsibility."
+  implemented_by: []

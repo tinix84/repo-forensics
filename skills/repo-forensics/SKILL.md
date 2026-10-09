@@ -56,12 +56,16 @@ Read `report.json` selectively; do not dump it whole into context on large repos
 
 Read `references/inference-guide.md` before writing hypotheses. Then, with the clone open:
 
-1. **Component responsibilities.** For the largest components (up to ~10), read the entry
-   modules, hub modules and files carrying signals. State a one-sentence responsibility, plus
-   inputs/outputs where visible. List every file you actually read in `files_read`: a
-   responsibility you did not read code for must have status `UNKNOWN`.
-2. **Architecture hypotheses.** Propose 1–4 candidate patterns (layered, hexagonal, pipeline,
-   plugin, RAG, client–server, …). For each: cite supporting evidence ids, then actively search
+1. **Component responsibilities and roles.** For the largest components (up to ~10), read the
+   entry modules, hub modules and files carrying signals. State a one-sentence responsibility,
+   inputs/outputs where visible, and 1–3 `roles` from the controlled vocabulary
+   (`src/repo_forensics/data/vocab/roles.yaml`). Roles are what make components comparable
+   across repositories, so pick by the job the code does, not by the directory name. List
+   every file you actually opened in `files_read`, and only those; a responsibility you did
+   not read code for must have status `UNKNOWN`.
+2. **Architecture hypotheses.** Propose 1–4 candidate patterns, each with a `pattern_id` from
+   `data/vocab/patterns.yaml` (layered, hexagonal, plugin, pipeline, rag, graph-rag, agent-loop,
+   client-server, worker-queue, …). For each: cite supporting evidence ids, then actively search
    for counter-evidence (e.g. for "layered": imports from lower to upper layers, component
    cycles at import time). Record what you searched for even when nothing was found. Give a
    concrete `how_to_falsify`.
@@ -91,7 +95,17 @@ Then build the HTML report, which renders the inference layer only when the bund
 repo-forensics render analysis/<name>      # writes analysis/<name>/report.html
 ```
 
-### 5. Report to the user
+### 5. Add to the corpus (when comparing repositories)
+
+```bash
+repo-forensics corpus add analysis/<name> --corpus corpus/
+repo-forensics corpus compare --corpus corpus/     # facts.jsonl, compare.json, compare.html
+```
+
+Only pinned bundles enter the corpus; an invalid `hypotheses.json` is dropped (facts only).
+Cross-repository statements take the weakest status of their inputs.
+
+### 6. Report to the user
 
 Keep facts and inferences visibly separate:
 

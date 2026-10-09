@@ -13,7 +13,7 @@
     "requested_ref": "fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4",
     "default_branch": null,
     "dirty": false,
-    "analyzed_at": "2026-10-09T05:53:42+00:00",
+    "analyzed_at": "2026-10-09T07:33:47+00:00",
     "license": "Apache-2.0",
     "license_file": "LICENSE",
     "pinned": true
@@ -819,19 +819,19 @@
         "fan_out": 8
       },
       {
-        "module": "llm.models",
-        "fan_out": 6
-      },
-      {
         "module": "llm.cli",
         "fan_out": 6
       },
       {
-        "module": "llm.logs",
-        "fan_out": 5
+        "module": "llm.models",
+        "fan_out": 6
       },
       {
         "module": "llm.default_plugins.openai_models",
+        "fan_out": 5
+      },
+      {
+        "module": "llm.logs",
         "fan_out": 5
       },
       {
@@ -847,11 +847,11 @@
         "fan_out": 2
       },
       {
-        "module": "llm.__main__",
+        "module": "llm.migrations",
         "fan_out": 1
       },
       {
-        "module": "llm.migrations",
+        "module": "llm.__main__",
         "fan_out": 1
       }
     ],
@@ -928,8 +928,8 @@
         "depended_on_by": {
           "llm (root modules)": 3,
           "llm.default_plugins": 1,
-          "llm.logs": 1,
-          "llm.cli": 1
+          "llm.cli": 1,
+          "llm.logs": 1
         },
         "dependency_depth": 0,
         "third_party": {
@@ -990,10 +990,10 @@
           "llm.cli": 1
         },
         "depended_on_by": {
-          "llm.models": 5,
           "llm.default_plugins": 5,
-          "llm.logs": 4,
-          "llm.cli": 4
+          "llm.cli": 4,
+          "llm.models": 5,
+          "llm.logs": 4
         },
         "dependency_depth": 0,
         "third_party": {
@@ -1033,8 +1033,8 @@
           "llm.models": 1
         },
         "depended_on_by": {
-          "llm.models": 1,
-          "llm.cli": 1
+          "llm.cli": 1,
+          "llm.models": 1
         },
         "dependency_depth": 0,
         "third_party": {
@@ -1654,5 +1654,5 @@
     "INFERRED": 2,
     "UNKNOWN": 3
   },
-  "evidence_digest": "sha256:3a8165cbc71de548a45f5a0c2191578a"
+  "evidence_digest": "sha256:14a27ee1cf451a87553931578b05ce39"
 }

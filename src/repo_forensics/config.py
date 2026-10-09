@@ -46,6 +46,8 @@ class Config:
     non_import_tools: set[str]
     signatures: list[Signature]
     entrypoint_detectors: list[dict]
+    roles: dict[str, str] = field(default_factory=dict)
+    patterns: dict[str, str] = field(default_factory=dict)
     extra: dict = field(default_factory=dict)
 
 
@@ -87,4 +89,6 @@ def load_config(extra_signature_dir: str | None = None) -> Config:
         non_import_tools={normalize_dist(x) for x in (_load("non_import_tools.yaml") or [])},
         signatures=sigs,
         entrypoint_detectors=_load("entrypoint_detectors.yaml") or [],
+        roles=_load("vocab/roles.yaml") or {},
+        patterns=_load("vocab/patterns.yaml") or {},
     )

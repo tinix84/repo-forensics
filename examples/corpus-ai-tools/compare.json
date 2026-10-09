@@ -1,0 +1,1753 @@
+{
+  "schema_version": "0.2.0",
+  "generated_at": "2026-10-09T07:38:44+00:00",
+  "repos": [
+    {
+      "repo": "microsoft/graphrag",
+      "ref": "microsoft/graphrag@5faaaf4f5685",
+      "shape": [
+        "UI application",
+        "CLI application",
+        "library (importable package)"
+      ],
+      "ai": "AI_CORE",
+      "deterministic_core": [
+        "hierarchical Leiden community detection",
+        "graph pruning and largest connected component",
+        "context building and token budgeting",
+        "vector search"
+      ],
+      "production_modules": 451,
+      "code_lines": 30912,
+      "components": 19,
+      "test_ratio": 0.297,
+      "cc_p95": 9.8,
+      "import_time_cycles": 0,
+      "entry_types": [
+        "cli",
+        "library-api",
+        "script",
+        "ui"
+      ],
+      "inference": true,
+      "unknowns": 5
+    },
+    {
+      "repo": "simonw/llm",
+      "ref": "simonw/llm@fe283cb9b4d9",
+      "shape": [
+        "CLI application",
+        "library (importable package)"
+      ],
+      "ai": "AI_CORE",
+      "deterministic_core": [
+        "plugin loading",
+        "conversation bookkeeping",
+        "SQLite logging"
+      ],
+      "production_modules": 19,
+      "code_lines": 13930,
+      "components": 5,
+      "test_ratio": 1.22,
+      "cc_p95": 18.45,
+      "import_time_cycles": 0,
+      "entry_types": [
+        "cli",
+        "library-api"
+      ],
+      "inference": true,
+      "unknowns": 4
+    },
+    {
+      "repo": "zylon-ai/private-gpt",
+      "ref": "zylon-ai/private-gpt@3cefd532cb6c",
+      "shape": [
+        "service (HTTP)",
+        "background worker",
+        "CLI application",
+        "library (importable package)"
+      ],
+      "ai": "AI_CORE",
+      "deterministic_core": [
+        "document parsing and chunking",
+        "vector search",
+        "job scheduling",
+        "HTTP API"
+      ],
+      "production_modules": 688,
+      "code_lines": 80204,
+      "components": 25,
+      "test_ratio": 0.648,
+      "cc_p95": 10.0,
+      "import_time_cycles": 1,
+      "entry_types": [
+        "cli",
+        "http",
+        "library-api",
+        "script",
+        "worker"
+      ],
+      "inference": true,
+      "unknowns": 5
+    }
+  ],
+  "primitives": [
+    {
+      "primitive": "hosted-llm-inference",
+      "category": "ai",
+      "cells": {
+        "microsoft/graphrag": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "litellm",
+            "openai"
+          ],
+          "library_levels": {
+            "litellm": "CALLED",
+            "openai": "CALLED"
+          },
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0107",
+            "microsoft/graphrag@5faaaf4f5685#EV-0106"
+          ],
+          "role": "CENTRAL",
+          "role_status": "INFERRED",
+          "refined": []
+        },
+        "simonw/llm": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "openai"
+          ],
+          "library_levels": {
+            "openai": "CALLED"
+          },
+          "evidence": [
+            "simonw/llm@fe283cb9b4d9#EV-0030"
+          ],
+          "role": "SUPPORTING",
+          "role_status": "INFERRED",
+          "refined": []
+        },
+        "zylon-ai/private-gpt": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "openai"
+          ],
+          "library_levels": {
+            "openai": "CALLED",
+            "anthropic": "DECLARED"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0139",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0140"
+          ],
+          "role": "SUPPORTING",
+          "role_status": "INFERRED",
+          "refined": []
+        }
+      },
+      "used_by": 3,
+      "shared": true,
+      "libraries_across_repos": [
+        "litellm",
+        "openai"
+      ],
+      "claim": "3 of 3 repositories import or call hosted-llm-inference via 2 different libraries",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "relational-store",
+      "category": "storage",
+      "cells": {
+        "microsoft/graphrag": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "sqlite3 (stdlib)"
+          ],
+          "library_levels": {
+            "sqlite3 (stdlib)": "CALLED"
+          },
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0114"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        },
+        "simonw/llm": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "sqlite3 (stdlib)"
+          ],
+          "library_levels": {
+            "sqlite3 (stdlib)": "CALLED"
+          },
+          "evidence": [
+            "simonw/llm@fe283cb9b4d9#EV-0031"
+          ],
+          "role": "SUPPORTING",
+          "role_status": "INFERRED",
+          "refined": []
+        },
+        "zylon-ai/private-gpt": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "psycopg / asyncpg",
+            "sqlalchemy"
+          ],
+          "library_levels": {
+            "sqlalchemy": "CALLED",
+            "psycopg / asyncpg": "IMPORTED",
+            "mysql drivers": "DECLARED"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0149",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0150",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0151"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        }
+      },
+      "used_by": 3,
+      "shared": true,
+      "libraries_across_repos": [
+        "psycopg / asyncpg",
+        "sqlalchemy",
+        "sqlite3 (stdlib)"
+      ],
+      "claim": "3 of 3 repositories import or call relational-store via 3 different libraries",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "bpe-tokenization",
+      "category": "ai",
+      "cells": {
+        "microsoft/graphrag": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "tiktoken"
+          ],
+          "library_levels": {
+            "tiktoken": "CALLED"
+          },
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0108"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        },
+        "zylon-ai/private-gpt": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "tiktoken"
+          ],
+          "library_levels": {
+            "tiktoken": "CALLED"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0145"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        }
+      },
+      "used_by": 2,
+      "shared": true,
+      "libraries_across_repos": [
+        "tiktoken"
+      ],
+      "claim": "2 of 3 repositories import or call bpe-tokenization",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "linguistic-parsing",
+      "category": "algorithm",
+      "cells": {
+        "microsoft/graphrag": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "spacy"
+          ],
+          "library_levels": {
+            "spacy": "CALLED"
+          },
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0113"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        },
+        "zylon-ai/private-gpt": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "spacy"
+          ],
+          "library_levels": {
+            "spacy": "CALLED"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0148"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        }
+      },
+      "used_by": 2,
+      "shared": true,
+      "libraries_across_repos": [
+        "spacy"
+      ],
+      "claim": "2 of 3 repositories import or call linguistic-parsing",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "approximate-nearest-neighbor",
+      "category": "storage",
+      "cells": {
+        "microsoft/graphrag": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "azure-search-documents",
+            "lancedb"
+          ],
+          "library_levels": {
+            "azure-search-documents": "CALLED",
+            "lancedb": "CALLED"
+          },
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0120",
+            "microsoft/graphrag@5faaaf4f5685#EV-0115"
+          ],
+          "role": "SUPPORTING",
+          "role_status": "INFERRED",
+          "refined": []
+        },
+        "zylon-ai/private-gpt": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "qdrant-client"
+          ],
+          "library_levels": {
+            "qdrant-client": "CALLED"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0153"
+          ],
+          "role": "SUPPORTING",
+          "role_status": "INFERRED",
+          "refined": []
+        }
+      },
+      "used_by": 2,
+      "shared": true,
+      "libraries_across_repos": [
+        "azure-search-documents",
+        "lancedb",
+        "qdrant-client"
+      ],
+      "claim": "2 of 3 repositories import or call approximate-nearest-neighbor via 3 different libraries",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "dataframe",
+      "category": "storage",
+      "cells": {
+        "microsoft/graphrag": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "pandas"
+          ],
+          "library_levels": {
+            "pandas": "CALLED"
+          },
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0116"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        },
+        "zylon-ai/private-gpt": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "pandas"
+          ],
+          "library_levels": {
+            "pandas": "CALLED"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0154"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        }
+      },
+      "used_by": 2,
+      "shared": true,
+      "libraries_across_repos": [
+        "pandas"
+      ],
+      "claim": "2 of 3 repositories import or call dataframe",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "object-store",
+      "category": "storage",
+      "cells": {
+        "microsoft/graphrag": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "azure-storage-blob"
+          ],
+          "library_levels": {
+            "azure-storage-blob": "CALLED"
+          },
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0118"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        },
+        "zylon-ai/private-gpt": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "boto3"
+          ],
+          "library_levels": {
+            "boto3": "CALLED"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0155"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        }
+      },
+      "used_by": 2,
+      "shared": true,
+      "libraries_across_repos": [
+        "azure-storage-blob",
+        "boto3"
+      ],
+      "claim": "2 of 3 repositories import or call object-store via 2 different libraries",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "neural-network-inference",
+      "category": "ai",
+      "cells": {
+        "zylon-ai/private-gpt": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "transformers"
+          ],
+          "library_levels": {
+            "transformers": "CALLED"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0141"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        }
+      },
+      "used_by": 1,
+      "shared": false,
+      "libraries_across_repos": [
+        "transformers"
+      ],
+      "claim": "1 of 3 repositories import or call neural-network-inference",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "retrieval-augmented-generation",
+      "category": "ai",
+      "cells": {
+        "zylon-ai/private-gpt": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "llama-index"
+          ],
+          "library_levels": {
+            "llama-index": "CALLED"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0144"
+          ],
+          "role": "CENTRAL",
+          "role_status": "INFERRED",
+          "refined": []
+        }
+      },
+      "used_by": 1,
+      "shared": false,
+      "libraries_across_repos": [
+        "llama-index"
+      ],
+      "claim": "1 of 3 repositories import or call retrieval-augmented-generation",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "tool-calling-protocol",
+      "category": "ai",
+      "cells": {
+        "zylon-ai/private-gpt": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "mcp"
+          ],
+          "library_levels": {
+            "mcp": "CALLED"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0146"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        }
+      },
+      "used_by": 1,
+      "shared": false,
+      "libraries_across_repos": [
+        "mcp"
+      ],
+      "claim": "1 of 3 repositories import or call tool-calling-protocol",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "binary-search",
+      "category": "algorithm",
+      "cells": {
+        "zylon-ai/private-gpt": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "bisect (stdlib)"
+          ],
+          "library_levels": {
+            "bisect (stdlib)": "CALLED"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0147"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        }
+      },
+      "used_by": 1,
+      "shared": false,
+      "libraries_across_repos": [
+        "bisect (stdlib)"
+      ],
+      "claim": "1 of 3 repositories import or call binary-search",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "community-detection",
+      "category": "algorithm",
+      "cells": {
+        "microsoft/graphrag": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "graspologic / leidenalg"
+          ],
+          "library_levels": {
+            "graspologic / leidenalg": "CALLED"
+          },
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0111"
+          ],
+          "role": "CENTRAL",
+          "role_status": "INFERRED",
+          "refined": [
+            "hierarchical-leiden"
+          ]
+        }
+      },
+      "used_by": 1,
+      "shared": false,
+      "libraries_across_repos": [
+        "graspologic / leidenalg"
+      ],
+      "claim": "1 of 3 repositories import or call community-detection",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "dense-linear-algebra",
+      "category": "algorithm",
+      "cells": {
+        "microsoft/graphrag": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "numpy"
+          ],
+          "library_levels": {
+            "numpy": "CALLED"
+          },
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0110"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        }
+      },
+      "used_by": 1,
+      "shared": false,
+      "libraries_across_repos": [
+        "numpy"
+      ],
+      "claim": "1 of 3 repositories import or call dense-linear-algebra",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "graph-processing",
+      "category": "algorithm",
+      "cells": {
+        "microsoft/graphrag": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "networkx"
+          ],
+          "library_levels": {
+            "networkx": "CALLED"
+          },
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0109"
+          ],
+          "role": "SUPPORTING",
+          "role_status": "INFERRED",
+          "refined": []
+        }
+      },
+      "used_by": 1,
+      "shared": false,
+      "libraries_across_repos": [
+        "networkx"
+      ],
+      "claim": "1 of 3 repositories import or call graph-processing",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "columnar-file-format",
+      "category": "storage",
+      "cells": {
+        "microsoft/graphrag": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "pyarrow"
+          ],
+          "library_levels": {
+            "pyarrow": "CALLED"
+          },
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0117"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        }
+      },
+      "used_by": 1,
+      "shared": false,
+      "libraries_across_repos": [
+        "pyarrow"
+      ],
+      "claim": "1 of 3 repositories import or call columnar-file-format",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "document-store",
+      "category": "storage",
+      "cells": {
+        "microsoft/graphrag": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "azure-cosmos"
+          ],
+          "library_levels": {
+            "azure-cosmos": "CALLED"
+          },
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0119"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        }
+      },
+      "used_by": 1,
+      "shared": false,
+      "libraries_across_repos": [
+        "azure-cosmos"
+      ],
+      "claim": "1 of 3 repositories import or call document-store",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "key-value-store",
+      "category": "storage",
+      "cells": {
+        "zylon-ai/private-gpt": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "redis"
+          ],
+          "library_levels": {
+            "redis": "CALLED"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0152"
+          ],
+          "role": "SUPPORTING",
+          "role_status": "INFERRED",
+          "refined": []
+        }
+      },
+      "used_by": 1,
+      "shared": false,
+      "libraries_across_repos": [
+        "redis"
+      ],
+      "claim": "1 of 3 repositories import or call key-value-store",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "object-serialization",
+      "category": "storage",
+      "cells": {
+        "zylon-ai/private-gpt": {
+          "usage_level": "CALLED",
+          "libraries": [
+            "pickle (stdlib)"
+          ],
+          "library_levels": {
+            "pickle (stdlib)": "CALLED"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0156"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        }
+      },
+      "used_by": 1,
+      "shared": false,
+      "libraries_across_repos": [
+        "pickle (stdlib)"
+      ],
+      "claim": "1 of 3 repositories import or call object-serialization",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "llm-orchestration",
+      "category": "ai",
+      "cells": {
+        "zylon-ai/private-gpt": {
+          "usage_level": "NON_PRODUCTION_ONLY",
+          "libraries": [
+            "langchain"
+          ],
+          "library_levels": {
+            "langchain": "NON_PRODUCTION_ONLY"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0143"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        }
+      },
+      "used_by": 0,
+      "shared": false,
+      "libraries_across_repos": [],
+      "claim": "0 of 3 repositories import or call llm-orchestration",
+      "status": "CONFIRMED"
+    },
+    {
+      "primitive": "tensor-computation-autodiff",
+      "category": "ai",
+      "cells": {
+        "zylon-ai/private-gpt": {
+          "usage_level": "DECLARED",
+          "libraries": [
+            "pytorch"
+          ],
+          "library_levels": {
+            "pytorch": "DECLARED"
+          },
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0142"
+          ],
+          "role": null,
+          "role_status": null,
+          "refined": []
+        }
+      },
+      "used_by": 0,
+      "shared": false,
+      "libraries_across_repos": [],
+      "claim": "0 of 3 repositories import or call tensor-computation-autodiff",
+      "status": "CONFIRMED"
+    }
+  ],
+  "similarity": [
+    {
+      "a": "microsoft/graphrag",
+      "b": "simonw/llm",
+      "jaccard": 0.167,
+      "shared": [
+        "hosted-llm-inference",
+        "relational-store"
+      ],
+      "only_a": [
+        "approximate-nearest-neighbor",
+        "bpe-tokenization",
+        "columnar-file-format",
+        "community-detection",
+        "dataframe",
+        "dense-linear-algebra",
+        "document-store",
+        "graph-processing",
+        "linguistic-parsing",
+        "object-store"
+      ],
+      "only_b": [],
+      "status": "CONFIRMED"
+    },
+    {
+      "a": "microsoft/graphrag",
+      "b": "zylon-ai/private-gpt",
+      "jaccard": 0.389,
+      "shared": [
+        "approximate-nearest-neighbor",
+        "bpe-tokenization",
+        "dataframe",
+        "hosted-llm-inference",
+        "linguistic-parsing",
+        "object-store",
+        "relational-store"
+      ],
+      "only_a": [
+        "columnar-file-format",
+        "community-detection",
+        "dense-linear-algebra",
+        "document-store",
+        "graph-processing"
+      ],
+      "only_b": [
+        "binary-search",
+        "key-value-store",
+        "neural-network-inference",
+        "object-serialization",
+        "retrieval-augmented-generation",
+        "tool-calling-protocol"
+      ],
+      "status": "CONFIRMED"
+    },
+    {
+      "a": "simonw/llm",
+      "b": "zylon-ai/private-gpt",
+      "jaccard": 0.154,
+      "shared": [
+        "hosted-llm-inference",
+        "relational-store"
+      ],
+      "only_a": [],
+      "only_b": [
+        "approximate-nearest-neighbor",
+        "binary-search",
+        "bpe-tokenization",
+        "dataframe",
+        "key-value-store",
+        "linguistic-parsing",
+        "neural-network-inference",
+        "object-serialization",
+        "object-store",
+        "retrieval-augmented-generation",
+        "tool-calling-protocol"
+      ],
+      "status": "CONFIRMED"
+    }
+  ],
+  "roles": [
+    {
+      "role": "generation",
+      "repos": {
+        "microsoft/graphrag": {
+          "components": [
+            {
+              "name": "graphrag.query",
+              "responsibility": "Query engines (basic, local, global, DRIFT) that build context from the graph, reports and vectors and generate answers.",
+              "confidence": 0.8
+            }
+          ],
+          "implementations": [],
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0131"
+          ],
+          "status": "INFERRED"
+        },
+        "simonw/llm": {
+          "components": [
+            {
+              "name": "llm.models",
+              "responsibility": "Provider-agnostic domain model: Prompt, Conversation, Response, Tool/Toolbox and tool-call chaining that every model plugin implements.",
+              "confidence": 0.8
+            }
+          ],
+          "implementations": [],
+          "evidence": [
+            "simonw/llm@fe283cb9b4d9#EV-0042"
+          ],
+          "status": "INFERRED"
+        },
+        "zylon-ai/private-gpt": {
+          "components": [
+            {
+              "name": "private_gpt.components.engines",
+              "responsibility": "Chat engine running an iterative tool-calling loop (max_iterations, parallel tool calls, checkpoints, interceptors).",
+              "confidence": 0.85
+            }
+          ],
+          "implementations": [
+            "llama-index (retrieval-augmented-generation)"
+          ],
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0175"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 3,
+      "differs": true,
+      "status": "INFERRED",
+      "definition": "Builds prompts and turns model outputs into the product's answers or artifacts.",
+      "claim": "3 repositories have a generation component; their implementations differ"
+    },
+    {
+      "role": "llm-provider-adapter",
+      "repos": {
+        "microsoft/graphrag": {
+          "components": [
+            {
+              "name": "graphrag_llm",
+              "responsibility": "Model access layer over litellm/OpenAI with caching, retries, rate limiting, tokenization and cost metrics.",
+              "confidence": 0.85
+            }
+          ],
+          "implementations": [
+            "litellm (hosted-llm-inference)",
+            "openai (hosted-llm-inference)"
+          ],
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0130",
+            "microsoft/graphrag@5faaaf4f5685#EV-0107",
+            "microsoft/graphrag@5faaaf4f5685#EV-0106"
+          ],
+          "status": "INFERRED"
+        },
+        "simonw/llm": {
+          "components": [
+            {
+              "name": "llm.default_plugins",
+              "responsibility": "Bundled plugin that registers OpenAI chat and embedding models through the same hooks third-party plugins use.",
+              "confidence": 0.85
+            }
+          ],
+          "implementations": [
+            "openai (hosted-llm-inference)"
+          ],
+          "evidence": [
+            "simonw/llm@fe283cb9b4d9#EV-0043",
+            "simonw/llm@fe283cb9b4d9#EV-0030"
+          ],
+          "status": "INFERRED"
+        },
+        "zylon-ai/private-gpt": {
+          "components": [
+            {
+              "name": "private_gpt.components.llm",
+              "responsibility": "LLM registry: discovers and initializes configured models and returns them by id or alias.",
+              "confidence": 0.8
+            }
+          ],
+          "implementations": [
+            "openai (hosted-llm-inference)",
+            "transformers (neural-network-inference)"
+          ],
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0174",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0139",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0144"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 3,
+      "differs": true,
+      "status": "INFERRED",
+      "definition": "Wraps a hosted model API (OpenAI, Anthropic, ...) behind an internal interface.",
+      "claim": "3 repositories have a llm-provider-adapter component; their implementations differ"
+    },
+    {
+      "role": "persistence",
+      "repos": {
+        "microsoft/graphrag": {
+          "components": [
+            {
+              "name": "graphrag_vectors",
+              "responsibility": "Vector store adapters: LanceDB, Azure AI Search, Cosmos DB behind one factory.",
+              "confidence": 0.85
+            },
+            {
+              "name": "graphrag_storage",
+              "responsibility": "Table and blob storage for pipeline artifacts (files, Azure Blob, Cosmos).",
+              "confidence": 0.75
+            }
+          ],
+          "implementations": [
+            "azure-cosmos (document-store)",
+            "azure-search-documents (approximate-nearest-neighbor)",
+            "azure-storage-blob (object-store)",
+            "lancedb (approximate-nearest-neighbor)",
+            "pyarrow (columnar-file-format)"
+          ],
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0133",
+            "microsoft/graphrag@5faaaf4f5685#EV-0115",
+            "microsoft/graphrag@5faaaf4f5685#EV-0120",
+            "microsoft/graphrag@5faaaf4f5685#EV-0132"
+          ],
+          "status": "INFERRED"
+        },
+        "simonw/llm": {
+          "components": [
+            {
+              "name": "llm.logs",
+              "responsibility": "LogStore wrapping a sqlite_utils database: records prompts, responses and threads.",
+              "confidence": 0.8
+            }
+          ],
+          "implementations": [],
+          "evidence": [
+            "simonw/llm@fe283cb9b4d9#EV-0045"
+          ],
+          "status": "INFERRED"
+        },
+        "zylon-ai/private-gpt": {
+          "components": [
+            {
+              "name": "private_gpt.components (other)",
+              "responsibility": "Merged bucket of smaller components, including the Qdrant-backed vector store, embeddings and storage.",
+              "confidence": 0.5
+            }
+          ],
+          "implementations": [
+            "boto3 (object-store)",
+            "pickle (stdlib) (object-serialization)",
+            "psycopg / asyncpg (relational-store)",
+            "qdrant-client (approximate-nearest-neighbor)",
+            "redis (key-value-store)",
+            "sqlalchemy (relational-store)"
+          ],
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0172",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0153"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 3,
+      "differs": true,
+      "status": "INFERRED",
+      "definition": "Stores and loads state (databases, logs, caches, files).",
+      "claim": "3 repositories have a persistence component; their implementations differ"
+    },
+    {
+      "role": "chunking-indexing",
+      "repos": {
+        "microsoft/graphrag": {
+          "components": [
+            {
+              "name": "graphrag.index",
+              "responsibility": "Indexing pipeline: sequential workflows that load documents, extract an entity graph with an LLM, cluster it into communities, write community reports and embed text.",
+              "confidence": 0.85
+            }
+          ],
+          "implementations": [
+            "spacy (linguistic-parsing)"
+          ],
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0129",
+            "microsoft/graphrag@5faaaf4f5685#EV-0111"
+          ],
+          "status": "INFERRED"
+        },
+        "zylon-ai/private-gpt": {
+          "components": [
+            {
+              "name": "private_gpt.components.ingest",
+              "responsibility": "Document ingestion: parsing, page splitting, transformations and progress tracking into the index.",
+              "confidence": 0.8
+            }
+          ],
+          "implementations": [
+            "spacy (linguistic-parsing)"
+          ],
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0178"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 2,
+      "differs": false,
+      "status": "INFERRED",
+      "definition": "Splits content and builds indexes or embeddings for later lookup.",
+      "claim": "2 repositories have a chunking-indexing component"
+    },
+    {
+      "role": "configuration",
+      "repos": {
+        "simonw/llm": {
+          "components": [
+            {
+              "name": "llm (root modules)",
+              "responsibility": "Plugin host: a pluggy PluginManager loads default plugins and setuptools entry points in group 'llm' and exposes hook specs for models, commands, tools and template loaders.",
+              "confidence": 0.85
+            }
+          ],
+          "implementations": [],
+          "evidence": [
+            "simonw/llm@fe283cb9b4d9#EV-0044",
+            "simonw/llm@fe283cb9b4d9#EV-0036",
+            "simonw/llm@fe283cb9b4d9#EV-0034"
+          ],
+          "status": "INFERRED"
+        },
+        "zylon-ai/private-gpt": {
+          "components": [
+            {
+              "name": "private_gpt.settings",
+              "responsibility": "Pydantic settings models (CORS, auth, UI, proxy, SSL, model and store selection).",
+              "confidence": 0.8
+            }
+          ],
+          "implementations": [],
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0181"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 2,
+      "differs": false,
+      "status": "INFERRED",
+      "definition": "Settings, environment handling, dependency injection.",
+      "claim": "2 repositories have a configuration component"
+    },
+    {
+      "role": "interface-cli",
+      "repos": {
+        "microsoft/graphrag": {
+          "components": [
+            {
+              "name": "graphrag.cli",
+              "responsibility": "Typer CLI for init, index, update, prompt-tune and query.",
+              "confidence": 0.8
+            }
+          ],
+          "implementations": [],
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0137"
+          ],
+          "status": "INFERRED"
+        },
+        "simonw/llm": {
+          "components": [
+            {
+              "name": "llm.cli",
+              "responsibility": "Click command group: the user-facing CLI for prompting, chat, logs, embeddings and plugin management.",
+              "confidence": 0.8
+            }
+          ],
+          "implementations": [],
+          "evidence": [
+            "simonw/llm@fe283cb9b4d9#EV-0041",
+            "simonw/llm@fe283cb9b4d9#EV-0025"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 2,
+      "differs": false,
+      "status": "INFERRED",
+      "definition": "Command-line entry surface; parses arguments and dispatches to the rest of the system.",
+      "claim": "2 repositories have a interface-cli component"
+    },
+    {
+      "role": "orchestration",
+      "repos": {
+        "microsoft/graphrag": {
+          "components": [
+            {
+              "name": "graphrag.index",
+              "responsibility": "Indexing pipeline: sequential workflows that load documents, extract an entity graph with an LLM, cluster it into communities, write community reports and embed text.",
+              "confidence": 0.85
+            }
+          ],
+          "implementations": [],
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0129",
+            "microsoft/graphrag@5faaaf4f5685#EV-0111"
+          ],
+          "status": "INFERRED"
+        },
+        "zylon-ai/private-gpt": {
+          "components": [
+            {
+              "name": "private_gpt.components.engines",
+              "responsibility": "Chat engine running an iterative tool-calling loop (max_iterations, parallel tool calls, checkpoints, interceptors).",
+              "confidence": 0.85
+            }
+          ],
+          "implementations": [
+            "llama-index (retrieval-augmented-generation)"
+          ],
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0175"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 2,
+      "differs": true,
+      "status": "INFERRED",
+      "definition": "Coordinates multi-step workflows, pipelines or agent loops across other components.",
+      "claim": "2 repositories have a orchestration component; their implementations differ"
+    },
+    {
+      "role": "retrieval",
+      "repos": {
+        "microsoft/graphrag": {
+          "components": [
+            {
+              "name": "graphrag.query",
+              "responsibility": "Query engines (basic, local, global, DRIFT) that build context from the graph, reports and vectors and generate answers.",
+              "confidence": 0.8
+            },
+            {
+              "name": "graphrag_vectors",
+              "responsibility": "Vector store adapters: LanceDB, Azure AI Search, Cosmos DB behind one factory.",
+              "confidence": 0.85
+            }
+          ],
+          "implementations": [
+            "azure-search-documents (approximate-nearest-neighbor)",
+            "lancedb (approximate-nearest-neighbor)"
+          ],
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0131",
+            "microsoft/graphrag@5faaaf4f5685#EV-0133",
+            "microsoft/graphrag@5faaaf4f5685#EV-0115",
+            "microsoft/graphrag@5faaaf4f5685#EV-0120"
+          ],
+          "status": "INFERRED"
+        },
+        "zylon-ai/private-gpt": {
+          "components": [
+            {
+              "name": "private_gpt.components.tools",
+              "responsibility": "Tool pipeline, scheduler and processors (including semantic search) executed on behalf of the model.",
+              "confidence": 0.8
+            },
+            {
+              "name": "private_gpt.components (other)",
+              "responsibility": "Merged bucket of smaller components, including the Qdrant-backed vector store, embeddings and storage.",
+              "confidence": 0.5
+            }
+          ],
+          "implementations": [
+            "llama-index (retrieval-augmented-generation)",
+            "qdrant-client (approximate-nearest-neighbor)"
+          ],
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0177",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0172",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0153"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 2,
+      "differs": true,
+      "status": "INFERRED",
+      "definition": "Finds relevant items for a query (vector, lexical, graph or hybrid search).",
+      "claim": "2 repositories have a retrieval component; their implementations differ"
+    },
+    {
+      "role": "background-jobs",
+      "repos": {
+        "zylon-ai/private-gpt": {
+          "components": [
+            {
+              "name": "private_gpt.celery",
+              "responsibility": "Celery workers and health endpoint for background jobs.",
+              "confidence": 0.75
+            },
+            {
+              "name": "private_gpt.arq",
+              "responsibility": "arq-based workers on Redis for background jobs.",
+              "confidence": 0.7
+            }
+          ],
+          "implementations": [
+            "celery / rq / dramatiq (background-task-queue)",
+            "redis (key-value-store)"
+          ],
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0185",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0165",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0188",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0152"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 1,
+      "differs": false,
+      "status": "INFERRED",
+      "definition": "Workers, queues and scheduled tasks.",
+      "claim": "1 repositories have a background-jobs component"
+    },
+    {
+      "role": "domain-model",
+      "repos": {
+        "simonw/llm": {
+          "components": [
+            {
+              "name": "llm.models",
+              "responsibility": "Provider-agnostic domain model: Prompt, Conversation, Response, Tool/Toolbox and tool-call chaining that every model plugin implements.",
+              "confidence": 0.8
+            }
+          ],
+          "implementations": [],
+          "evidence": [
+            "simonw/llm@fe283cb9b4d9#EV-0042"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 1,
+      "differs": false,
+      "status": "INFERRED",
+      "definition": "Core data types and abstractions other components build on.",
+      "claim": "1 repositories have a domain-model component"
+    },
+    {
+      "role": "ingestion",
+      "repos": {
+        "zylon-ai/private-gpt": {
+          "components": [
+            {
+              "name": "private_gpt.components.ingest",
+              "responsibility": "Document ingestion: parsing, page splitting, transformations and progress tracking into the index.",
+              "confidence": 0.8
+            },
+            {
+              "name": "private_gpt.components.readers",
+              "responsibility": "Format readers (docling, markitdown, PDF inspection, pptx, vision) producing nodes for ingestion.",
+              "confidence": 0.8
+            }
+          ],
+          "implementations": [
+            "pandas (dataframe)",
+            "requests / httpx / aiohttp / urllib (outbound-http)",
+            "spacy (linguistic-parsing)"
+          ],
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0178",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0176"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 1,
+      "differs": false,
+      "status": "INFERRED",
+      "definition": "Reads and parses external sources (files, web, databases) into internal documents.",
+      "claim": "1 repositories have a ingestion component"
+    },
+    {
+      "role": "interface-http-api",
+      "repos": {
+        "zylon-ai/private-gpt": {
+          "components": [
+            {
+              "name": "private_gpt.server",
+              "responsibility": "FastAPI routers for chat, completions, embeddings, ingest, files, MCP and tools.",
+              "confidence": 0.85
+            }
+          ],
+          "implementations": [
+            "web frameworks (inbound-http)"
+          ],
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0173",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0158"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 1,
+      "differs": false,
+      "status": "INFERRED",
+      "definition": "HTTP/RPC API surface (routes, request/response models).",
+      "claim": "1 repositories have a interface-http-api component"
+    },
+    {
+      "role": "interface-ui",
+      "repos": {
+        "microsoft/graphrag": {
+          "components": [
+            {
+              "name": "app",
+              "responsibility": "Experimental Streamlit demo for comparing search methods side by side; documented as unsupported.",
+              "confidence": 0.75
+            }
+          ],
+          "implementations": [],
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0134"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 1,
+      "differs": false,
+      "status": "INFERRED",
+      "definition": "Graphical or web user interface rendered for humans.",
+      "claim": "1 repositories have a interface-ui component"
+    },
+    {
+      "role": "knowledge-graph",
+      "repos": {
+        "microsoft/graphrag": {
+          "components": [
+            {
+              "name": "graphrag.index",
+              "responsibility": "Indexing pipeline: sequential workflows that load documents, extract an entity graph with an LLM, cluster it into communities, write community reports and embed text.",
+              "confidence": 0.85
+            },
+            {
+              "name": "graphrag.graphs",
+              "responsibility": "Graph algorithms: hierarchical Leiden clustering via graspologic_native, modularity, largest connected component.",
+              "confidence": 0.9
+            }
+          ],
+          "implementations": [
+            "graspologic / leidenalg (community-detection)",
+            "networkx (graph-processing)"
+          ],
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0129",
+            "microsoft/graphrag@5faaaf4f5685#EV-0111",
+            "microsoft/graphrag@5faaaf4f5685#EV-0143",
+            "microsoft/graphrag@5faaaf4f5685#EV-0111"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 1,
+      "differs": false,
+      "status": "INFERRED",
+      "definition": "Builds or analyzes an explicit graph of entities and relations.",
+      "claim": "1 repositories have a knowledge-graph component"
+    },
+    {
+      "role": "plugin-host",
+      "repos": {
+        "simonw/llm": {
+          "components": [
+            {
+              "name": "llm (root modules)",
+              "responsibility": "Plugin host: a pluggy PluginManager loads default plugins and setuptools entry points in group 'llm' and exposes hook specs for models, commands, tools and template loaders.",
+              "confidence": 0.85
+            }
+          ],
+          "implementations": [
+            "importlib (dynamic-import)",
+            "pluggy / stevedore (plugin-registry)"
+          ],
+          "evidence": [
+            "simonw/llm@fe283cb9b4d9#EV-0044",
+            "simonw/llm@fe283cb9b4d9#EV-0036",
+            "simonw/llm@fe283cb9b4d9#EV-0034"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 1,
+      "differs": false,
+      "status": "INFERRED",
+      "definition": "Discovers, loads and registers extensions.",
+      "claim": "1 repositories have a plugin-host component"
+    },
+    {
+      "role": "tool-execution",
+      "repos": {
+        "zylon-ai/private-gpt": {
+          "components": [
+            {
+              "name": "private_gpt.components.tools",
+              "responsibility": "Tool pipeline, scheduler and processors (including semantic search) executed on behalf of the model.",
+              "confidence": 0.8
+            }
+          ],
+          "implementations": [],
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0177"
+          ],
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 1,
+      "differs": false,
+      "status": "INFERRED",
+      "definition": "Defines, sandboxes or executes tools/functions on behalf of a model.",
+      "claim": "1 repositories have a tool-execution component"
+    }
+  ],
+  "patterns": [
+    {
+      "pattern": "plugin",
+      "repos": {
+        "microsoft/graphrag": {
+          "confidence": 0.6,
+          "status": "INFERRED",
+          "claim": "Storage, vector stores and model providers are swappable through factories and config, not compile-time choices.",
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0133",
+            "microsoft/graphrag@5faaaf4f5685#EV-0130"
+          ],
+          "counter_notes": [
+            "no entry-point plugin loading was observed; extensibility is via factories registered in code, a weaker form of plugin"
+          ]
+        },
+        "simonw/llm": {
+          "confidence": 0.85,
+          "status": "SUPPORTED",
+          "claim": "Model providers are plugins: the core defines pluggy hook specs and loads providers dynamically; OpenAI support is itself a default plugin.",
+          "evidence": [
+            "simonw/llm@fe283cb9b4d9#EV-0036",
+            "simonw/llm@fe283cb9b4d9#EV-0034",
+            "simonw/llm@fe283cb9b4d9#EV-0030",
+            "simonw/llm@fe283cb9b4d9#EV-0043"
+          ],
+          "counter_notes": [
+            "searched core components (llm.cli, llm.models, llm.logs) for direct openai imports: none; the openai signal is confined to llm.default_plugins and is not statically reachable from any entry point"
+          ]
+        }
+      },
+      "in_repos": 2,
+      "status": "INFERRED",
+      "definition": "A host loads extensions through a registry or entry points; features live in plugins.",
+      "family": "plugin"
+    },
+    {
+      "pattern": "agent-loop",
+      "repos": {
+        "zylon-ai/private-gpt": {
+          "confidence": 0.8,
+          "status": "SUPPORTED",
+          "claim": "The chat engine iterates model -> tool calls -> results until stopped or max_iterations, with tools (including semantic search) scheduled in parallel.",
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0175",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0177",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0146"
+          ],
+          "counter_notes": [
+            "searched for a single-shot retrieve-then-generate path in engines: none found; retrieval appears as a tool processor"
+          ]
+        }
+      },
+      "in_repos": 1,
+      "status": "SUPPORTED",
+      "definition": "A model iteratively chooses tools/actions until a goal is reached.",
+      "family": "agent-loop"
+    },
+    {
+      "pattern": "client-server",
+      "repos": {
+        "zylon-ai/private-gpt": {
+          "confidence": 0.85,
+          "status": "SUPPORTED",
+          "claim": "A FastAPI server exposes chat, ingest and tool endpoints to separate clients.",
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0173",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0158",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0111"
+          ],
+          "counter_notes": [
+            "searched for a bundled UI: none in production code"
+          ]
+        }
+      },
+      "in_repos": 1,
+      "status": "SUPPORTED",
+      "definition": "A long-running server exposes an API to separate clients.",
+      "family": "client-server"
+    },
+    {
+      "pattern": "graph-rag",
+      "repos": {
+        "microsoft/graphrag": {
+          "confidence": 0.9,
+          "status": "SUPPORTED",
+          "claim": "Answers are generated over an LLM-extracted knowledge graph clustered into hierarchical Leiden communities with pre-computed community reports, rather than over raw text chunks alone.",
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0111",
+            "microsoft/graphrag@5faaaf4f5685#EV-0129",
+            "microsoft/graphrag@5faaaf4f5685#EV-0131",
+            "microsoft/graphrag@5faaaf4f5685#EV-0115"
+          ],
+          "counter_notes": [
+            "searched for a plain chunk-only path: a 'basic' search exists alongside local/global/DRIFT, so graph use is optional per query, not universal"
+          ]
+        }
+      },
+      "in_repos": 1,
+      "status": "SUPPORTED",
+      "definition": "RAG over an extracted knowledge graph (entities, communities, summaries).",
+      "family": "rag"
+    },
+    {
+      "pattern": "layered",
+      "repos": {
+        "simonw/llm": {
+          "confidence": 0.3,
+          "status": "INFERRED",
+          "claim": "CLI on top of a provider-agnostic domain layer (models) on top of persistence (logs/SQLite).",
+          "evidence": [
+            "simonw/llm@fe283cb9b4d9#EV-0041",
+            "simonw/llm@fe283cb9b4d9#EV-0042",
+            "simonw/llm@fe283cb9b4d9#EV-0045"
+          ],
+          "counter_notes": [
+            "import-time component cycle among cli, models, logs and the root bucket: layers are not strictly ordered"
+          ]
+        }
+      },
+      "in_repos": 1,
+      "status": "INFERRED",
+      "definition": "Components ordered in layers; dependencies point one way (downwards).",
+      "family": "layered"
+    },
+    {
+      "pattern": "pipeline",
+      "repos": {
+        "microsoft/graphrag": {
+          "confidence": 0.85,
+          "status": "SUPPORTED",
+          "claim": "Indexing is a staged pipeline of named workflows (load -> extract graph -> communities -> reports -> embeddings) whose outputs are tables.",
+          "evidence": [
+            "microsoft/graphrag@5faaaf4f5685#EV-0129",
+            "microsoft/graphrag@5faaaf4f5685#EV-0117",
+            "microsoft/graphrag@5faaaf4f5685#EV-0116"
+          ],
+          "counter_notes": [
+            "workflows share a run context and storage, so stages are coupled through tables rather than strictly isolated"
+          ]
+        }
+      },
+      "in_repos": 1,
+      "status": "SUPPORTED",
+      "definition": "Data flows through sequential stages (ingest -> transform -> index -> serve).",
+      "family": "pipeline"
+    },
+    {
+      "pattern": "rag",
+      "repos": {
+        "zylon-ai/private-gpt": {
+          "confidence": 0.7,
+          "status": "INFERRED",
+          "claim": "Retrieval-augmented generation is implemented as a semantic-search tool over a Qdrant vector store, invoked by the agent loop.",
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0153",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0144",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0177"
+          ],
+          "counter_notes": [
+            "vector store lives in a merged bucket, so the exact component boundary is uncertain"
+          ]
+        }
+      },
+      "in_repos": 1,
+      "status": "INFERRED",
+      "definition": "Retrieval-augmented generation: retrieve context, then generate with a model.",
+      "family": "rag"
+    },
+    {
+      "pattern": "worker-queue",
+      "repos": {
+        "zylon-ai/private-gpt": {
+          "confidence": 0.75,
+          "status": "SUPPORTED",
+          "claim": "Long-running work (ingestion, tools) is offloaded to Celery and arq workers.",
+          "evidence": [
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0185",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0188",
+            "zylon-ai/private-gpt@3cefd532cb6c#EV-0165"
+          ],
+          "counter_notes": [
+            "two queue systems coexist; which one is used in a given deployment is configuration"
+          ]
+        }
+      },
+      "in_repos": 1,
+      "status": "SUPPORTED",
+      "definition": "Work is queued and executed by background workers.",
+      "family": "event-driven"
+    }
+  ],
+  "pattern_families": [
+    {
+      "family": "rag",
+      "members": [
+        "graph-rag",
+        "rag"
+      ],
+      "repos": {
+        "microsoft/graphrag": {
+          "pattern": "graph-rag",
+          "confidence": 0.9,
+          "status": "SUPPORTED"
+        },
+        "zylon-ai/private-gpt": {
+          "pattern": "rag",
+          "confidence": 0.7,
+          "status": "INFERRED"
+        }
+      },
+      "in_repos": 2,
+      "status": "INFERRED"
+    }
+  ],
+  "facts": 361,
+  "rule": "A cross-repository statement takes the weakest status of its inputs."
+}

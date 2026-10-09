@@ -35,7 +35,8 @@
           "status",
           "confidence",
           "evidence_ids",
-          "files_read"
+          "files_read",
+          "roles"
         ],
         "properties": {
           "name": {
@@ -80,6 +81,14 @@
             "items": {
               "type": "string"
             }
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 3,
+            "description": "Role ids from data/vocab/roles.yaml; makes components comparable across repositories."
           }
         }
       }
@@ -91,6 +100,7 @@
         "additionalProperties": false,
         "required": [
           "id",
+          "pattern_id",
           "pattern",
           "claim",
           "status",
@@ -143,6 +153,10 @@
           "how_to_falsify": {
             "type": "string",
             "minLength": 10
+          },
+          "pattern_id": {
+            "type": "string",
+            "description": "Pattern id from data/vocab/patterns.yaml."
           }
         }
       }

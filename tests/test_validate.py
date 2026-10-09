@@ -21,9 +21,11 @@ def good_hypotheses(report):
         "commit_sha": report["provenance"]["commit_sha"],
         "evidence_digest": report["evidence_digest"],
         "components": [{"name": comp["name"], "responsibility": "Owns the core run loop.", "status": "INFERRED",
+                        "roles": ["orchestration"],
                         "confidence": 0.7, "evidence_ids": [comp["evidence_id"]], "files_read": ["src/demo/core/engine.py"]}],
         "architecture_hypotheses": [{
-            "id": "HY-01", "pattern": "layered", "claim": "api depends on core which depends on retrieval",
+            "id": "HY-01", "pattern": "layered", "pattern_id": "layered",
+            "claim": "api depends on core which depends on retrieval",
             "status": "INFERRED", "confidence": 0.6, "evidence_ids": [comp["evidence_id"]],
             "counter_evidence_ids": [], "counter_evidence_notes": ["searched for retrieval -> api imports: none"],
             "how_to_falsify": "Find an import from demo.retrieval into demo.api."}],
@@ -100,3 +102,13 @@ def test_html_renders_inference_only_when_valid(demo_analysis, tmp_path):
     h["evidence_digest"] = "sha256:" + "0" * 32          # invalid -> inference must not be shown
     (dst / "hypotheses.json").write_text(json.dumps(h))
     assert "Owns the core run loop." not in render_html(dst).read_text()
+
+
+def test_vocabulary_is_enforced(demo_analysis, tmp_path):
+    dst, report = _copy(demo_analysis, tmp_path)
+    h = good_hypotheses(report)
+    h["components"][0]["roles"] = ["magic-sauce"]
+    h["architecture_hypotheses"][0]["pattern_id"] = "microkernel-ish"
+    (dst / "hypotheses.json").write_text(json.dumps(h))
+    errs = "\n".join(validate_bundle(dst))
+    assert "not in vocabulary (data/vocab/roles.yaml)" in errs and "pattern_id 'microkernel-ish'" in errs

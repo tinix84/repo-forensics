@@ -1,0 +1,35 @@
+{
+  "schema_version": "0.2.0",
+  "repos": [
+    {
+      "repo": "microsoft/graphrag",
+      "commit_sha": "5faaaf4f5685fa2056fa8c3bf9342cb089f2942f",
+      "evidence_digest": "sha256:900a7ffc10310b52759671e10679ccc8",
+      "tool_version": "0.1.0",
+      "inference": true,
+      "inference_rejected": 0,
+      "added_at": "2026-10-09T07:36:19+00:00",
+      "path": "bundles/microsoft__graphrag"
+    },
+    {
+      "repo": "simonw/llm",
+      "commit_sha": "fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4",
+      "evidence_digest": "sha256:14a27ee1cf451a87553931578b05ce39",
+      "tool_version": "0.1.0",
+      "inference": true,
+      "inference_rejected": 0,
+      "added_at": "2026-10-09T07:36:18+00:00",
+      "path": "bundles/simonw__llm"
+    },
+    {
+      "repo": "zylon-ai/private-gpt",
+      "commit_sha": "3cefd532cb6cccf65065af5e873c44bdca71e4d4",
+      "evidence_digest": "sha256:5975f9f91e5a3626e5d1640dc1df22f0",
+      "tool_version": "0.1.0",
+      "inference": true,
+      "inference_rejected": 0,
+      "added_at": "2026-10-09T07:36:19+00:00",
+      "path": "bundles/zylon-ai__private-gpt"
+    }
+  ]
+}

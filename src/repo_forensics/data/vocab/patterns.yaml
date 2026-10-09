@@ -1,0 +1,30 @@
+# Controlled vocabulary for architecture patterns (hypotheses.json pattern_id).
+# `parent` groups specializations into families for cross-repository comparison
+# (graph-rag is a kind of rag; hexagonal is a kind of layering).
+layered:
+  definition: "Components ordered in layers; dependencies point one way (downwards)."
+hexagonal:
+  definition: "Domain core without I/O; adapters for storage, APIs and models depend on it."
+  parent: layered
+plugin:
+  definition: "A host loads extensions through a registry or entry points; features live in plugins."
+pipeline:
+  definition: "Data flows through sequential stages (ingest -> transform -> index -> serve)."
+rag:
+  definition: "Retrieval-augmented generation: retrieve context, then generate with a model."
+graph-rag:
+  definition: "RAG over an extracted knowledge graph (entities, communities, summaries)."
+  parent: rag
+agent-loop:
+  definition: "A model iteratively chooses tools/actions until a goal is reached."
+client-server:
+  definition: "A long-running server exposes an API to separate clients."
+worker-queue:
+  definition: "Work is queued and executed by background workers."
+  parent: event-driven
+event-driven:
+  definition: "Components communicate through published events or messages."
+shared-kernel:
+  definition: "One central component is used by nearly all others; heavy mutual coupling."
+library-facade:
+  definition: "A thin public API over internal machinery; primarily used as a library."

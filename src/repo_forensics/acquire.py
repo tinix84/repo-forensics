@@ -97,6 +97,9 @@ def clone(target: str, dest: Path, ref: str | None = None) -> Acquired:
         head = git(["ls-remote", "--symref", "origin", "HEAD"], cwd=dest, check=False)
         m = re.search(r"ref:\s+refs/heads/(\S+)\s+HEAD", head)
         default_branch = m.group(1) if m else None
+    if ref and re.fullmatch(r"[0-9a-f]{7,39}", ref):
+        raise AcquireError(f"'{ref}' looks like an abbreviated commit SHA; a shallow fetch needs the full "
+                           "40-character SHA (or a branch/tag name)")
     git(["fetch", "-q", "--depth", "1", "--no-tags", "--no-recurse-submodules",
          "origin", ref or "HEAD"], cwd=dest)
     git(["checkout", "-q", "--detach", "FETCH_HEAD"], cwd=dest)

@@ -1,16 +1,14 @@
 {
   "schema_version": "0.1.0",
   "commit_sha": "fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4",
-  "evidence_digest": "sha256:3a8165cbc71de548a45f5a0c2191578a",
+  "evidence_digest": "sha256:14a27ee1cf451a87553931578b05ce39",
   "components": [
     {
       "name": "llm.models",
       "responsibility": "Provider-agnostic domain model: Prompt, Conversation, Response, Tool/Toolbox and tool-call chaining that every model plugin implements.",
-      "inputs": [
-        "prompt text, attachments, tools"
-      ],
-      "outputs": [
-        "Response objects, tool calls"
+      "roles": [
+        "domain-model",
+        "generation"
       ],
       "status": "INFERRED",
       "confidence": 0.8,
@@ -19,11 +17,21 @@
       ],
       "files_read": [
         "llm/models.py"
+      ],
+      "inputs": [
+        "prompt text, attachments, tools"
+      ],
+      "outputs": [
+        "Response objects, tool calls"
       ]
     },
     {
       "name": "llm (root modules)",
       "responsibility": "Plugin host: a pluggy PluginManager loads default plugins and setuptools entry points in group 'llm' and exposes hook specs for models, commands, tools and template loaders.",
+      "roles": [
+        "plugin-host",
+        "configuration"
+      ],
       "status": "INFERRED",
       "confidence": 0.85,
       "evidence_ids": [
@@ -39,6 +47,9 @@
     {
       "name": "llm.default_plugins",
       "responsibility": "Bundled plugin that registers OpenAI chat and embedding models through the same hooks third-party plugins use.",
+      "roles": [
+        "llm-provider-adapter"
+      ],
       "status": "INFERRED",
       "confidence": 0.85,
       "evidence_ids": [
@@ -48,11 +59,43 @@
       "files_read": [
         "llm/default_plugins/openai_models.py"
       ]
+    },
+    {
+      "name": "llm.cli",
+      "responsibility": "Click command group: the user-facing CLI for prompting, chat, logs, embeddings and plugin management.",
+      "roles": [
+        "interface-cli"
+      ],
+      "status": "INFERRED",
+      "confidence": 0.8,
+      "evidence_ids": [
+        "EV-0041",
+        "EV-0025"
+      ],
+      "files_read": [
+        "llm/cli.py"
+      ]
+    },
+    {
+      "name": "llm.logs",
+      "responsibility": "LogStore wrapping a sqlite_utils database: records prompts, responses and threads.",
+      "roles": [
+        "persistence"
+      ],
+      "status": "INFERRED",
+      "confidence": 0.8,
+      "evidence_ids": [
+        "EV-0045"
+      ],
+      "files_read": [
+        "llm/logs.py"
+      ]
     }
   ],
   "architecture_hypotheses": [
     {
       "id": "HY-01",
+      "pattern_id": "plugin",
       "pattern": "plugin architecture (microkernel)",
       "claim": "Model providers are plugins: the core defines pluggy hook specs and loads providers dynamically; OpenAI support is itself a default plugin.",
       "status": "SUPPORTED",
@@ -65,12 +108,13 @@
       ],
       "counter_evidence_ids": [],
       "counter_evidence_notes": [
-        "searched core components (llm.cli, llm.models, llm.logs) for direct openai imports: none; the openai signal is confined to llm.default_plugins.openai_models and is not statically reachable from any entry point"
+        "searched core components (llm.cli, llm.models, llm.logs) for direct openai imports: none; the openai signal is confined to llm.default_plugins and is not statically reachable from any entry point"
       ],
       "how_to_falsify": "Find a static import of llm.default_plugins.openai_models from llm.cli or llm.models in dependency-graph.json."
     },
     {
       "id": "HY-02",
+      "pattern_id": "layered",
       "pattern": "layered",
       "claim": "CLI on top of a provider-agnostic domain layer (models) on top of persistence (logs/SQLite).",
       "status": "INFERRED",
@@ -81,12 +125,13 @@
         "EV-0045"
       ],
       "counter_evidence_ids": [
+        "EV-0010",
         "EV-0039"
       ],
       "counter_evidence_notes": [
-        "components.import_time_cycles contains llm.cli, llm.models, llm.logs and the synthetic root bucket: the layers are not strictly ordered (partly an artefact of the merged bucket)"
+        "import-time component cycle among cli, models, logs and the root bucket: layers are not strictly ordered"
       ],
-      "how_to_falsify": "Re-run with --component-depth 2 on a split of the root bucket and check whether llm.models still depends on llm.cli at import time."
+      "how_to_falsify": "Check whether llm.models depends on llm.cli at import time after splitting the root bucket."
     }
   ],
   "primitive_roles": [
@@ -104,7 +149,7 @@
       "evidence_ids": [
         "EV-0036"
       ],
-      "rationale": "pluggy PluginManager is how every model, command and tool reaches the CLI."
+      "rationale": "pluggy is how every model, command and tool reaches the CLI."
     },
     {
       "signature": "sqlite3",
@@ -119,15 +164,14 @@
     "classification": "AI_CORE",
     "deterministic_core": [
       "plugin loading",
-      "prompt/conversation bookkeeping",
-      "SQLite logging",
-      "embedding storage and similarity"
+      "conversation bookkeeping",
+      "SQLite logging"
     ],
     "evidence_ids": [
       "EV-0030",
       "EV-0042"
     ],
-    "rationale": "The product's output is model responses, but the concrete provider is interchangeable via plugins."
+    "rationale": "The product's output is model responses; the concrete provider is interchangeable via plugins."
   },
   "unknowns": [
     {

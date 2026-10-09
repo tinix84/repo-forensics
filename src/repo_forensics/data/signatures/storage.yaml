@@ -124,3 +124,24 @@
   primitive: object-serialization
   modules: [pickle, joblib, dill, cloudpickle]
   distributions: [joblib, dill, cloudpickle]
+- id: azure-blob
+  library: azure-storage-blob
+  category: storage
+  subcategory: object-store
+  primitive: object-store
+  modules: [azure.storage.blob]
+  distributions: [azure-storage-blob]
+- id: azure-cosmos
+  library: azure-cosmos
+  category: storage
+  subcategory: document-store
+  primitive: document-store
+  modules: [azure.cosmos]
+  distributions: [azure-cosmos]
+- id: azure-ai-search
+  library: azure-search-documents
+  category: storage
+  subcategory: vector-store
+  primitive: approximate-nearest-neighbor
+  modules: [azure.search.documents]
+  distributions: [azure-search-documents]

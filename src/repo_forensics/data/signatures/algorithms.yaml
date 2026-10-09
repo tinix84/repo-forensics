@@ -205,3 +205,20 @@
   primitive: binary-search
   modules: [bisect]
   distributions: []
+- id: community-detection
+  library: graspologic / leidenalg
+  category: algorithm
+  subcategory: graph
+  primitive: community-detection
+  modules: [graspologic, graspologic_native, leidenalg, cdlib, community]
+  distributions: [graspologic, graspologic-native, leidenalg, cdlib, python-louvain]
+  refine:
+    graspologic.partition.hierarchical_leiden: hierarchical-leiden
+    graspologic_native.hierarchical_leiden: hierarchical-leiden
+- id: spacy
+  library: spacy
+  category: algorithm
+  subcategory: nlp
+  primitive: linguistic-parsing
+  modules: [spacy, nltk]
+  distributions: [spacy, nltk]

@@ -60,6 +60,8 @@ def validate_bundle(out_dir: Path) -> list[str]:
         if hyp.get("evidence_digest") != report.get("evidence_digest"):
             errors.append("hypotheses.json: evidence_digest does not match report.json — evidence ids may now "
                           "point to different facts; re-derive the inferences from the current report")
+        from .config import load_config
+        vocab = load_config()
         comp_names = {c["name"] for c in report["components"]["items"]}
         for c in hyp.get("components", []):
             if c.get("name") not in comp_names:
@@ -70,12 +72,21 @@ def validate_bundle(out_dir: Path) -> list[str]:
                 elif ids[i].get("kind") == "component" and ids[i].get("data", {}).get("name") != c.get("name"):
                     errors.append(f"hypotheses.json: component {c.get('name')} cites {i}, which describes "
                                   f"component {ids[i].get('data', {}).get('name')}")
+            bad_roles = [r for r in c.get("roles", []) if r not in vocab.roles]
+            if bad_roles:
+                errors.append(f"hypotheses.json: component {c.get('name')}: roles {bad_roles} not in vocabulary "
+                              "(data/vocab/roles.yaml)")
+            if c.get("status") != "UNKNOWN" and not c.get("roles"):
+                errors.append(f"hypotheses.json: component {c.get('name')}: at least one role is required")
             if c.get("status") != "UNKNOWN" and not c.get("files_read"):
                 errors.append(f"hypotheses.json: component {c.get('name')}: responsibility claimed without files_read")
         for h in hyp.get("architecture_hypotheses", []):
             for i in h.get("evidence_ids", []) + h.get("counter_evidence_ids", []):
                 if i not in ids:
                     errors.append(f"hypotheses.json: {h.get('id')}: unknown evidence id {i}")
+            if h.get("pattern_id") not in vocab.patterns:
+                errors.append(f"hypotheses.json: {h.get('id')}: pattern_id '{h.get('pattern_id')}' not in vocabulary "
+                              "(data/vocab/patterns.yaml)")
             if not h.get("counter_evidence_ids") and not h.get("counter_evidence_notes"):
                 errors.append(f"hypotheses.json: {h.get('id')}: no counter-evidence recorded "
                               "(state what was searched for, even if nothing was found)")

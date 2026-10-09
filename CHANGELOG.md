@@ -9,6 +9,22 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
   types (continuous = fact, dashed = inference, dotted = unknown); component map as inline SVG layered by
   dependency depth; every evidence location links to the exact source line at the pinned commit.
 - `repo-forensics render <dir>`: rebuilds the HTML, including `hypotheses.json` only if the bundle validates.
+- Corpus layer: `repo-forensics corpus add | compare`. Fact table of triples with global evidence references
+  (`owner/repo@sha12#EV-id`); comparisons by shared primitive, by role (same role, different implementation)
+  and by architecture pattern with pattern families; weakest-link status for cross-repository statements;
+  `compare.html` with a self-contained evidence register.
+- Controlled vocabularies `data/vocab/roles.yaml` (19 roles with `implemented_by`) and `patterns.yaml`
+  (12 patterns with `parent`); `hypotheses.json` now requires component `roles` and hypothesis `pattern_id`.
+- Signatures: hierarchical Leiden / community detection (graspologic, graspologic_native, leidenalg),
+  spaCy/NLTK, Azure Blob, Cosmos DB, Azure AI Search, pluggy/stevedore.
+
+### Changed
+- `--ref` with an abbreviated SHA now fails with a clear message (shallow fetch needs the full SHA).
+
+### Fixed
+- Corpus role table credited every library in a component to each of its roles (e.g. an S3 client as an
+  LLM-adapter implementation); implementations are now filtered by the role's `implemented_by`.
+- Matrix cells counted declared-only libraries (e.g. `anthropic`) as used.
 
 ## [0.1.0] - 2026-10-09
 

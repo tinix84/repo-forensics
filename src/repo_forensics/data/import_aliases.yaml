@@ -47,3 +47,8 @@ ulid: python-ulid
 slugify: python-slugify
 multipart: python-multipart
 typing_extensions: typing-extensions
+graspologic_native: graspologic-native
+azure.storage.blob: azure-storage-blob
+azure.cosmos: azure-cosmos
+azure.search.documents: azure-search-documents
+azure.identity: azure-identity

@@ -2,8 +2,8 @@
 
 - **Repository:** https://github.com/simonw/llm
 - **Commit:** `fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4`
-- **Analyzed:** 2026-10-09T05:53:42+00:00
-- **Evidence digest:** `sha256:3a8165cbc71de548a45f5a0c2191578a`
+- **Analyzed:** 2026-10-09T07:33:47+00:00
+- **Evidence digest:** `sha256:14a27ee1cf451a87553931578b05ce39`
 - **License (heuristic):** Apache-2.0
 - **Tool:** repo-forensics 0.1.0, tier 1
 

@@ -34,6 +34,14 @@ def main(argv: list[str] | None = None) -> int:
     h = sub.add_parser("render", help="(re)build report.html, including hypotheses.json if it validates")
     h.add_argument("out")
 
+    c = sub.add_parser("corpus", help="cross-repository corpus: add bundles, compare them")
+    csub = c.add_subparsers(dest="corpus_cmd", required=True)
+    ca = csub.add_parser("add", help="validate and add one or more analysis bundles")
+    ca.add_argument("bundles", nargs="+")
+    ca.add_argument("--corpus", default="corpus")
+    cc = csub.add_parser("compare", help="build facts.jsonl, compare.json and compare.html")
+    cc.add_argument("--corpus", default="corpus")
+
     args = ap.parse_args(argv)
     if args.cmd == "analyze":
         from .acquire import AcquireError
@@ -67,6 +75,24 @@ def main(argv: list[str] | None = None) -> int:
             print(f"INVALID: {len(errs)} problem(s)", file=sys.stderr)
             return 1
         print("VALID")
+        return 0
+    if args.cmd == "corpus":
+        from .corpus import CorpusError, add, compare
+        if args.corpus_cmd == "add":
+            status = 0
+            for b in args.bundles:
+                try:
+                    entry = add(Path(b), Path(args.corpus))
+                    note = "" if entry["inference"] else " (facts only: no valid hypotheses.json)"
+                    print(f"added {entry['repo']}@{entry['commit_sha'][:12]}{note}")
+                except CorpusError as err:
+                    print(f"rejected {b}: {err}", file=sys.stderr)
+                    status = 1
+            return status
+        res = compare(Path(args.corpus))
+        shared = sum(1 for r in res["primitives"] if r["shared"])
+        print(f"{len(res['repos'])} repos, {res['facts']} facts, {shared} shared primitives, "
+              f"{len(res['roles'])} roles, {len(res['patterns'])} patterns -> {Path(args.corpus) / 'compare.html'}")
         return 0
     if args.cmd == "render":
         from .html import render_html

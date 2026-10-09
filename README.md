@@ -72,6 +72,26 @@ The skill runs the CLI, reads the code it needs, writes `hypotheses.json`, and i
 `repo-forensics validate` passes. A worked, validated example is in
 [`examples/simonw-llm/`](examples/simonw-llm/).
 
+## Comparing repositories
+
+A single report cannot show what tools have in common, so bundles can be collected into a
+corpus and compared on three shared vocabularies:
+
+| Common ground | Based on | Status |
+|---|---|---|
+| Shared primitives (e.g. 3/3 call hosted LLM inference; 2/3 use ANN search via different libraries) | signature database | fact |
+| Same role, different implementation (e.g. retrieval via LanceDB vs Qdrant) | `roles.yaml` + measured signals filtered by role | inference |
+| Architecture patterns and families (graph-rag and rag meet in the rag family) | `patterns.yaml` | inference |
+
+```bash
+repo-forensics corpus add analysis/llm analysis/graphrag analysis/private-gpt --corpus corpus
+repo-forensics corpus compare --corpus corpus     # facts.jsonl, compare.json, compare.html
+```
+
+Facts are triples with global evidence references (`owner/repo@sha12#EV-0042`); a statement that
+spans repositories takes the weakest status of its inputs. Worked example:
+[`examples/corpus-ai-tools/`](examples/corpus-ai-tools/) (simonw/llm, microsoft/graphrag, zylon-ai/private-gpt).
+
 ## Output bundle
 
 ```
@@ -111,7 +131,7 @@ run against a synthetic repository that plants each pattern the analyzer must de
 
 | Version | Scope |
 |---|---|
-| v0.2 | Adapter layer: Semgrep, Syft SBOM, PMD CPD duplication, all writing the same evidence schema |
+| v0.2 | Corpus comparison (done, unreleased); adapter layer: Semgrep, Syft SBOM, PMD CPD duplication |
 | v0.3 | Second ecosystem (TypeScript or Rust) via tree-sitter, to test language-neutral normalization |
 | v0.4 | Tier 2: build-aware analysis (mypy, tests) inside a disposable, network-less container |
 | later | Adversarial-reviewer skill consuming `report.json` + `hypotheses.json`; evidence graph export |

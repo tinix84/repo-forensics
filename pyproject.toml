@@ -49,3 +49,4 @@ ignore = ["E731"]
 
 [tool.ruff.lint.per-file-ignores]
 "src/repo_forensics/html.py" = ["E501"]   # HTML/CSS template strings
+"src/repo_forensics/corpus_html.py" = ["E501"]

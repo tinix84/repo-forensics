@@ -7,6 +7,14 @@
 4. AI assessment
 5. hypotheses.json template
 
+## 0. Vocabularies
+
+Component `roles` and hypothesis `pattern_id` must come from `src/repo_forensics/data/vocab/`.
+Each role lists the signal subcategories that can implement it (`implemented_by`); in corpus
+comparisons only those count as the role's implementation. Patterns may have a `parent`
+(graph-rag → rag) so specializations meet in one family. If nothing fits, use the closest term
+and say why in the responsibility; propose a vocabulary change rather than inventing a term.
+
 ## 1. Method
 
 For every hypothesis: (a) cite the evidence that suggested it; (b) name what would contradict
@@ -58,6 +66,7 @@ Always list the `deterministic_core`: graph traversal, scoring, filtering, parsi
     {
       "name": "<exact component name from report.json>",
       "responsibility": "One sentence on what it does.",
+      "roles": ["retrieval"],
       "inputs": ["query text"],
       "outputs": ["ranked chunks"],
       "status": "INFERRED",
@@ -69,6 +78,7 @@ Always list the `deterministic_core`: graph traversal, scoring, filtering, parsi
   "architecture_hypotheses": [
     {
       "id": "HY-01",
+      "pattern_id": "layered",
       "pattern": "layered",
       "claim": "api depends on services which depend on domain; domain depends on nothing internal.",
       "status": "INFERRED",
