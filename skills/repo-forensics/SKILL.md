@@ -85,6 +85,12 @@ component's evidence, and stale bindings: `commit_sha` and `evidence_digest` mus
 digest. If the digest changed (new tool version, re-run), re-derive the inferences: never
 patch ids by hand.
 
+Then build the HTML report, which renders the inference layer only when the bundle validates:
+
+```bash
+repo-forensics render analysis/<name>      # writes analysis/<name>/report.html
+```
+
 ### 5. Report to the user
 
 Keep facts and inferences visibly separate:

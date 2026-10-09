@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>simonw/llm — repo-forensics report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Barlow+Condensed:wght@600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F7F8F6;--ink:#17233A;--ink-2:#4A5568;--rule:#C9D1D9;--grid:#E6EAEE;--hidden:#6A4BA8;
+--hidden-bg:#F3EFFA;--phantom:#9A6B00;--phantom-bg:#FBF6E6;--red:#B4232A;--card:#FFFFFF;--link:#1F4FA8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#11161E;--ink:#E3E8EF;--ink-2:#A3AEBD;
+--rule:#334050;--grid:#1C2430;--hidden:#B49BEA;--hidden-bg:#1E1A2B;--phantom:#E2B54A;--phantom-bg:#241F12;
+--red:#F07178;--card:#161C26;--link:#8DB4FF}}
+:root[data-theme="dark"]{--paper:#11161E;--ink:#E3E8EF;--ink-2:#A3AEBD;--rule:#334050;--grid:#1C2430;--hidden:#B49BEA;
+--hidden-bg:#1E1A2B;--phantom:#E2B54A;--phantom-bg:#241F12;--red:#F07178;--card:#161C26;--link:#8DB4FF}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 "Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+background-size:24px 24px;background-attachment:fixed}
+main{max-width:980px;margin:0 auto;padding:20px 16px 64px}
+a{color:var(--link)}a:focus-visible,summary:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+h1,h2,h3{font-family:"Barlow Condensed","Barlow",system-ui,sans-serif;font-weight:600;line-height:1.15;margin:0}
+h1{font-size:clamp(2rem,6vw,3.1rem);letter-spacing:-.01em}h1 a{color:inherit;text-decoration:none}
+h2{font-size:1.6rem;margin:0 0 10px;padding-top:6px;border-top:2px solid var(--ink)}
+h3{font-size:1.2rem}
+section{margin-top:40px}
+.sheet{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end;border:2px solid var(--ink);background:var(--card);padding:18px}
+@media (max-width:720px){.sheet{grid-template-columns:1fr}}
+.kicker{margin:0 0 4px;color:var(--ink-2);font-size:.95rem}
+.lede{margin:10px 0 0;font-size:1.1rem;max-width:60ch}
+.shape{margin:8px 0 0}
+.titleblock{border-collapse:collapse;font-size:.85rem;min-width:260px}
+.titleblock th,.titleblock td{border:1px solid var(--ink);padding:3px 8px;text-align:left;vertical-align:top}
+.titleblock th{font-weight:600;white-space:nowrap;background:var(--paper)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;margin:14px 0 0;font-size:.92rem}
+.legend .note{color:var(--ink-2);flex-basis:100%}
+.ln{display:inline-block;width:36px;height:0;margin-right:8px;vertical-align:middle;border-top:2.5px solid var(--ink)}
+.ln.infer{border-top:2.5px dashed var(--hidden)}.ln.unknown{border-top:2.5px dotted var(--phantom)}
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--rule);
+margin:18px -16px 0;padding:8px 16px;display:flex;gap:16px;overflow-x:auto;white-space:nowrap;font-size:.95rem}
+nav.toc a{text-decoration:none;color:var(--ink)}nav.toc a:hover{text-decoration:underline}
+.muted,.sub{color:var(--ink-2)}.sub{font-size:.88rem}
+.path{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:.84em;word-break:break-all}
+.scroll{overflow-x:auto;max-width:100%}
+.map{display:block;margin:6px auto;width:100%;height:auto}
+.map .layer{fill:var(--ink-2);font-size:11px}
+.map .node rect{fill:var(--card);stroke:var(--ink);stroke-width:1.5}
+.map .node.entry rect{stroke-width:3}
+.map .node.synthetic rect{stroke-dasharray:6 4;stroke:var(--hidden)}
+.map .node.explained rect{fill:var(--hidden-bg)}
+.map .node text.n{fill:var(--ink);font:600 14px "Barlow Condensed",system-ui,sans-serif}
+.map .node text.s{fill:var(--ink-2);font-size:11px}
+.map a:hover rect{stroke:var(--link)}
+.map .edge{fill:none;stroke:var(--ink-2);opacity:.7}.map .edge.back{stroke:var(--red);opacity:.75}
+.map .arrowhead{fill:var(--ink-2)}
+.caption{font-size:.88rem;color:var(--ink-2);margin:4px 0 0}
+.card{background:var(--card);padding:14px 16px;margin:12px 0;border:2px solid var(--ink)}
+.card.infer,.resp.infer{border:2px dashed var(--hidden)}
+.card.infer{background:var(--hidden-bg)}
+.infer-text{color:var(--hidden)}
+.hyp-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.conf{font-size:.88rem;color:var(--ink-2);display:inline-flex;gap:8px;align-items:center}
+.track{display:inline-block;width:90px;height:8px;border:1.5px dashed var(--hidden);padding:1px}
+.fill{display:block;height:100%;background:var(--hidden)}
+.against{border-left:3px solid var(--red);padding-left:10px;margin:8px 0}
+.falsify{margin:8px 0 0}
+.cite{margin:8px 0 0}
+ul.tight{margin:4px 0;padding-left:20px}
+.comp{background:var(--card);border:2px solid var(--ink);padding:12px 16px;margin:12px 0}
+.comp.synthetic{border-style:dashed;border-color:var(--hidden)}
+.comp-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:baseline}
+.nums{color:var(--ink-2);font-size:.92rem}
+.flags{margin:6px 0}
+.tag{display:inline-block;border:1px solid var(--ink-2);padding:0 6px;font-size:.8rem;margin-right:4px}
+.tag.strong{border:2px solid var(--ink);font-weight:600}.tag.infer{border:1px dashed var(--hidden);color:var(--hidden)}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;margin:6px 0}
+dt{color:var(--ink-2)}dd{margin:0}
+.resp{padding:10px 12px;margin-top:10px;background:var(--hidden-bg)}
+.resp p{margin:0 0 4px}
+table.grid{border-collapse:collapse;width:100%;font-size:.93rem;background:var(--card)}
+table.grid th,table.grid td{border:1px solid var(--rule);padding:6px 8px;text-align:left;vertical-align:top}
+table.grid th{border-bottom:2px solid var(--ink);font-weight:600}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.cat{font-size:.85rem;color:var(--ink-2)}
+.ladder{min-width:250px}
+.step{display:inline-block;padding:1px 7px;margin:0 3px 3px 0;font-size:.8rem;border:1px solid var(--rule);color:var(--ink-2)}
+.step.fact.on{border:1.5px solid var(--ink);color:var(--ink);background:var(--grid)}
+.step.infer{border:1.5px dashed var(--hidden);color:var(--hidden)}
+.step.infer.on{background:var(--hidden);color:var(--card)}
+.chip{display:inline-block;font-size:.78rem;padding:0 6px;margin:1px 2px;text-decoration:none;color:var(--ink);
+border:1.5px solid var(--ink);background:var(--card);white-space:nowrap}
+.chip.fact-weak{border-width:1px}.chip.infer{border:1.5px dashed var(--hidden);color:var(--hidden)}
+.chip.unknown{border:1.5px dotted var(--phantom);color:var(--phantom)}
+.sev{font-size:.8rem}.sev.warn{color:var(--red);font-weight:600}
+.unknown-box{border:2.5px dotted var(--phantom);background:var(--phantom-bg);padding:10px 16px}
+ul.qs{padding-left:18px;margin:6px 0}ul.qs li{margin:0 0 10px}
+.facts dd ul{margin:2px 0}
+.hist{width:100%;max-width:560px;display:block}
+.hist .bar{fill:var(--ink)}.hist .bar.hot{fill:url(#hatch)}
+.hist .v,.hist .l{fill:var(--ink-2);font-size:11px;text-anchor:middle}
+ul.check{list-style:none;padding:0;columns:2 280px;column-gap:28px;margin:0}
+ul.check li{break-inside:avoid;margin:0 0 4px}
+ul.check li.done span{color:var(--ink)}ul.check li.partial span{color:var(--ink-2)}
+ul.check li.deferred_to_inference span{color:var(--hidden)}ul.check li.not_done span{color:var(--phantom)}
+details.ev{background:var(--card);border:1.5px solid var(--ink);margin:6px 0;padding:6px 10px}
+details.ev.fact-weak{border-width:1px}details.ev.infer{border:1.5px dashed var(--hidden)}
+details.ev.unknown{border:1.5px dotted var(--phantom)}
+details.ev:target{outline:3px solid var(--link)}
+details.ev summary{cursor:pointer}
+.eid{font-weight:600;margin-right:6px}.st{font-size:.8rem;color:var(--ink-2);margin-right:6px}
+ul.locs{margin:4px 0;padding-left:18px;font-size:.9rem}
+footer{margin-top:48px;color:var(--ink-2);font-size:.85rem;border-top:1px solid var(--rule);padding-top:10px}
+[id]{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 56px)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style></head>
+<body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="var(--paper)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--red)" stroke-width="3"/></pattern></defs></svg><main>
+<header class="sheet">
+  <div class="headline">
+    <p class="kicker">Repository forensics report</p>
+    <h1><a href="https://github.com/simonw/llm/tree/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4" target="_blank" rel="noopener">simonw/llm</a></h1>
+    <p class="lede">5 components, 19 production modules, 4 entry points, 4 open questions.</p>
+    <p class="shape infer-text">Reads as CLI application and library (importable package) <a class="chip infer" href="#EV-0046" title="INFERRED: Repository appears to be: CLI application, library (importable package)">EV-0046</a></p>
+  </div>
+  <table class="titleblock" aria-label="Title block"><tr><th>Commit</th><td><span class="path">fe283cb9b4d9</span></td></tr><tr><th>Analyzed</th><td>2026-10-09 05:53 UTC</td></tr><tr><th>Tool</th><td>repo-forensics 0.1.0, tier 1</td></tr><tr><th>Evidence</th><td><span class="path">3a8165cbc71d</span> (66 items)</td></tr><tr><th>Inference</th><td>validated hypotheses.json</td></tr><tr><th>License</th><td>Apache-2.0</td></tr><tr><th>Languages</th><td>Python 100%</td></tr></table>
+</header>
+<aside class="legend" aria-label="Line types">
+  <span><i class="ln fact"></i>Measured fact</span>
+  <span><i class="ln infer"></i>Inference</span>
+  <span><i class="ln unknown"></i>Unknown</span>
+  <span class="note">Line types follow technical-drawing convention: visible, hidden, phantom.</span>
+</aside><nav class="toc" aria-label="Sections"><a href="#map">Map</a><a href="#inference">Inference</a><a href="#components">Components</a><a href="#primitives">Primitives</a><a href="#entry">Entry points</a><a href="#structure">Structure</a><a href="#complexity">Complexity</a><a href="#unknowns">Open questions</a><a href="#evidence">Evidence</a></nav><section id="map"><h2>Component map</h2><div class="scroll"><svg class="map" viewBox="0 0 786 330" style="min-width:min(786px,640px)" role="img" aria-label="Component dependency map"><defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker></defs><text class="layer" x="24" y="38">depth 1</text><text class="layer" x="24" y="188">depth 0</text><path class="edge back" d="M118,222 C118,185 498,185 498,222" stroke-width="2.6" marker-end="url(#arr)"><title>llm.cli imports llm (root modules) (4 module edges)</title></path><path class="edge back" d="M118,222 C118,197 308,197 308,222" stroke-width="1.0" marker-end="url(#arr)"><title>llm.cli imports llm.models (1 module edges)</title></path><path class="edge back" d="M118,222 C118,176 688,176 688,222" stroke-width="1.0" marker-end="url(#arr)"><title>llm.cli imports llm.logs (1 module edges)</title></path><path class="edge back" d="M308,222 C308,197 498,197 498,222" stroke-width="2.9" marker-end="url(#arr)"><title>llm.models imports llm (root modules) (5 module edges)</title></path><path class="edge back" d="M308,222 C308,185 688,185 688,222" stroke-width="1.0" marker-end="url(#arr)"><title>llm.models imports llm.logs (1 module edges)</title></path><path class="edge" d="M393,126 C393,174 488,174 488,222" stroke-width="2.9" marker-end="url(#arr)"><title>llm.default_plugins imports llm (root modules) (5 module edges)</title></path><path class="edge" d="M393,126 C393,174 298,174 298,222" stroke-width="1.0" marker-end="url(#arr)"><title>llm.default_plugins imports llm.models (1 module edges)</title></path><path class="edge" d="M393,126 C393,174 108,174 108,222" stroke-width="1.0" marker-end="url(#arr)"><title>llm.default_plugins imports llm.cli (1 module edges)</title></path><path class="edge back" d="M478,276 C478,301 288,301 288,276" stroke-width="2.3" marker-end="url(#arr)"><title>llm (root modules) imports llm.models (3 module edges)</title></path><path class="edge back" d="M478,276 C478,313 98,313 98,276" stroke-width="1.0" marker-end="url(#arr)"><title>llm (root modules) imports llm.cli (1 module edges)</title></path><path class="edge back" d="M668,276 C668,301 478,301 478,276" stroke-width="2.6" marker-end="url(#arr)"><title>llm.logs imports llm (root modules) (4 module edges)</title></path><path class="edge back" d="M668,276 C668,313 288,313 288,276" stroke-width="1.0" marker-end="url(#arr)"><title>llm.logs imports llm.models (1 module edges)</title></path><a href="#comp-llm-cli"><g class="node entry"><rect x="24" y="222" width="168" height="54" rx="3"/><text class="n" x="34" y="244">cli</text><text class="s" x="34" y="262">3,817 LOC · cli</text><title>llm.cli</title></g></a><a href="#comp-llm-models"><g class="node explained"><rect x="214" y="222" width="168" height="54" rx="3"/><text class="n" x="224" y="244">models</text><text class="s" x="224" y="262">3,065 LOC</text><title>llm.models</title></g></a><a href="#comp-llm-default-plugins"><g class="node explained"><rect x="309" y="72" width="168" height="54" rx="3"/><text class="n" x="319" y="94">default_plugins</text><text class="s" x="319" y="112">2,846 LOC</text><title>llm.default_plugins</title></g></a><a href="#comp-llm-root-modules"><g class="node synthetic entry explained"><rect x="404" y="222" width="168" height="54" rx="3"/><text class="n" x="414" y="244">llm (root modules)</text><text class="s" x="414" y="262">2,547 LOC · cli, library-api</text><title>llm (root modules)</title></g></a><a href="#comp-llm-logs"><g class="node"><rect x="594" y="222" width="168" height="54" rx="3"/><text class="n" x="604" y="244">logs</text><text class="s" x="604" y="262">1,655 LOC</text><title>llm.logs</title></g></a></svg></div><p class="caption">Arrows point from importer to imported; width grows with the number of module edges. Red arrows close an import-time cycle. Thick boxes hold entry points, dashed boxes are merged buckets, tinted boxes have an inferred responsibility.</p></section><section id="inference"><h2>Inference</h2><div class="card infer"><h3>AI is the core of the product</h3><p>The product&#x27;s output is model responses, but the concrete provider is interchangeable via plugins.</p><p class="sub">What the system does without a model</p><ul class="tight"><li>plugin loading</li><li>prompt/conversation bookkeeping</li><li>SQLite logging</li><li>embedding storage and similarity</li></ul><p class="cite"><a class="chip fact" href="#EV-0030" title="CONFIRMED: Production code calls openai (hosted-llm-inference) at 3 site(s) in 1 module(s)">EV-0030</a> <a class="chip fact" href="#EV-0042" title="CONFIRMED: Component `llm.models`: 1 modules, 3065 code lines, depends on 2 and is used by 4 components">EV-0042</a></p></div>
+<div class="card infer hyp">
+  <div class="hyp-head"><h3>plugin architecture (microkernel)</h3>
+    <span class="conf" title="confidence 0.85"><span class="track"><span class="fill" style="width:85%"></span></span>
+    0.85 · supported</span></div>
+  <p>Model providers are plugins: the core defines pluggy hook specs and loads providers dynamically; OpenAI support is itself a default plugin.</p>
+  <p class="cite">For: <a class="chip fact" href="#EV-0036" title="CONFIRMED: Production code calls pluggy / stevedore (plugin-registry) at 3 site(s) in 2 module(s)">EV-0036</a> <a class="chip fact" href="#EV-0034" title="CONFIRMED: Production code calls importlib (dynamic-import) at 1 site(s) in 1 module(s)">EV-0034</a> <a class="chip fact" href="#EV-0030" title="CONFIRMED: Production code calls openai (hosted-llm-inference) at 3 site(s) in 1 module(s)">EV-0030</a> <a class="chip fact" href="#EV-0043" title="CONFIRMED: Component `llm.default_plugins`: 3 modules, 2846 code lines, depends on 3 and is used by 0 components">EV-0043</a></p>
+  <div class="against"><p class="sub">Against, or searched for and not found</p><ul class="tight"><li>searched core components (llm.cli, llm.models, llm.logs) for direct openai imports: none; the openai signal is confined to llm.default_plugins.openai_models and is not statically reachable from any entry point</li></ul>
+  <p class="cite"></p></div>
+  <p class="falsify"><span class="sub">Falsify by</span> Find a static import of llm.default_plugins.openai_models from llm.cli or llm.models in dependency-graph.json.</p>
+</div>
+<div class="card infer hyp">
+  <div class="hyp-head"><h3>layered</h3>
+    <span class="conf" title="confidence 0.30"><span class="track"><span class="fill" style="width:30%"></span></span>
+    0.30 · inferred</span></div>
+  <p>CLI on top of a provider-agnostic domain layer (models) on top of persistence (logs/SQLite).</p>
+  <p class="cite">For: <a class="chip fact" href="#EV-0041" title="CONFIRMED: Component `llm.cli`: 1 modules, 3817 code lines, depends on 3 and is used by 2 components">EV-0041</a> <a class="chip fact" href="#EV-0042" title="CONFIRMED: Component `llm.models`: 1 modules, 3065 code lines, depends on 2 and is used by 4 components">EV-0042</a> <a class="chip fact" href="#EV-0045" title="CONFIRMED: Component `llm.logs`: 1 modules, 1655 code lines, depends on 2 and is used by 2 components">EV-0045</a></p>
+  <div class="against"><p class="sub">Against, or searched for and not found</p><ul class="tight"><li>components.import_time_cycles contains llm.cli, llm.models, llm.logs and the synthetic root bucket: the layers are not strictly ordered (partly an artefact of the merged bucket)</li></ul>
+  <p class="cite"><a class="chip fact" href="#EV-0039" title="CONFIRMED: 4 components depend on each other cyclically: llm (root modules), llm.cli, llm.logs, llm.models">EV-0039</a></p></div>
+  <p class="falsify"><span class="sub">Falsify by</span> Re-run with --component-depth 2 on a split of the root bucket and check whether llm.models still depends on llm.cli at import time.</p>
+</div></section><section id="components"><h2>Components</h2><p class="muted">Grouped by directory (rule: depth 2). Dashed boxes are merged buckets of small modules.</p>
+<article class="comp fact" id="comp-llm-cli">
+  <div class="comp-head"><h3>cli</h3><span class="nums">3,817 LOC, 1 modules,
+  depth 0</span></div>
+  <p class="flags"><span class="tag">in a cycle</span> <span class="tag strong">cli entry</span></p>
+  <dl><dt>Depends on</dt><dd>llm (root modules) (4), models (1), logs (1)</dd><dt>Signals</dt><dd>dynamic-code, filesystem, sqlite3</dd>
+  <dt>Tests importing it</dt><dd>21</dd><dt>Where</dt><dd><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py" target="_blank" rel="noopener">llm/cli.py</a></dd></dl>
+  <p class="cite"><a class="chip fact" href="#EV-0041" title="CONFIRMED: Component `llm.cli`: 1 modules, 3817 code lines, depends on 3 and is used by 2 components">EV-0041</a></p>
+</article>
+<article class="comp fact" id="comp-llm-models">
+  <div class="comp-head"><h3>models</h3><span class="nums">3,065 LOC, 1 modules,
+  depth 0</span></div>
+  <p class="flags"><span class="tag">in a cycle</span></p>
+  <dl><dt>Depends on</dt><dd>llm (root modules) (5), logs (1)</dd><dt>Signals</dt><dd>none</dd>
+  <dt>Tests importing it</dt><dd>4</dd><dt>Where</dt><dd><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/models.py" target="_blank" rel="noopener">llm/models.py</a></dd></dl>
+  <div class="resp infer"><p>Provider-agnostic domain model: Prompt, Conversation, Response, Tool/Toolbox and tool-call chaining that every model plugin implements.</p><p class="sub">In: prompt text, attachments, tools. Out: Response objects, tool calls.</p><p class="sub">Read: <a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/models.py" target="_blank" rel="noopener">llm/models.py</a> · confidence 0.8</p></div><p class="cite"><a class="chip fact" href="#EV-0042" title="CONFIRMED: Component `llm.models`: 1 modules, 3065 code lines, depends on 2 and is used by 4 components">EV-0042</a></p>
+</article>
+<article class="comp fact" id="comp-llm-default-plugins">
+  <div class="comp-head"><h3>default_plugins</h3><span class="nums">2,846 LOC, 3 modules,
+  depth 1</span></div>
+  <p class="flags"></p>
+  <dl><dt>Depends on</dt><dd>llm (root modules) (5), models (1), cli (1)</dd><dt>Signals</dt><dd>filesystem, openai, sqlite3</dd>
+  <dt>Tests importing it</dt><dd>3</dd><dt>Where</dt><dd><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins" target="_blank" rel="noopener">llm/default_plugins</a></dd></dl>
+  <div class="resp infer"><p>Bundled plugin that registers OpenAI chat and embedding models through the same hooks third-party plugins use.</p><p class="sub">Read: <a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py" target="_blank" rel="noopener">llm/default_plugins/openai_models.py</a> · confidence 0.85</p></div><p class="cite"><a class="chip fact" href="#EV-0043" title="CONFIRMED: Component `llm.default_plugins`: 3 modules, 2846 code lines, depends on 3 and is used by 0 components">EV-0043</a></p>
+</article>
+<article class="comp fact synthetic" id="comp-llm-root-modules">
+  <div class="comp-head"><h3>llm (root modules)</h3><span class="nums">2,547 LOC, 13 modules,
+  depth 0</span></div>
+  <p class="flags"><span class="tag infer">merged bucket</span> <span class="tag">in a cycle</span> <span class="tag strong">cli entry</span> <span class="tag strong">library-api entry</span></p>
+  <dl><dt>Depends on</dt><dd>models (3), cli (1)</dd><dt>Signals</dt><dd>dynamic-import, plugin-system, sqlite3</dd>
+  <dt>Tests importing it</dt><dd>28</dd><dt>Where</dt><dd><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm" target="_blank" rel="noopener">llm</a></dd></dl>
+  <div class="resp infer"><p>Plugin host: a pluggy PluginManager loads default plugins and setuptools entry points in group &#x27;llm&#x27; and exposes hook specs for models, commands, tools and template loaders.</p><p class="sub">Read: <a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/plugins.py" target="_blank" rel="noopener">llm/plugins.py</a>, <a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/hookspecs.py" target="_blank" rel="noopener">llm/hookspecs.py</a> · confidence 0.85</p></div><p class="cite"><a class="chip fact" href="#EV-0044" title="CONFIRMED: Component `llm (root modules)`: 13 modules, 2547 code lines, depends on 2 and is used by 4 components">EV-0044</a></p>
+</article>
+<article class="comp fact" id="comp-llm-logs">
+  <div class="comp-head"><h3>logs</h3><span class="nums">1,655 LOC, 1 modules,
+  depth 0</span></div>
+  <p class="flags"><span class="tag">in a cycle</span></p>
+  <dl><dt>Depends on</dt><dd>llm (root modules) (4), models (1)</dd><dt>Signals</dt><dd>filesystem</dd>
+  <dt>Tests importing it</dt><dd>7</dd><dt>Where</dt><dd><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/logs.py" target="_blank" rel="noopener">llm/logs.py</a></dd></dl>
+  <p class="cite"><a class="chip fact" href="#EV-0045" title="CONFIRMED: Component `llm.logs`: 1 modules, 1655 code lines, depends on 2 and is used by 2 components">EV-0045</a></p>
+</article></section><section id="primitives"><h2>Primitives and boundaries</h2><p class="muted">How far each library is actually used: declared in a manifest, imported, or called by production code. Whether it is central is an inference.</p><div class="scroll"><table class="grid"><thead><tr><th>Library</th><th>Kind</th><th>Usage</th><th>Reach</th><th>Ev.</th></tr></thead><tbody><tr><td><b>openai</b><br><span class="sub">hosted-llm-inference</span></td>
+<td><span class="cat">ai</span></td><td class="ladder"><span class="step fact on">declared</span><span class="step fact on">imported</span><span class="step fact on">called</span><span class="step infer" title="role decided by inference">supporting</span><p class="sub infer-text">One provider among many, loaded as a plugin; the core is provider-agnostic.</p></td>
+<td class="sub">not statically reachable</td><td><a class="chip fact" href="#EV-0030" title="CONFIRMED: Production code calls openai (hosted-llm-inference) at 3 site(s) in 1 module(s)">EV-0030</a></td></tr><tr><td><b>builtins</b><br><span class="sub">dynamic-code-execution</span></td>
+<td><span class="cat">boundary</span></td><td class="ladder"><span class="step fact">declared</span><span class="step fact on">imported</span><span class="step fact on">called</span><span class="step infer" title="role decided by inference">central?</span></td>
+<td class="sub">reachable from an entry point</td><td><a class="chip fact" href="#EV-0033" title="CONFIRMED: Production code calls builtins (dynamic-code-execution) at 1 site(s) in 1 module(s)">EV-0033</a></td></tr><tr><td><b>importlib</b><br><span class="sub">dynamic-import</span></td>
+<td><span class="cat">boundary</span></td><td class="ladder"><span class="step fact">declared</span><span class="step fact on">imported</span><span class="step fact on">called</span><span class="step infer" title="role decided by inference">central?</span></td>
+<td class="sub">reachable from an entry point</td><td><a class="chip fact" href="#EV-0034" title="CONFIRMED: Production code calls importlib (dynamic-import) at 1 site(s) in 1 module(s)">EV-0034</a></td></tr><tr><td><b>builtins / shutil</b><br><span class="sub">filesystem-io</span></td>
+<td><span class="cat">boundary</span></td><td class="ladder"><span class="step fact">declared</span><span class="step fact on">imported</span><span class="step fact on">called</span><span class="step infer" title="role decided by inference">central?</span></td>
+<td class="sub">reachable from an entry point</td><td><a class="chip fact" href="#EV-0035" title="CONFIRMED: Production code calls builtins / shutil (filesystem-io) at 8 site(s) in 3 module(s)">EV-0035</a></td></tr><tr><td><b>pluggy / stevedore</b><br><span class="sub">plugin-registry</span></td>
+<td><span class="cat">boundary</span></td><td class="ladder"><span class="step fact on">declared</span><span class="step fact on">imported</span><span class="step fact on">called</span><span class="step infer on" title="role decided by inference">central</span><p class="sub infer-text">pluggy PluginManager is how every model, command and tool reaches the CLI.</p></td>
+<td class="sub">reachable from an entry point</td><td><a class="chip fact" href="#EV-0036" title="CONFIRMED: Production code calls pluggy / stevedore (plugin-registry) at 3 site(s) in 2 module(s)">EV-0036</a></td></tr><tr><td><b>subprocess / os</b><br><span class="sub">subprocess-execution</span> <span class="tag">tests/examples only</span></td>
+<td><span class="cat">boundary</span></td><td class="ladder"><span class="step fact">declared</span><span class="step fact">imported</span><span class="step fact">called</span><span class="step infer" title="role decided by inference">central?</span></td>
+<td class="sub">not statically reachable</td><td><a class="chip fact" href="#EV-0032" title="CONFIRMED: subprocess / os (subprocess-execution) appears only in tests/examples/scripts">EV-0032</a></td></tr><tr><td><b>sqlite3 (stdlib)</b><br><span class="sub">relational-store</span></td>
+<td><span class="cat">storage</span></td><td class="ladder"><span class="step fact on">declared</span><span class="step fact on">imported</span><span class="step fact on">called</span><span class="step infer" title="role decided by inference">supporting</span><p class="sub infer-text">Logs prompts/responses and stores embeddings; not on the generation path.</p></td>
+<td class="sub">reachable from an entry point</td><td><a class="chip fact" href="#EV-0031" title="CONFIRMED: Production code calls sqlite3 (stdlib) (relational-store) at 7 site(s) in 5 module(s)">EV-0031</a></td></tr></tbody></table></div></section><section id="entry"><h2>Entry points</h2><div class="scroll"><table class="grid"><thead><tr><th>Type</th><th>Where</th><th>Detected by</th><th>Ev.</th></tr></thead><tbody><tr><td><b>cli</b> llm</td><td><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py" target="_blank" rel="noopener">llm/cli.py</a></td><td class="sub">declared console script</td><td><a class="chip fact" href="#EV-0025" title="CONFIRMED: cli entry point `llm` at llm.cli (declared console script)">EV-0025</a></td></tr><tr><td><b>cli</b></td><td><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/__main__.py" target="_blank" rel="noopener">llm/__main__.py</a></td><td class="sub">__main__.py (python -m)</td><td><a class="chip fact" href="#EV-0026" title="CONFIRMED: cli entry point at llm.__main__ (__main__.py (python -m))">EV-0026</a></td></tr><tr><td><b>cli</b></td><td><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py" target="_blank" rel="noopener">llm/cli.py</a></td><td class="sub">decorator `click.group`</td><td><a class="chip fact" href="#EV-0027" title="CONFIRMED: cli entry point at llm.cli (decorator `click.group`)">EV-0027</a></td></tr><tr><td><b>library-api</b></td><td><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/__init__.py" target="_blank" rel="noopener">llm/__init__.py</a></td><td class="sub">importable top-level package declared by a package manifest</td><td><a class="chip fact-weak" href="#EV-0028" title="SUPPORTED: library-api entry point at llm (importable top-level package declared by a package manifest)">EV-0028</a></td></tr></tbody></table></div></section><section id="structure"><h2>Structure</h2>
+<dl class="facts"><dt>Module import cycles</dt><dd>1 total, 0 at import time
+<ul class="tight"><li>llm → llm.embeddings → llm.logs → llm.models → llm.parts</li></ul></dd><dt>Hubs (high fan-in)</dt><dd>none above threshold</dd>
+<dt>Fan-in / fan-out P95</dt><dd>6.0 / 6.2</dd>
+<dt>Orphan modules</dt><dd>2</dd></dl>
+<h3>Signals worth reading</h3><p class="muted">Thresholds mark places to look, not defects.</p>
+<div class="scroll"><table class="grid"><thead><tr><th>Rule</th><th>Target</th><th>Detail</th><th>Level</th><th>Ev.</th></tr></thead>
+<tbody><tr><td>cyclic dependency</td><td>llm, llm.embeddings, llm.logs, llm.models…</td><td class="sub">5-module cycle (only via function-level imports)</td><td><span class="sev info">info</span></td><td><a class="chip fact" href="#EV-0010" title="CONFIRMED: Import cycle among 5 modules: llm, llm.embeddings, llm.logs, llm.models, llm.parts">EV-0010</a></td></tr><tr><td>oversized module</td><td>llm.cli</td><td class="sub">3817 code lines</td><td><span class="sev info">info</span></td><td><a class="chip fact" href="#EV-0011" title="CONFIRMED: llm.cli has 3817 code lines">EV-0011</a></td></tr><tr><td>possibly unused dependency</td><td>pyreadline3</td><td class="sub">declared in runtime scope, never imported</td><td><span class="sev info">info</span></td><td><a class="chip fact" href="#EV-0024" title="CONFIRMED: Runtime dependency `pyreadline3` is declared but no Python import of it was found">EV-0024</a></td></tr><tr><td>component cycle</td><td>llm (root modules), llm.cli, llm.logs, llm.models</td><td class="sub">4-component cycle at import time (involves a merged bucket)</td><td><span class="sev info">info</span></td><td><a class="chip fact" href="#EV-0039" title="CONFIRMED: 4 components depend on each other cyclically: llm (root modules), llm.cli, llm.logs, llm.models">EV-0039</a></td></tr><tr><td>high complexity</td><td>22 more functions</td><td class="sub">CC 16–24</td><td><span class="sev info">info</span></td><td><a class="chip fact" href="#EV-0048" title="CONFIRMED: 22 further functions exceed cyclomatic complexity 15">EV-0048</a></td></tr><tr><td>high complexity</td><td>llm.cli::prompt</td><td class="sub">CC 119, 326 NLOC</td><td><span class="sev warn">warn</span></td><td><a class="chip fact" href="#EV-0049" title="CONFIRMED: llm.cli::prompt has cyclomatic complexity 119">EV-0049</a></td></tr><tr><td>high complexity</td><td>llm.cli::logs_list</td><td class="sub">CC 113, 362 NLOC</td><td><span class="sev warn">warn</span></td><td><a class="chip fact" href="#EV-0050" title="CONFIRMED: llm.cli::logs_list has cyclomatic complexity 113">EV-0050</a></td></tr><tr><td>high complexity</td><td>llm.models::_build_message_parts</td><td class="sub">CC 63, 147 NLOC</td><td><span class="sev warn">warn</span></td><td><a class="chip fact" href="#EV-0051" title="CONFIRMED: llm.models::_build_message_parts has cyclomatic complexity 63">EV-0051</a></td></tr><tr><td>high complexity</td><td>llm.default_plugins.openai_models::register_commands.endpoint</td><td class="sub">CC 60, 203 NLOC</td><td><span class="sev warn">warn</span></td><td><a class="chip fact" href="#EV-0052" title="CONFIRMED: llm.default_plugins.openai_models::register_commands.endpoint has cyclomatic complexity 60">EV-0052</a></td></tr><tr><td>high complexity</td><td>llm.default_plugins.openai_models::execute</td><td class="sub">CC 47, 177 NLOC</td><td><span class="sev warn">warn</span></td><td><a class="chip fact" href="#EV-0053" title="CONFIRMED: llm.default_plugins.openai_models::execute has cyclomatic complexity 47">EV-0053</a></td></tr><tr><td>high complexity</td><td>llm.default_plugins.openai_models::execute</td><td class="sub">CC 43, 171 NLOC</td><td><span class="sev warn">warn</span></td><td><a class="chip fact" href="#EV-0054" title="CONFIRMED: llm.default_plugins.openai_models::execute has cyclomatic complexity 43">EV-0054</a></td></tr><tr><td>high complexity</td><td>llm.cli::tools_list</td><td class="sub">CC 38, 137 NLOC</td><td><span class="sev warn">warn</span></td><td><a class="chip fact" href="#EV-0055" title="CONFIRMED: llm.cli::tools_list has cyclomatic complexity 38">EV-0055</a></td></tr><tr><td>high complexity</td><td>llm.models::execute_tool_calls</td><td class="sub">CC 37, 150 NLOC</td><td><span class="sev warn">warn</span></td><td><a class="chip fact" href="#EV-0056" title="CONFIRMED: llm.models::execute_tool_calls has cyclomatic complexity 37">EV-0056</a></td></tr><tr><td>high complexity</td><td>llm.cli::chat</td><td class="sub">CC 31, 122 NLOC</td><td><span class="sev warn">warn</span></td><td><a class="chip fact" href="#EV-0057" title="CONFIRMED: llm.cli::chat has cyclomatic complexity 31">EV-0057</a></td></tr><tr><td>high complexity</td><td>llm.cli::render_model_with_aliases</td><td class="sub">CC 30, 66 NLOC</td><td><span class="sev warn">warn</span></td><td><a class="chip fact" href="#EV-0058" title="CONFIRMED: llm.cli::render_model_with_aliases has cyclomatic complexity 30">EV-0058</a></td></tr><tr><td>high complexity</td><td>llm.default_plugins.openai_models::execute</td><td class="sub">CC 30, 107 NLOC</td><td><span class="sev warn">warn</span></td><td><a class="chip fact" href="#EV-0059" title="CONFIRMED: llm.default_plugins.openai_models::execute has cyclomatic complexity 30">EV-0059</a></td></tr><tr><td>high complexity</td><td>llm.default_plugins.openai_models::execute</td><td class="sub">CC 30, 107 NLOC</td><td><span class="sev warn">warn</span></td><td><a class="chip fact" href="#EV-0060" title="CONFIRMED: llm.default_plugins.openai_models::execute has cyclomatic complexity 30">EV-0060</a></td></tr><tr><td>high complexity</td><td>llm.default_plugins.openai_models::_build_responses_input</td><td class="sub">CC 29, 88 NLOC</td><td><span class="sev warn">warn</span></td><td><a class="chip fact" href="#EV-0061" title="CONFIRMED: llm.default_plugins.openai_models::_build_responses_input has cyclomatic complexity 29">EV-0061</a></td></tr><tr><td>high complexity</td><td>llm.cli::embed</td><td class="sub">CC 27, 71 NLOC</td><td><span class="sev warn">warn</span></td><td><a class="chip fact" href="#EV-0062" title="CONFIRMED: llm.cli::embed has cyclomatic complexity 27">EV-0062</a></td></tr><tr><td>high complexity</td><td>llm.cli::embed_multi</td><td class="sub">CC 24, 74 NLOC</td><td><span class="sev info">info</span></td><td><a class="chip fact" href="#EV-0063" title="CONFIRMED: llm.cli::embed_multi has cyclomatic complexity 24">EV-0063</a></td></tr></tbody></table></div></section><section id="complexity"><h2>Complexity</h2>
+<p class="muted">552 functions measured with lizard 1.24.1. Median 2.0, P95 18.45,
+max 119. Bars right of the threshold (15) are drawn hatched.</p>
+<div class="scroll"><svg class="hist" viewBox="0 0 520 190" role="img" aria-label="Distribution of cyclomatic complexity"><rect class="bar" x="28" y="28.0" width="46" height="122.0"/><text class="v" x="51.0" y="23.0">183</text><text class="l" x="51.0" y="166">1</text><rect class="bar" x="82" y="86.7" width="46" height="63.3"/><text class="v" x="105.0" y="81.7">95</text><text class="l" x="105.0" y="166">2</text><rect class="bar" x="136" y="83.3" width="46" height="66.7"/><text class="v" x="159.0" y="78.3">100</text><text class="l" x="159.0" y="166">3–4</text><rect class="bar" x="190" y="96.7" width="46" height="53.3"/><text class="v" x="213.0" y="91.7">80</text><text class="l" x="213.0" y="166">5–7</text><rect class="bar" x="244" y="120.0" width="46" height="30.0"/><text class="v" x="267.0" y="115.0">45</text><text class="l" x="267.0" y="166">8–12</text><rect class="bar" x="298" y="132.7" width="46" height="17.3"/><text class="v" x="321.0" y="127.7">26</text><text class="l" x="321.0" y="166">13–20</text><rect class="bar hot" x="352" y="140.0" width="46" height="10.0"/><text class="v" x="375.0" y="135.0">15</text><text class="l" x="375.0" y="166">21–33</text><rect class="bar hot" x="406" y="147.3" width="46" height="2.7"/><text class="v" x="429.0" y="142.3">4</text><text class="l" x="429.0" y="166">34–54</text><rect class="bar hot" x="460" y="147.3" width="46" height="2.7"/><text class="v" x="483.0" y="142.3">4</text><text class="l" x="483.0" y="166">55+</text><text class="l" x="260.0" y="184">cyclomatic complexity per function</text></svg></div>
+<div class="scroll"><table class="grid"><thead><tr><th>Function</th><th>Location</th><th>CC</th><th>NLOC</th></tr></thead>
+<tbody><tr><td>prompt</td><td><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L685" target="_blank" rel="noopener">llm/cli.py:685</a></td><td class="num">119</td><td class="num">326</td></tr><tr><td>logs_list</td><td><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L1883" target="_blank" rel="noopener">llm/cli.py:1883</a></td><td class="num">113</td><td class="num">362</td></tr><tr><td>_build_message_parts</td><td><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/models.py#L1319" target="_blank" rel="noopener">llm/models.py:1319</a></td><td class="num">63</td><td class="num">147</td></tr><tr><td>register_commands.endpoint</td><td><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L605" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:605</a></td><td class="num">60</td><td class="num">203</td></tr><tr><td>execute</td><td><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L2757" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:2757</a></td><td class="num">47</td><td class="num">177</td></tr><tr><td>execute</td><td><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L2513" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:2513</a></td><td class="num">43</td><td class="num">171</td></tr><tr><td>tools_list</td><td><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L2832" target="_blank" rel="noopener">llm/cli.py:2832</a></td><td class="num">38</td><td class="num">137</td></tr><tr><td>execute_tool_calls</td><td><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/models.py#L2247" target="_blank" rel="noopener">llm/models.py:2247</a></td><td class="num">37</td><td class="num">150</td></tr></tbody></table></div></section><section id="unknowns"><h2>Open questions</h2><div class="unknown-box"><ul class="qs"><li><b>Which modules are loaded dynamically at runtime?</b><br><span class="sub">importlib/`__import__` calls exist; the static import graph may be missing edges.</span> <a class="chip unknown" href="#EV-0037" title="UNKNOWN: Which modules are loaded dynamically at runtime?">EV-0037</a></li><li><b>Do the tests pass, and what do they cover?</b><br><span class="sub">Tier 0/1 never executes repository code; coverage requires a sandboxed Tier 2 run.</span> <a class="chip unknown" href="#EV-0065" title="UNKNOWN: Do the tests pass, and what do they cover?">EV-0065</a></li><li><b>How much code is duplicated?</b><br><span class="sub">Duplication analysis is not implemented in v0.1.</span> <a class="chip unknown" href="#EV-0066" title="UNKNOWN: How much code is duplicated?">EV-0066</a></li><li><b>How much real-world usage goes through third-party plugins rather than the bundled OpenAI plugin?</b><br><span class="sub">Plugins are installed separately and are not visible in this repository.</span> <span class="tag infer">from inference</span></li></ul></div></section><section id="checklist"><h2>Checklist</h2><p class="muted">● done ◐ partial ○ not done ◌ left to inference</p><ul class="check"><li class="done"><span aria-hidden="true">●</span> Repository pinned to commit</li><li class="done"><span aria-hidden="true">●</span> Languages identified</li><li class="done"><span aria-hidden="true">●</span> Build systems identified</li><li class="done"><span aria-hidden="true">●</span> Entry points located <span class=sub>(Python only)</span></li><li class="done"><span aria-hidden="true">●</span> Internal modules mapped <span class=sub>(Python only)</span></li><li class="done"><span aria-hidden="true">●</span> Dependency inventory generated <span class=sub>(direct Python deps only; SBOM/transitive in v0.2)</span></li><li class="done"><span aria-hidden="true">●</span> Dependency graph generated</li><li class="done"><span aria-hidden="true">●</span> Cycles calculated</li><li class="done"><span aria-hidden="true">●</span> Fan-in/fan-out calculated</li><li class="partial"><span aria-hidden="true">◐</span> Components inferred <span class=sub>(directory-based; responsibilities deferred to inference step)</span></li><li class="done"><span aria-hidden="true">●</span> External boundaries mapped <span class=sub>(signature-based)</span></li><li class="done"><span aria-hidden="true">●</span> Storage mechanisms mapped <span class=sub>(signature-based)</span></li><li class="done"><span aria-hidden="true">●</span> Computational primitives identified <span class=sub>(signature-based; CENTRAL level deferred to inference)</span></li><li class="partial"><span aria-hidden="true">◐</span> AI/ML usage identified <span class=sub>(presence measured; core vs supporting deferred to inference)</span></li><li class="done"><span aria-hidden="true">●</span> Complexity measured</li><li class="not_done"><span aria-hidden="true">○</span> Duplication measured <span class=sub>(v0.2)</span></li><li class="done"><span aria-hidden="true">●</span> Tests inventoried <span class=sub>(static only)</span></li><li class="deferred_to_inference"><span aria-hidden="true">◌</span> Architecture patterns hypothesized</li><li class="done"><span aria-hidden="true">●</span> Architecture smells identified <span class=sub>(signals, not verdicts)</span></li><li class="done"><span aria-hidden="true">●</span> Evidence confidence attached</li><li class="partial"><span aria-hidden="true">◐</span> Counter-evidence recorded <span class=sub>(mechanical counter-evidence only; hypotheses must add their own)</span></li><li class="done"><span aria-hidden="true">●</span> Unknowns explicitly listed</li></ul></section><section id="evidence"><h2>Evidence register</h2><p class="muted">Every id cited above. Source links point to the pinned commit.</p><details class="ev fact" id="EV-0001"><summary><span class="eid">EV-0001</span>
+<span class="st">confirmed</span> Analysis is pinned to commit fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4</summary>
+<div class="evbody"><p class="sub">acquire · provenance.commit · git · confidence 1.0</p>
+<ul class="locs"><li>  <span class="sub">git rev-parse HEAD = fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4</span></li></ul>
+</div></details><details class="ev fact-weak" id="EV-0002"><summary><span class="eid">EV-0002</span>
+<span class="st">supported</span> License text matches Apache-2.0</summary>
+<div class="evbody"><p class="sub">acquire · provenance.license · repo-forensics · confidence 0.8</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/LICENSE" target="_blank" rel="noopener">LICENSE</a>  <span class="sub">heuristic text match on license file</span></li></ul>
+</div></details><details class="ev fact" id="EV-0003"><summary><span class="eid">EV-0003</span>
+<span class="st">confirmed</span> Python accounts for 100.0% of production code lines (13930 lines in 54 files)</summary>
+<div class="evbody"><p class="sub">fingerprint · language · repo-forensics/fingerprint · confidence 1.0</p>
+
+</div></details><details class="ev fact" id="EV-0004"><summary><span class="eid">EV-0004</span>
+<span class="st">confirmed</span> Build/package manifest docs/Makefile (make)</summary>
+<div class="evbody"><p class="sub">fingerprint · manifest · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/docs/Makefile" target="_blank" rel="noopener">docs/Makefile</a>  <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0005"><summary><span class="eid">EV-0005</span>
+<span class="st">confirmed</span> Build/package manifest docs/plugins/llm-markov/pyproject.toml (pyproject)</summary>
+<div class="evbody"><p class="sub">fingerprint · manifest · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/docs/plugins/llm-markov/pyproject.toml" target="_blank" rel="noopener">docs/plugins/llm-markov/pyproject.toml</a>  <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0006"><summary><span class="eid">EV-0006</span>
+<span class="st">confirmed</span> Build/package manifest docs/requirements.txt (pip-requirements)</summary>
+<div class="evbody"><p class="sub">fingerprint · manifest · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/docs/requirements.txt" target="_blank" rel="noopener">docs/requirements.txt</a>  <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0007"><summary><span class="eid">EV-0007</span>
+<span class="st">confirmed</span> Build/package manifest pyproject.toml (pyproject)</summary>
+<div class="evbody"><p class="sub">fingerprint · manifest · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/pyproject.toml" target="_blank" rel="noopener">pyproject.toml</a>  <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0008"><summary><span class="eid">EV-0008</span>
+<span class="st">confirmed</span> Repository contains 2 package roots (monorepo-like layout)</summary>
+<div class="evbody"><p class="sub">fingerprint · repo.multi_package · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/." target="_blank" rel="noopener">.</a>  <span class="sub">pyproject.toml</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/docs/plugins/llm-markov" target="_blank" rel="noopener">docs/plugins/llm-markov</a>  <span class="sub">pyproject.toml</span></li></ul>
+</div></details><details class="ev fact" id="EV-0009"><summary><span class="eid">EV-0009</span>
+<span class="st">confirmed</span> Internal Python import graph: 19 production modules, 40 distinct module-to-module import edges</summary>
+<div class="evbody"><p class="sub">measure · graph.size · repo-forensics/ast · confidence 1.0</p>
+
+</div></details><details class="ev fact" id="EV-0010"><summary><span class="eid">EV-0010</span>
+<span class="st">confirmed</span> Import cycle among 5 modules: llm, llm.embeddings, llm.logs, llm.models, llm.parts</summary>
+<div class="evbody"><p class="sub">measure · graph.cycle · repo-forensics/tarjan · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/__init__.py#L11" target="_blank" rel="noopener">llm/__init__.py:11</a> llm -&gt; llm.embeddings <span class="sub">module</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/__init__.py#L18" target="_blank" rel="noopener">llm/__init__.py:18</a> llm -&gt; llm.models <span class="sub">module</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/__init__.py#L43" target="_blank" rel="noopener">llm/__init__.py:43</a> llm -&gt; llm.parts <span class="sub">module</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/embeddings.py#L13" target="_blank" rel="noopener">llm/embeddings.py:13</a> llm.embeddings -&gt; llm.models <span class="sub">module</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/embeddings.py#L52" target="_blank" rel="noopener">llm/embeddings.py:52</a> llm.embeddings -&gt; llm <span class="sub">lazy</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/embeddings.py#L93" target="_blank" rel="noopener">llm/embeddings.py:93</a> llm.embeddings -&gt; llm <span class="sub">lazy</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/embeddings.py#L137" target="_blank" rel="noopener">llm/embeddings.py:137</a> llm.embeddings -&gt; llm <span class="sub">lazy</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/embeddings.py#L200" target="_blank" rel="noopener">llm/embeddings.py:200</a> llm.embeddings -&gt; llm <span class="sub">lazy</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/embeddings.py#L270" target="_blank" rel="noopener">llm/embeddings.py:270</a> llm.embeddings -&gt; llm <span class="sub">lazy</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/embeddings.py#L324" target="_blank" rel="noopener">llm/embeddings.py:324</a> llm.embeddings -&gt; llm <span class="sub">lazy</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/logs.py#L27" target="_blank" rel="noopener">llm/logs.py:27</a> llm.logs -&gt; llm.models <span class="sub">module</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/logs.py#L28" target="_blank" rel="noopener">llm/logs.py:28</a> llm.logs -&gt; llm.parts <span class="sub">module</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/logs.py#L1053" target="_blank" rel="noopener">llm/logs.py:1053</a> llm.logs -&gt; llm <span class="sub">lazy</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/models.py#L561" target="_blank" rel="noopener">llm/models.py:561</a> llm.models -&gt; llm.parts <span class="sub">lazy</span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/models.py#L664" target="_blank" rel="noopener">llm/models.py:664</a> llm.models -&gt; llm.parts <span class="sub">lazy</span></li></ul><p class="sub">showing 15 of 35 locations</p>
+</div></details><details class="ev fact" id="EV-0011"><summary><span class="eid">EV-0011</span>
+<span class="st">confirmed</span> llm.cli has 3817 code lines</summary>
+<div class="evbody"><p class="sub">measure · module.oversized · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py" target="_blank" rel="noopener">llm/cli.py</a>  <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0012"><summary><span class="eid">EV-0012</span>
+<span class="st">confirmed</span> Production code imports third-party package `click` in 4 modules</summary>
+<div class="evbody"><p class="sub">measure · dependency.imported · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/__init__.py#L9" target="_blank" rel="noopener">llm/__init__.py:9</a> click <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L21" target="_blank" rel="noopener">llm/cli.py:21</a> click <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L10" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:10</a> click <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/utils.py#L12" target="_blank" rel="noopener">llm/utils.py:12</a> click <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0013"><summary><span class="eid">EV-0013</span>
+<span class="st">confirmed</span> Production code imports third-party package `click_default_group` in 1 modules</summary>
+<div class="evbody"><p class="sub">measure · dependency.imported · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L26" target="_blank" rel="noopener">llm/cli.py:26</a> click_default_group <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0014"><summary><span class="eid">EV-0014</span>
+<span class="st">confirmed</span> Production code imports third-party package `condense_json` in 1 modules</summary>
+<div class="evbody"><p class="sub">measure · dependency.imported · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/logs.py#L24" target="_blank" rel="noopener">llm/logs.py:24</a> condense_json <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0015"><summary><span class="eid">EV-0015</span>
+<span class="st">confirmed</span> Production code imports third-party package `httpx2` in 4 modules</summary>
+<div class="evbody"><p class="sub">measure · dependency.imported · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L22" target="_blank" rel="noopener">llm/cli.py:22</a> httpx2 <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L11" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:11</a> httpx2 <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/models.py#L32" target="_blank" rel="noopener">llm/models.py:32</a> httpx2 <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/utils.py#L13" target="_blank" rel="noopener">llm/utils.py:13</a> httpx2 <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0016"><summary><span class="eid">EV-0016</span>
+<span class="st">confirmed</span> Production code imports third-party package `openai` in 1 modules</summary>
+<div class="evbody"><p class="sub">measure · dependency.imported · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L12" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:12</a> openai <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0017"><summary><span class="eid">EV-0017</span>
+<span class="st">confirmed</span> Production code imports third-party package `pluggy` in 2 modules</summary>
+<div class="evbody"><p class="sub">measure · dependency.imported · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/hookspecs.py#L1" target="_blank" rel="noopener">llm/hookspecs.py:1</a> pluggy <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/plugins.py#L6" target="_blank" rel="noopener">llm/plugins.py:6</a> pluggy <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0018"><summary><span class="eid">EV-0018</span>
+<span class="st">confirmed</span> Production code imports third-party package `puremagic` in 1 modules</summary>
+<div class="evbody"><p class="sub">measure · dependency.imported · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/utils.py#L14" target="_blank" rel="noopener">llm/utils.py:14</a> puremagic <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0019"><summary><span class="eid">EV-0019</span>
+<span class="st">confirmed</span> Production code imports third-party package `pydantic` in 4 modules</summary>
+<div class="evbody"><p class="sub">measure · dependency.imported · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L23" target="_blank" rel="noopener">llm/cli.py:23</a> pydantic <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L15" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:15</a> pydantic <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/models.py#L43" target="_blank" rel="noopener">llm/models.py:43</a> pydantic <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/templates.py#L4" target="_blank" rel="noopener">llm/templates.py:4</a> pydantic <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0020"><summary><span class="eid">EV-0020</span>
+<span class="st">confirmed</span> Production code imports third-party package `sqlite_utils` in 5 modules</summary>
+<div class="evbody"><p class="sub">measure · dependency.imported · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L24" target="_blank" rel="noopener">llm/cli.py:24</a> sqlite_utils <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L27" target="_blank" rel="noopener">llm/cli.py:27</a> sqlite_utils.utils <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L13" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:13</a> sqlite_utils <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/embeddings.py#L9" target="_blank" rel="noopener">llm/embeddings.py:9</a> sqlite_utils <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/embeddings.py#L10" target="_blank" rel="noopener">llm/embeddings.py:10</a> sqlite_utils.db <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/embeddings_migrations.py#L4" target="_blank" rel="noopener">llm/embeddings_migrations.py:4</a> sqlite_utils <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/utils.py#L15" target="_blank" rel="noopener">llm/utils.py:15</a> sqlite_utils <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0021"><summary><span class="eid">EV-0021</span>
+<span class="st">confirmed</span> Production code imports third-party package `typing_extensions` in 1 modules</summary>
+<div class="evbody"><p class="sub">measure · dependency.imported · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/serialization.py#L39" target="_blank" rel="noopener">llm/serialization.py:39</a> typing_extensions <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0022"><summary><span class="eid">EV-0022</span>
+<span class="st">confirmed</span> Production code imports third-party package `ulid` in 1 modules</summary>
+<div class="evbody"><p class="sub">measure · dependency.imported · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/utils.py#L16" target="_blank" rel="noopener">llm/utils.py:16</a> ulid <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0023"><summary><span class="eid">EV-0023</span>
+<span class="st">confirmed</span> Production code imports third-party package `yaml` in 2 modules</summary>
+<div class="evbody"><p class="sub">measure · dependency.imported · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L25" target="_blank" rel="noopener">llm/cli.py:25</a> yaml <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L14" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:14</a> yaml <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0024"><summary><span class="eid">EV-0024</span>
+<span class="st">confirmed</span> Runtime dependency `pyreadline3` is declared but no Python import of it was found</summary>
+<div class="evbody"><p class="sub">measure · dependency.declared_not_imported · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/pyproject.toml" target="_blank" rel="noopener">pyproject.toml</a> pyreadline3; sys_platform == &#x27;win32&#x27; <span class="sub"></span></li></ul>
+<p class="sub">Counter-evidence</p><ul class="locs"><li>could be a plugin, server, CLI tool or loaded dynamically</li></ul></div></details><details class="ev fact" id="EV-0025"><summary><span class="eid">EV-0025</span>
+<span class="st">confirmed</span> cli entry point `llm` at llm.cli (declared console script)</summary>
+<div class="evbody"><p class="sub">measure · entrypoint · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/pyproject.toml" target="_blank" rel="noopener">pyproject.toml</a> llm = llm.cli:cli <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0026"><summary><span class="eid">EV-0026</span>
+<span class="st">confirmed</span> cli entry point at llm.__main__ (__main__.py (python -m))</summary>
+<div class="evbody"><p class="sub">measure · entrypoint · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/__main__.py" target="_blank" rel="noopener">llm/__main__.py</a>  <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0027"><summary><span class="eid">EV-0027</span>
+<span class="st">confirmed</span> cli entry point at llm.cli (decorator `click.group`)</summary>
+<div class="evbody"><p class="sub">measure · entrypoint · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L534" target="_blank" rel="noopener">llm/cli.py:534</a> click.group <span class="sub"></span></li></ul>
+</div></details><details class="ev fact-weak" id="EV-0028"><summary><span class="eid">EV-0028</span>
+<span class="st">supported</span> library-api entry point at llm (importable top-level package declared by a package manifest)</summary>
+<div class="evbody"><p class="sub">measure · entrypoint · repo-forensics · confidence 0.8</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/__init__.py" target="_blank" rel="noopener">llm/__init__.py</a>  <span class="sub">defines __all__</span></li></ul>
+</div></details><details class="ev fact" id="EV-0029"><summary><span class="eid">EV-0029</span>
+<span class="st">confirmed</span> 2 production modules are imported by no other production module and are not recognized entry points</summary>
+<div class="evbody"><p class="sub">measure · graph.orphans · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/default_tools.py" target="_blank" rel="noopener">llm/default_plugins/default_tools.py</a>  <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py" target="_blank" rel="noopener">llm/default_plugins/openai_models.py</a>  <span class="sub"></span></li></ul>
+<p class="sub">Counter-evidence</p><ul class="locs"><li>may be loaded dynamically, via plugins, or used only by tests</li></ul></div></details><details class="ev fact" id="EV-0030"><summary><span class="eid">EV-0030</span>
+<span class="st">confirmed</span> Production code calls openai (hosted-llm-inference) at 3 site(s) in 1 module(s)</summary>
+<div class="evbody"><p class="sub">measure · signal.ai · repo-forensics/signatures · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L508" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:508</a> openai.OpenAI <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L1367" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:1367</a> openai.AsyncOpenAI <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L1369" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:1369</a> openai.OpenAI <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0031"><summary><span class="eid">EV-0031</span>
+<span class="st">confirmed</span> Production code calls sqlite3 (stdlib) (relational-store) at 7 site(s) in 5 module(s)</summary>
+<div class="evbody"><p class="sub">measure · signal.storage · repo-forensics/signatures · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L1421" target="_blank" rel="noopener">llm/cli.py:1421</a> sqlite_utils.Database <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L3660" target="_blank" rel="noopener">llm/cli.py:3660</a> sqlite_utils.utils.rows_from_file <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L4069" target="_blank" rel="noopener">llm/cli.py:4069</a> sqlite_utils.Database <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L4082" target="_blank" rel="noopener">llm/cli.py:4082</a> sqlite_utils.Database <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L675" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:675</a> sqlite_utils.Database <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/embeddings.py#L54" target="_blank" rel="noopener">llm/embeddings.py:54</a> sqlite_utils.Database <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/embeddings_migrations.py#L6" target="_blank" rel="noopener">llm/embeddings_migrations.py:6</a> sqlite_utils.Migrations <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0032"><summary><span class="eid">EV-0032</span>
+<span class="st">confirmed</span> subprocess / os (subprocess-execution) appears only in tests/examples/scripts</summary>
+<div class="evbody"><p class="sub">measure · signal.boundary · repo-forensics/signatures · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/docs/conf.py#L1" target="_blank" rel="noopener">docs/conf.py:1</a> subprocess <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/docs/conf.py#L88" target="_blank" rel="noopener">docs/conf.py:88</a> subprocess.Popen <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0033"><summary><span class="eid">EV-0033</span>
+<span class="st">confirmed</span> Production code calls builtins (dynamic-code-execution) at 1 site(s) in 1 module(s)</summary>
+<div class="evbody"><p class="sub">measure · signal.boundary · repo-forensics/signatures · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L4293" target="_blank" rel="noopener">llm/cli.py:4293</a> builtins.exec <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0034"><summary><span class="eid">EV-0034</span>
+<span class="st">confirmed</span> Production code calls importlib (dynamic-import) at 1 site(s) in 1 module(s)</summary>
+<div class="evbody"><p class="sub">measure · signal.boundary · repo-forensics/signatures · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/plugins.py#L51" target="_blank" rel="noopener">llm/plugins.py:51</a> importlib.import_module <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0035"><summary><span class="eid">EV-0035</span>
+<span class="st">confirmed</span> Production code calls builtins / shutil (filesystem-io) at 8 site(s) in 3 module(s)</summary>
+<div class="evbody"><p class="sub">measure · signal.boundary · repo-forensics/signatures · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L2459" target="_blank" rel="noopener">llm/cli.py:2459</a> shutil.get_terminal_size <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L3289" target="_blank" rel="noopener">llm/cli.py:3289</a> shutil.get_terminal_size <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L3454" target="_blank" rel="noopener">llm/cli.py:3454</a> builtins.open <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L3666" target="_blank" rel="noopener">llm/cli.py:3666</a> builtins.open <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L3673" target="_blank" rel="noopener">llm/cli.py:3673</a> builtins.open <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L3771" target="_blank" rel="noopener">llm/cli.py:3771</a> builtins.open <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L389" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:389</a> builtins.open <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/logs.py#L106" target="_blank" rel="noopener">llm/logs.py:106</a> builtins.open <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0036"><summary><span class="eid">EV-0036</span>
+<span class="st">confirmed</span> Production code calls pluggy / stevedore (plugin-registry) at 3 site(s) in 2 module(s)</summary>
+<div class="evbody"><p class="sub">measure · signal.boundary · repo-forensics/signatures · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/hookspecs.py#L3" target="_blank" rel="noopener">llm/hookspecs.py:3</a> pluggy.HookspecMarker <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/hookspecs.py#L4" target="_blank" rel="noopener">llm/hookspecs.py:4</a> pluggy.HookimplMarker <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/plugins.py#L15" target="_blank" rel="noopener">llm/plugins.py:15</a> pluggy.PluginManager <span class="sub"></span></li></ul>
+</div></details><details class="ev unknown" id="EV-0037"><summary><span class="eid">EV-0037</span>
+<span class="st">unknown</span> Which modules are loaded dynamically at runtime?</summary>
+<div class="evbody"><p class="sub">measure · unknown · repo-forensics</p>
+
+</div></details><details class="ev fact" id="EV-0038"><summary><span class="eid">EV-0038</span>
+<span class="st">confirmed</span> Production code reads 4 environment variables</summary>
+<div class="evbody"><p class="sub">measure · config.env_vars · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/plugins.py#L18" target="_blank" rel="noopener">llm/plugins.py:18</a> LLM_LOAD_PLUGINS <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L1364" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:1364</a> LLM_OPENAI_SHOW_RESPONSES <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L1144" target="_blank" rel="noopener">llm/cli.py:1144</a> LLM_RAISE_ERRORS <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/__init__.py#L417" target="_blank" rel="noopener">llm/__init__.py:417</a> LLM_USER_PATH <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0039"><summary><span class="eid">EV-0039</span>
+<span class="st">confirmed</span> 4 components depend on each other cyclically: llm (root modules), llm.cli, llm.logs, llm.models</summary>
+<div class="evbody"><p class="sub">decompose · component.cycle · repo-forensics · confidence 1.0</p>
+
+<p class="sub">Counter-evidence</p><ul class="locs"><li>cycle passes through a merged bucket of small modules; may be an artefact of grouping</li></ul></div></details><details class="ev infer" id="EV-0040"><summary><span class="eid">EV-0040</span>
+<span class="st">inferred</span> Directory structure is assumed to reflect component boundaries</summary>
+<div class="evbody"><p class="sub">decompose · component.method · repo-forensics · confidence 0.6</p>
+
+<p class="sub">Counter-evidence</p><ul class="locs"><li>directories can be organizational rather than architectural; validate by reading entry points</li></ul></div></details><details class="ev fact" id="EV-0041"><summary><span class="eid">EV-0041</span>
+<span class="st">confirmed</span> Component `llm.cli`: 1 modules, 3817 code lines, depends on 3 and is used by 2 components</summary>
+<div class="evbody"><p class="sub">decompose · component · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py" target="_blank" rel="noopener">llm/cli.py</a>  <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0042"><summary><span class="eid">EV-0042</span>
+<span class="st">confirmed</span> Component `llm.models`: 1 modules, 3065 code lines, depends on 2 and is used by 4 components</summary>
+<div class="evbody"><p class="sub">decompose · component · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/models.py" target="_blank" rel="noopener">llm/models.py</a>  <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0043"><summary><span class="eid">EV-0043</span>
+<span class="st">confirmed</span> Component `llm.default_plugins`: 3 modules, 2846 code lines, depends on 3 and is used by 0 components</summary>
+<div class="evbody"><p class="sub">decompose · component · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins" target="_blank" rel="noopener">llm/default_plugins</a>  <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0044"><summary><span class="eid">EV-0044</span>
+<span class="st">confirmed</span> Component `llm (root modules)`: 13 modules, 2547 code lines, depends on 2 and is used by 4 components</summary>
+<div class="evbody"><p class="sub">decompose · component · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm" target="_blank" rel="noopener">llm</a>  <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0045"><summary><span class="eid">EV-0045</span>
+<span class="st">confirmed</span> Component `llm.logs`: 1 modules, 1655 code lines, depends on 2 and is used by 2 components</summary>
+<div class="evbody"><p class="sub">decompose · component · repo-forensics · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/logs.py" target="_blank" rel="noopener">llm/logs.py</a>  <span class="sub"></span></li></ul>
+</div></details><details class="ev infer" id="EV-0046"><summary><span class="eid">EV-0046</span>
+<span class="st">inferred</span> Repository appears to be: CLI application, library (importable package)</summary>
+<div class="evbody"><p class="sub">decompose · repo.shape · repo-forensics · confidence 0.6</p>
+
+</div></details><details class="ev fact" id="EV-0047"><summary><span class="eid">EV-0047</span>
+<span class="st">confirmed</span> 552 functions: median CC 2.0, P95 18.45, max 119</summary>
+<div class="evbody"><p class="sub">measure · complexity.distribution · lizard · confidence 1.0</p>
+
+</div></details><details class="ev fact" id="EV-0048"><summary><span class="eid">EV-0048</span>
+<span class="st">confirmed</span> 22 further functions exceed cyclomatic complexity 15</summary>
+<div class="evbody"><p class="sub">measure · complexity.function.aggregate · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L40" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:40</a> register_models (CC 24) <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L1678" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:1678</a> __init__ (CC 24) <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/models.py#L2789" target="_blank" rel="noopener">llm/models.py:2789</a> _trailing_pending_tool_calls (CC 24) <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/logs.py#L477" target="_blank" rel="noopener">llm/logs.py:477</a> _log_in_transaction (CC 23) <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L2511" target="_blank" rel="noopener">llm/cli.py:2511</a> models_list (CC 22) <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/logs.py#L1500" target="_blank" rel="noopener">llm/logs.py:1500</a> log_row_extras (CC 22) <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/models.py#L1887" target="_blank" rel="noopener">llm/models.py:1887</a> execute_tool_calls (CC 22) <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L2066" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:2066</a> _build_responses_kwargs (CC 21) <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L136" target="_blank" rel="noopener">llm/cli.py:136</a> _run_chat (CC 20) <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L1415" target="_blank" rel="noopener">llm/cli.py:1415</a> load_conversation (CC 20) <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L2264" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:2264</a> _server_tool_events (CC 20) <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/logs.py#L1734" target="_blank" rel="noopener">llm/logs.py:1734</a> legacy_log_rows (CC 20) <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L3727" target="_blank" rel="noopener">llm/cli.py:3727</a> similar (CC 19) <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L1688" target="_blank" rel="noopener">llm/cli.py:1688</a> annotate_log_rows (CC 18) <span class="sub"></span></li><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/__init__.py#L176" target="_blank" rel="noopener">llm/__init__.py:176</a> get_tools.register (CC 17) <span class="sub"></span></li></ul><p class="sub">showing 15 of 22 locations</p>
+</div></details><details class="ev fact" id="EV-0049"><summary><span class="eid">EV-0049</span>
+<span class="st">confirmed</span> llm.cli::prompt has cyclomatic complexity 119</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L685" target="_blank" rel="noopener">llm/cli.py:685</a> prompt <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0050"><summary><span class="eid">EV-0050</span>
+<span class="st">confirmed</span> llm.cli::logs_list has cyclomatic complexity 113</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L1883" target="_blank" rel="noopener">llm/cli.py:1883</a> logs_list <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0051"><summary><span class="eid">EV-0051</span>
+<span class="st">confirmed</span> llm.models::_build_message_parts has cyclomatic complexity 63</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/models.py#L1319" target="_blank" rel="noopener">llm/models.py:1319</a> _build_message_parts <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0052"><summary><span class="eid">EV-0052</span>
+<span class="st">confirmed</span> llm.default_plugins.openai_models::register_commands.endpoint has cyclomatic complexity 60</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L605" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:605</a> register_commands.endpoint <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0053"><summary><span class="eid">EV-0053</span>
+<span class="st">confirmed</span> llm.default_plugins.openai_models::execute has cyclomatic complexity 47</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L2757" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:2757</a> execute <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0054"><summary><span class="eid">EV-0054</span>
+<span class="st">confirmed</span> llm.default_plugins.openai_models::execute has cyclomatic complexity 43</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L2513" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:2513</a> execute <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0055"><summary><span class="eid">EV-0055</span>
+<span class="st">confirmed</span> llm.cli::tools_list has cyclomatic complexity 38</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L2832" target="_blank" rel="noopener">llm/cli.py:2832</a> tools_list <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0056"><summary><span class="eid">EV-0056</span>
+<span class="st">confirmed</span> llm.models::execute_tool_calls has cyclomatic complexity 37</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/models.py#L2247" target="_blank" rel="noopener">llm/models.py:2247</a> execute_tool_calls <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0057"><summary><span class="eid">EV-0057</span>
+<span class="st">confirmed</span> llm.cli::chat has cyclomatic complexity 31</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L1247" target="_blank" rel="noopener">llm/cli.py:1247</a> chat <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0058"><summary><span class="eid">EV-0058</span>
+<span class="st">confirmed</span> llm.cli::render_model_with_aliases has cyclomatic complexity 30</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L2416" target="_blank" rel="noopener">llm/cli.py:2416</a> render_model_with_aliases <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0059"><summary><span class="eid">EV-0059</span>
+<span class="st">confirmed</span> llm.default_plugins.openai_models::execute has cyclomatic complexity 30</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L1412" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:1412</a> execute <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0060"><summary><span class="eid">EV-0060</span>
+<span class="st">confirmed</span> llm.default_plugins.openai_models::execute has cyclomatic complexity 30</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L1530" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:1530</a> execute <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0061"><summary><span class="eid">EV-0061</span>
+<span class="st">confirmed</span> llm.default_plugins.openai_models::_build_responses_input has cyclomatic complexity 29</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/default_plugins/openai_models.py#L1954" target="_blank" rel="noopener">llm/default_plugins/openai_models.py:1954</a> _build_responses_input <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0062"><summary><span class="eid">EV-0062</span>
+<span class="st">confirmed</span> llm.cli::embed has cyclomatic complexity 27</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L3386" target="_blank" rel="noopener">llm/cli.py:3386</a> embed <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0063"><summary><span class="eid">EV-0063</span>
+<span class="st">confirmed</span> llm.cli::embed_multi has cyclomatic complexity 24</summary>
+<div class="evbody"><p class="sub">measure · complexity.function · lizard · confidence 1.0</p>
+<ul class="locs"><li><a class="path" href="https://github.com/simonw/llm/blob/fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4/llm/cli.py#L3529" target="_blank" rel="noopener">llm/cli.py:3529</a> embed_multi <span class="sub"></span></li></ul>
+</div></details><details class="ev fact" id="EV-0064"><summary><span class="eid">EV-0064</span>
+<span class="st">confirmed</span> 33 test modules with 810 test functions; test/production code ratio 1.22</summary>
+<div class="evbody"><p class="sub">measure · tests.inventory · repo-forensics · confidence 1.0</p>
+
+</div></details><details class="ev unknown" id="EV-0065"><summary><span class="eid">EV-0065</span>
+<span class="st">unknown</span> Do the tests pass, and what do they cover?</summary>
+<div class="evbody"><p class="sub">measure · unknown · repo-forensics</p>
+
+</div></details><details class="ev unknown" id="EV-0066"><summary><span class="eid">EV-0066</span>
+<span class="st">unknown</span> How much code is duplicated?</summary>
+<div class="evbody"><p class="sub">measure · unknown · repo-forensics</p>
+
+</div></details></section><footer>Generated by repo-forensics 0.1.0. Facts come from static analysis at the pinned commit; inferences come from a validated <span class="path">hypotheses.json</span> bound to evidence digest <span class="path">sha256:3a8165cbc71de548a45f5a0c2191578a</span>.</footer></main><script>
+function openTarget(){var id=location.hash.slice(1);if(!id)return;var el=document.getElementById(id);
+if(el&&el.tagName==='DETAILS'){el.open=true;}}
+window.addEventListener('hashchange',openTarget);openTarget();
+</script></body></html>

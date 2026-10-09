@@ -86,3 +86,17 @@ def test_tampered_evidence_is_detected(demo_analysis, tmp_path):
     p = dst / "evidence.jsonl"
     p.write_text(p.read_text().replace("CONFIRMED", "SUPPORTED", 1))
     assert any("does not match report.json evidence_digest" in e for e in validate_bundle(dst))
+
+
+def test_html_renders_inference_only_when_valid(demo_analysis, tmp_path):
+    from repo_forensics.html import render_html
+    dst, report = _copy(demo_analysis, tmp_path)
+    page = render_html(dst).read_text()
+    assert "No inference layer yet" in page and 'id="EV-0001"' in page
+    h = good_hypotheses(report)
+    (dst / "hypotheses.json").write_text(json.dumps(h))
+    page = render_html(dst).read_text()
+    assert "Owns the core run loop." in page and "No inference layer yet" not in page
+    h["evidence_digest"] = "sha256:" + "0" * 32          # invalid -> inference must not be shown
+    (dst / "hypotheses.json").write_text(json.dumps(h))
+    assert "Owns the core run loop." not in render_html(dst).read_text()

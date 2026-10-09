@@ -54,6 +54,7 @@ repo-forensics analyze pallets/flask --out analysis/flask          # GitHub shor
 repo-forensics analyze https://github.com/simonw/llm --ref fe283cb9 --out analysis/llm --keep-clone
 repo-forensics analyze ./my-local-repo --out analysis/mine
 repo-forensics validate analysis/llm
+repo-forensics render analysis/llm      # rebuild report.html including the validated inference layer
 ```
 
 Options: `--tier 0|1` (0 = parsing only; 1 = also lizard, default), `--component-depth 1|2`,
@@ -76,6 +77,7 @@ The skill runs the CLI, reads the code it needs, writes `hypotheses.json`, and i
 ```
 analysis/<name>/
 ├── report.json            # stable interface for downstream tools (JSON Schema 2020-12)
+├── report.html            # self-contained visual report (facts solid, inferences dashed, unknowns dotted)
 ├── report.md              # human-readable report
 ├── evidence.jsonl         # one evidence item per line
 ├── hypotheses.json        # inference layer (written by the skill, validated)

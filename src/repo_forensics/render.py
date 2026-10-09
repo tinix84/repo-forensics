@@ -163,3 +163,5 @@ def write_outputs(report: dict, evidence: list[dict], out_dir: Path) -> None:
     (out_dir / "metrics" / "complexity.json").write_text(json.dumps(funcs, indent=1) + "\n", encoding="utf-8")
     (out_dir / "architecture.mmd").write_text(mermaid(report), encoding="utf-8")
     (out_dir / "report.md").write_text(markdown(report), encoding="utf-8")
+    from .html import render_html
+    render_html(out_dir)

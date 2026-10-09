@@ -2,6 +2,14 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- `report.html`: self-contained visual report. Evidence status is encoded with technical-drawing line
+  types (continuous = fact, dashed = inference, dotted = unknown); component map as inline SVG layered by
+  dependency depth; every evidence location links to the exact source line at the pinned commit.
+- `repo-forensics render <dir>`: rebuilds the HTML, including `hypotheses.json` only if the bundle validates.
+
 ## [0.1.0] - 2026-10-09
 
 ### Added

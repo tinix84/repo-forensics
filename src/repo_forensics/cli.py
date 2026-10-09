@@ -31,6 +31,9 @@ def main(argv: list[str] | None = None) -> int:
     v = sub.add_parser("validate", help="validate an analysis directory (and hypotheses.json if present)")
     v.add_argument("out")
 
+    h = sub.add_parser("render", help="(re)build report.html, including hypotheses.json if it validates")
+    h.add_argument("out")
+
     args = ap.parse_args(argv)
     if args.cmd == "analyze":
         from .acquire import AcquireError
@@ -64,6 +67,16 @@ def main(argv: list[str] | None = None) -> int:
             print(f"INVALID: {len(errs)} problem(s)", file=sys.stderr)
             return 1
         print("VALID")
+        return 0
+    if args.cmd == "render":
+        from .html import render_html
+        from .validate import validate_bundle
+        errs = validate_bundle(Path(args.out))
+        path = render_html(Path(args.out))
+        if errs:
+            print(f"warning: bundle has {len(errs)} validation problem(s); the inference layer was not rendered",
+                  file=sys.stderr)
+        print(path)
         return 0
     return 1
 
