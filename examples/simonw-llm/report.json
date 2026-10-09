@@ -1,0 +1,1658 @@
+{
+  "schema_version": "0.1.0",
+  "tool": {
+    "name": "repo-forensics",
+    "version": "0.1.0",
+    "tier": 1,
+    "requested_tier": 1,
+    "notes": []
+  },
+  "provenance": {
+    "url": "https://github.com/simonw/llm",
+    "commit_sha": "fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4",
+    "requested_ref": "fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4",
+    "default_branch": null,
+    "dirty": false,
+    "analyzed_at": "2026-10-09T05:53:42+00:00",
+    "license": "Apache-2.0",
+    "license_file": "LICENSE",
+    "pinned": true
+  },
+  "fingerprint": {
+    "languages": {
+      "Python": {
+        "kind": "programming",
+        "files": 54,
+        "code_lines": 31068,
+        "comment_lines": 1602,
+        "blank_lines": 4444,
+        "source_code_lines": 13930,
+        "source_share": 1.0,
+        "code_lines_by_class": {
+          "docs": 137,
+          "source": 13930,
+          "test": 17001
+        }
+      },
+      "Markdown": {
+        "kind": "docs",
+        "files": 30,
+        "code_lines": 9316,
+        "comment_lines": 0,
+        "blank_lines": 2351,
+        "source_code_lines": 0,
+        "source_share": null,
+        "code_lines_by_class": {
+          "docs": 9316
+        }
+      },
+      "Shell": {
+        "kind": "programming",
+        "files": 1,
+        "code_lines": 23,
+        "comment_lines": 5,
+        "blank_lines": 1,
+        "source_code_lines": 0,
+        "source_share": 0.0,
+        "code_lines_by_class": {
+          "test": 23
+        }
+      },
+      "HTML": {
+        "kind": "markup",
+        "files": 1,
+        "code_lines": 14,
+        "comment_lines": 0,
+        "blank_lines": 2,
+        "source_code_lines": 0,
+        "source_share": null,
+        "code_lines_by_class": {
+          "docs": 14
+        }
+      },
+      "Makefile": {
+        "kind": "programming",
+        "files": 1,
+        "code_lines": 12,
+        "comment_lines": 6,
+        "blank_lines": 5,
+        "source_code_lines": 0,
+        "source_share": 0.0,
+        "code_lines_by_class": {
+          "docs": 12
+        }
+      },
+      "YAML": {
+        "kind": "data",
+        "files": 19,
+        "code_lines": 0,
+        "comment_lines": 0,
+        "blank_lines": 0,
+        "source_code_lines": 0,
+        "source_share": null,
+        "code_lines_by_class": {
+          "config": 0,
+          "test": 0
+        }
+      },
+      "TOML": {
+        "kind": "data",
+        "files": 3,
+        "code_lines": 0,
+        "comment_lines": 0,
+        "blank_lines": 0,
+        "source_code_lines": 0,
+        "source_share": null,
+        "code_lines_by_class": {
+          "docs": 0,
+          "config": 0
+        }
+      },
+      "INI": {
+        "kind": "data",
+        "files": 2,
+        "code_lines": 0,
+        "comment_lines": 0,
+        "blank_lines": 0,
+        "source_code_lines": 0,
+        "source_share": null,
+        "code_lines_by_class": {
+          "config": 0
+        }
+      }
+    },
+    "analysis_coverage": {
+      "Python": "deep"
+    },
+    "file_classes": {
+      "config": 11,
+      "other": 5,
+      "docs": 37,
+      "source": 19,
+      "test": 46
+    },
+    "files_total": 118,
+    "manifests": [
+      {
+        "path": "docs/Makefile",
+        "ecosystem": "generic",
+        "build_system": "make"
+      },
+      {
+        "path": "docs/plugins/llm-markov/pyproject.toml",
+        "ecosystem": "python",
+        "build_system": "pyproject"
+      },
+      {
+        "path": "docs/requirements.txt",
+        "ecosystem": "python",
+        "build_system": "pip-requirements"
+      },
+      {
+        "path": "pyproject.toml",
+        "ecosystem": "python",
+        "build_system": "pyproject",
+        "build_backend": "setuptools.build_meta"
+      }
+    ],
+    "build_systems": [
+      "make",
+      "pip-requirements",
+      "pyproject",
+      "setuptools"
+    ],
+    "package_roots": [
+      {
+        "dir": ".",
+        "manifests": [
+          "pyproject.toml"
+        ]
+      },
+      {
+        "dir": "docs/plugins/llm-markov",
+        "manifests": [
+          "pyproject.toml"
+        ]
+      }
+    ],
+    "multi_package": true,
+    "ci": [
+      ".github/workflows/cog.yml",
+      ".github/workflows/publish.yml",
+      ".github/workflows/stable-docs.yml",
+      ".github/workflows/test.yml"
+    ]
+  },
+  "entrypoints": [
+    {
+      "name": "llm",
+      "type": "cli",
+      "module": "llm.cli",
+      "path": "llm/cli.py",
+      "detection": "declared console script",
+      "status": "CONFIRMED",
+      "evidence_id": "EV-0025"
+    },
+    {
+      "name": null,
+      "type": "cli",
+      "module": "llm.__main__",
+      "path": "llm/__main__.py",
+      "detection": "__main__.py (python -m)",
+      "status": "CONFIRMED",
+      "evidence_id": "EV-0026"
+    },
+    {
+      "name": null,
+      "type": "cli",
+      "module": "llm.cli",
+      "path": "llm/cli.py",
+      "detection": "decorator `click.group`",
+      "status": "CONFIRMED",
+      "evidence_id": "EV-0027"
+    },
+    {
+      "name": null,
+      "type": "library-api",
+      "module": "llm",
+      "path": "llm/__init__.py",
+      "detection": "importable top-level package declared by a package manifest",
+      "status": "SUPPORTED",
+      "evidence_id": "EV-0028"
+    }
+  ],
+  "repo_shape": {
+    "hypothesis": [
+      "CLI application",
+      "library (importable package)"
+    ],
+    "status": "INFERRED",
+    "evidence_id": "EV-0046"
+  },
+  "dependencies": {
+    "declared": [
+      {
+        "name": "sphinx",
+        "scope": "non-production",
+        "manifest": "docs/requirements.txt",
+        "raw": "sphinx==7.2.6"
+      },
+      {
+        "name": "furo",
+        "scope": "non-production",
+        "manifest": "docs/requirements.txt",
+        "raw": "furo==2023.9.10"
+      },
+      {
+        "name": "sphinx-autobuild",
+        "scope": "non-production",
+        "manifest": "docs/requirements.txt",
+        "raw": "sphinx-autobuild"
+      },
+      {
+        "name": "sphinx-copybutton",
+        "scope": "non-production",
+        "manifest": "docs/requirements.txt",
+        "raw": "sphinx-copybutton"
+      },
+      {
+        "name": "sphinx-markdown-builder",
+        "scope": "non-production",
+        "manifest": "docs/requirements.txt",
+        "raw": "sphinx-markdown-builder==0.6.8"
+      },
+      {
+        "name": "myst-parser",
+        "scope": "non-production",
+        "manifest": "docs/requirements.txt",
+        "raw": "myst-parser"
+      },
+      {
+        "name": "cogapp",
+        "scope": "non-production",
+        "manifest": "docs/requirements.txt",
+        "raw": "cogapp"
+      },
+      {
+        "name": "click",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "click"
+      },
+      {
+        "name": "httpx2",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "httpx2"
+      },
+      {
+        "name": "condense-json",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "condense-json>=1.1"
+      },
+      {
+        "name": "openai",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "openai>3"
+      },
+      {
+        "name": "click-default-group",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "click-default-group>=1.2.3"
+      },
+      {
+        "name": "sqlite-utils",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "sqlite-utils>=4.0"
+      },
+      {
+        "name": "pydantic",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "pydantic>=2.0.0"
+      },
+      {
+        "name": "typing-extensions",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "typing-extensions"
+      },
+      {
+        "name": "pyyaml",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "PyYAML"
+      },
+      {
+        "name": "pluggy",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "pluggy"
+      },
+      {
+        "name": "python-ulid",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "python-ulid"
+      },
+      {
+        "name": "setuptools",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "setuptools"
+      },
+      {
+        "name": "pip",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "pip"
+      },
+      {
+        "name": "pyreadline3",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "pyreadline3; sys_platform == 'win32'"
+      },
+      {
+        "name": "puremagic",
+        "scope": "runtime",
+        "manifest": "pyproject.toml",
+        "raw": "puremagic"
+      },
+      {
+        "name": "build",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "build"
+      },
+      {
+        "name": "click",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "click>=8.2.0"
+      },
+      {
+        "name": "pytest",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "pytest"
+      },
+      {
+        "name": "numpy",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "numpy"
+      },
+      {
+        "name": "httpx2-pytest",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "httpx2-pytest>=2"
+      },
+      {
+        "name": "pytest-asyncio",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "pytest-asyncio"
+      },
+      {
+        "name": "cogapp",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "cogapp"
+      },
+      {
+        "name": "mypy",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "mypy>=1.10.0"
+      },
+      {
+        "name": "black",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "black>=26.3.1"
+      },
+      {
+        "name": "pytest-recording",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "pytest-recording"
+      },
+      {
+        "name": "ruff",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "ruff>=0.16.0"
+      },
+      {
+        "name": "syrupy",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "syrupy"
+      },
+      {
+        "name": "types-click",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "types-click"
+      },
+      {
+        "name": "types-pyyaml",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "types-PyYAML"
+      },
+      {
+        "name": "types-setuptools",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "types-setuptools"
+      },
+      {
+        "name": "llm-echo",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "llm-echo==0.3a3"
+      },
+      {
+        "name": "sphinx",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "sphinx==7.2.6"
+      },
+      {
+        "name": "furo",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "furo==2023.9.10"
+      },
+      {
+        "name": "sphinx-autobuild",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "sphinx-autobuild"
+      },
+      {
+        "name": "sphinx-copybutton",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "sphinx-copybutton"
+      },
+      {
+        "name": "sphinx-markdown-builder",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "sphinx-markdown-builder==0.6.8"
+      },
+      {
+        "name": "myst-parser",
+        "scope": "dev",
+        "manifest": "pyproject.toml",
+        "raw": "myst-parser"
+      },
+      {
+        "name": "setuptools",
+        "scope": "build",
+        "manifest": "pyproject.toml",
+        "raw": "setuptools"
+      }
+    ],
+    "declared_counts": {
+      "non-production": 7,
+      "runtime": 15,
+      "dev": 22,
+      "build": 1
+    },
+    "third_party_imported": [
+      {
+        "import_name": "click",
+        "distribution_guess": "click",
+        "declared_as": [
+          "click"
+        ],
+        "modules_importing": 24,
+        "production_modules_importing": 4,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "source": 4,
+          "test": 23
+        }
+      },
+      {
+        "import_name": "click_default_group",
+        "distribution_guess": "click-default-group",
+        "declared_as": [
+          "click-default-group"
+        ],
+        "modules_importing": 1,
+        "production_modules_importing": 1,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "source": 1
+        }
+      },
+      {
+        "import_name": "condense_json",
+        "distribution_guess": "condense-json",
+        "declared_as": [
+          "condense-json"
+        ],
+        "modules_importing": 2,
+        "production_modules_importing": 1,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "source": 1,
+          "test": 2
+        }
+      },
+      {
+        "import_name": "docutils",
+        "distribution_guess": "docutils",
+        "declared_as": [],
+        "modules_importing": 1,
+        "production_modules_importing": 0,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "docs": 1
+        }
+      },
+      {
+        "import_name": "httpx2",
+        "distribution_guess": "httpx2",
+        "declared_as": [
+          "httpx2"
+        ],
+        "modules_importing": 5,
+        "production_modules_importing": 4,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "source": 4,
+          "test": 1
+        }
+      },
+      {
+        "import_name": "llm_echo",
+        "distribution_guess": "llm-echo",
+        "declared_as": [
+          "llm-echo"
+        ],
+        "modules_importing": 1,
+        "production_modules_importing": 0,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "test": 1
+        }
+      },
+      {
+        "import_name": "numpy",
+        "distribution_guess": "numpy",
+        "declared_as": [
+          "numpy"
+        ],
+        "modules_importing": 1,
+        "production_modules_importing": 0,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "test": 1
+        }
+      },
+      {
+        "import_name": "openai",
+        "distribution_guess": "openai",
+        "declared_as": [
+          "openai"
+        ],
+        "modules_importing": 1,
+        "production_modules_importing": 1,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "source": 1
+        }
+      },
+      {
+        "import_name": "pluggy",
+        "distribution_guess": "pluggy",
+        "declared_as": [
+          "pluggy"
+        ],
+        "modules_importing": 2,
+        "production_modules_importing": 2,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "source": 2
+        }
+      },
+      {
+        "import_name": "puremagic",
+        "distribution_guess": "puremagic",
+        "declared_as": [
+          "puremagic"
+        ],
+        "modules_importing": 1,
+        "production_modules_importing": 1,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "source": 1
+        }
+      },
+      {
+        "import_name": "pydantic",
+        "distribution_guess": "pydantic",
+        "declared_as": [
+          "pydantic"
+        ],
+        "modules_importing": 10,
+        "production_modules_importing": 4,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "docs": 1,
+          "source": 4,
+          "test": 5
+        }
+      },
+      {
+        "import_name": "pytest",
+        "distribution_guess": "pytest",
+        "declared_as": [
+          "pytest"
+        ],
+        "modules_importing": 31,
+        "production_modules_importing": 0,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "test": 31
+        }
+      },
+      {
+        "import_name": "pytest_httpx2",
+        "distribution_guess": "pytest-httpx2",
+        "declared_as": [],
+        "modules_importing": 4,
+        "production_modules_importing": 0,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "test": 4
+        }
+      },
+      {
+        "import_name": "sqlite_utils",
+        "distribution_guess": "sqlite-utils",
+        "declared_as": [
+          "sqlite-utils"
+        ],
+        "modules_importing": 8,
+        "production_modules_importing": 5,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "source": 7,
+          "test": 3
+        }
+      },
+      {
+        "import_name": "typing_extensions",
+        "distribution_guess": "typing-extensions",
+        "declared_as": [
+          "typing-extensions"
+        ],
+        "modules_importing": 1,
+        "production_modules_importing": 1,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "source": 1
+        }
+      },
+      {
+        "import_name": "ulid",
+        "distribution_guess": "python-ulid",
+        "declared_as": [
+          "python-ulid"
+        ],
+        "modules_importing": 2,
+        "production_modules_importing": 1,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "source": 1,
+          "test": 1
+        }
+      },
+      {
+        "import_name": "yaml",
+        "distribution_guess": "pyyaml",
+        "declared_as": [
+          "pyyaml"
+        ],
+        "modules_importing": 5,
+        "production_modules_importing": 2,
+        "type_checking_only": false,
+        "sites_by_class": {
+          "source": 2,
+          "test": 3
+        }
+      }
+    ],
+    "stdlib_imported": {
+      "json": 31,
+      "typing": 24,
+      "os": 12,
+      "sys": 11,
+      "importlib": 11,
+      "pathlib": 10,
+      "re": 9,
+      "time": 8,
+      "unittest": 8,
+      "collections": 6,
+      "textwrap": 6,
+      "datetime": 6,
+      "base64": 5,
+      "dataclasses": 5,
+      "hashlib": 5,
+      "inspect": 4,
+      "asyncio": 4,
+      "sqlite3": 4,
+      "itertools": 3,
+      "functools": 2,
+      "types": 2,
+      "threading": 2,
+      "subprocess": 1,
+      "random": 1,
+      "struct": 1,
+      "io": 1,
+      "readline": 1,
+      "shutil": 1,
+      "warnings": 1,
+      "runpy": 1,
+      "enum": 1,
+      "abc": 1,
+      "string": 1,
+      "ast": 1,
+      "contextlib": 1
+    },
+    "imported_not_declared": [],
+    "declared_not_imported": [
+      "pyreadline3"
+    ]
+  },
+  "module_graph": {
+    "production_modules": 19,
+    "test_modules": 33,
+    "edges": 40,
+    "fan_in": {
+      "n": 19,
+      "median": 2.0,
+      "p90": 6.0,
+      "p95": 6.0,
+      "max": 6
+    },
+    "fan_out": {
+      "n": 19,
+      "median": 1.0,
+      "p90": 6.0,
+      "p95": 6.2,
+      "max": 8
+    },
+    "module_code_lines": {
+      "n": 19,
+      "median": 117.0,
+      "p90": 2885.0,
+      "p95": 3140.2,
+      "max": 3817
+    },
+    "cycles": [
+      [
+        "llm",
+        "llm.embeddings",
+        "llm.logs",
+        "llm.models",
+        "llm.parts"
+      ]
+    ],
+    "import_time_cycles": [],
+    "hubs": [],
+    "top_fan_out": [
+      {
+        "module": "llm",
+        "fan_out": 8
+      },
+      {
+        "module": "llm.models",
+        "fan_out": 6
+      },
+      {
+        "module": "llm.cli",
+        "fan_out": 6
+      },
+      {
+        "module": "llm.logs",
+        "fan_out": 5
+      },
+      {
+        "module": "llm.default_plugins.openai_models",
+        "fan_out": 5
+      },
+      {
+        "module": "llm.embeddings",
+        "fan_out": 3
+      },
+      {
+        "module": "llm.default_plugins.default_tools",
+        "fan_out": 2
+      },
+      {
+        "module": "llm.parts",
+        "fan_out": 2
+      },
+      {
+        "module": "llm.__main__",
+        "fan_out": 1
+      },
+      {
+        "module": "llm.migrations",
+        "fan_out": 1
+      }
+    ],
+    "orphans": [
+      "llm.default_plugins.default_tools",
+      "llm.default_plugins.openai_models"
+    ],
+    "reachable_from_entrypoints": 15
+  },
+  "components": {
+    "method": {
+      "rule": "directory",
+      "depth": 2,
+      "main_package": "llm",
+      "main_package_share": 1.0,
+      "min_file_share_for_own_component": 0.05,
+      "split_dominant": [],
+      "synthetic_buckets": [
+        "llm (root modules)"
+      ]
+    },
+    "items": [
+      {
+        "name": "llm.cli",
+        "synthetic": false,
+        "paths": [
+          "llm/cli.py"
+        ],
+        "modules": 1,
+        "code_lines": 3817,
+        "depends_on": {
+          "llm (root modules)": 4,
+          "llm.models": 1,
+          "llm.logs": 1
+        },
+        "depended_on_by": {
+          "llm (root modules)": 1,
+          "llm.default_plugins": 1
+        },
+        "dependency_depth": 0,
+        "third_party": {
+          "sqlite_utils": 2,
+          "pydantic": 1,
+          "click": 1,
+          "httpx2": 1,
+          "yaml": 1,
+          "click_default_group": 1
+        },
+        "signals": [
+          "dynamic-code",
+          "filesystem",
+          "sqlite3"
+        ],
+        "entrypoints": [
+          "cli"
+        ],
+        "imported_by_tests": 21,
+        "in_component_cycle": true,
+        "responsibility": null,
+        "evidence_id": "EV-0041"
+      },
+      {
+        "name": "llm.models",
+        "synthetic": false,
+        "paths": [
+          "llm/models.py"
+        ],
+        "modules": 1,
+        "code_lines": 3065,
+        "depends_on": {
+          "llm (root modules)": 5,
+          "llm.logs": 1
+        },
+        "depended_on_by": {
+          "llm (root modules)": 3,
+          "llm.default_plugins": 1,
+          "llm.logs": 1,
+          "llm.cli": 1
+        },
+        "dependency_depth": 0,
+        "third_party": {
+          "pydantic": 1,
+          "httpx2": 1
+        },
+        "signals": [],
+        "entrypoints": [],
+        "imported_by_tests": 4,
+        "in_component_cycle": true,
+        "responsibility": null,
+        "evidence_id": "EV-0042"
+      },
+      {
+        "name": "llm.default_plugins",
+        "synthetic": false,
+        "paths": [
+          "llm/default_plugins"
+        ],
+        "modules": 3,
+        "code_lines": 2846,
+        "depends_on": {
+          "llm (root modules)": 5,
+          "llm.models": 1,
+          "llm.cli": 1
+        },
+        "depended_on_by": {},
+        "dependency_depth": 1,
+        "third_party": {
+          "pydantic": 1,
+          "click": 1,
+          "httpx2": 1,
+          "sqlite_utils": 1,
+          "yaml": 1,
+          "openai": 1
+        },
+        "signals": [
+          "filesystem",
+          "openai",
+          "sqlite3"
+        ],
+        "entrypoints": [],
+        "imported_by_tests": 3,
+        "in_component_cycle": false,
+        "responsibility": null,
+        "evidence_id": "EV-0043"
+      },
+      {
+        "name": "llm (root modules)",
+        "synthetic": true,
+        "paths": [
+          "llm"
+        ],
+        "modules": 13,
+        "code_lines": 2547,
+        "depends_on": {
+          "llm.models": 3,
+          "llm.cli": 1
+        },
+        "depended_on_by": {
+          "llm.models": 5,
+          "llm.default_plugins": 5,
+          "llm.logs": 4,
+          "llm.cli": 4
+        },
+        "dependency_depth": 0,
+        "third_party": {
+          "sqlite_utils": 4,
+          "click": 2,
+          "pluggy": 2,
+          "pydantic": 1,
+          "httpx2": 1,
+          "typing_extensions": 1,
+          "puremagic": 1,
+          "ulid": 1
+        },
+        "signals": [
+          "dynamic-import",
+          "plugin-system",
+          "sqlite3"
+        ],
+        "entrypoints": [
+          "cli",
+          "library-api"
+        ],
+        "imported_by_tests": 28,
+        "in_component_cycle": true,
+        "responsibility": null,
+        "evidence_id": "EV-0044"
+      },
+      {
+        "name": "llm.logs",
+        "synthetic": false,
+        "paths": [
+          "llm/logs.py"
+        ],
+        "modules": 1,
+        "code_lines": 1655,
+        "depends_on": {
+          "llm (root modules)": 4,
+          "llm.models": 1
+        },
+        "depended_on_by": {
+          "llm.models": 1,
+          "llm.cli": 1
+        },
+        "dependency_depth": 0,
+        "third_party": {
+          "condense_json": 1
+        },
+        "signals": [
+          "filesystem"
+        ],
+        "entrypoints": [],
+        "imported_by_tests": 7,
+        "in_component_cycle": true,
+        "responsibility": null,
+        "evidence_id": "EV-0045"
+      }
+    ],
+    "cycles": [
+      [
+        "llm (root modules)",
+        "llm.cli",
+        "llm.logs",
+        "llm.models"
+      ]
+    ],
+    "import_time_cycles": [
+      [
+        "llm (root modules)",
+        "llm.cli",
+        "llm.logs",
+        "llm.models"
+      ]
+    ]
+  },
+  "signals": [
+    {
+      "signature": "openai",
+      "library": "openai",
+      "category": "ai",
+      "subcategory": "llm-provider-api",
+      "primitive": "hosted-llm-inference",
+      "usage_level": "CALLED",
+      "declared": true,
+      "production_import_sites": 1,
+      "production_call_sites": 3,
+      "test_sites": 0,
+      "production_modules": [
+        "llm.default_plugins.openai_models"
+      ],
+      "reachable_from_entrypoint": false,
+      "refined_primitives": {},
+      "evidence_id": "EV-0030"
+    },
+    {
+      "signature": "dynamic-code",
+      "library": "builtins",
+      "category": "boundary",
+      "subcategory": "dynamic-code",
+      "primitive": "dynamic-code-execution",
+      "usage_level": "CALLED",
+      "declared": false,
+      "production_import_sites": 0,
+      "production_call_sites": 1,
+      "test_sites": 0,
+      "production_modules": [
+        "llm.cli"
+      ],
+      "reachable_from_entrypoint": true,
+      "refined_primitives": {},
+      "evidence_id": "EV-0033"
+    },
+    {
+      "signature": "dynamic-import",
+      "library": "importlib",
+      "category": "boundary",
+      "subcategory": "dynamic-import",
+      "primitive": "dynamic-import",
+      "usage_level": "CALLED",
+      "declared": false,
+      "production_import_sites": 0,
+      "production_call_sites": 1,
+      "test_sites": 0,
+      "production_modules": [
+        "llm.plugins"
+      ],
+      "reachable_from_entrypoint": true,
+      "refined_primitives": {},
+      "evidence_id": "EV-0034"
+    },
+    {
+      "signature": "filesystem",
+      "library": "builtins / shutil",
+      "category": "boundary",
+      "subcategory": "filesystem",
+      "primitive": "filesystem-io",
+      "usage_level": "CALLED",
+      "declared": false,
+      "production_import_sites": 1,
+      "production_call_sites": 8,
+      "test_sites": 7,
+      "production_modules": [
+        "llm.cli",
+        "llm.default_plugins.openai_models",
+        "llm.logs"
+      ],
+      "reachable_from_entrypoint": true,
+      "refined_primitives": {},
+      "evidence_id": "EV-0035"
+    },
+    {
+      "signature": "plugin-system",
+      "library": "pluggy / stevedore",
+      "category": "boundary",
+      "subcategory": "plugin-system",
+      "primitive": "plugin-registry",
+      "usage_level": "CALLED",
+      "declared": true,
+      "production_import_sites": 2,
+      "production_call_sites": 3,
+      "test_sites": 0,
+      "production_modules": [
+        "llm.hookspecs",
+        "llm.plugins"
+      ],
+      "reachable_from_entrypoint": true,
+      "refined_primitives": {},
+      "evidence_id": "EV-0036"
+    },
+    {
+      "signature": "subprocess",
+      "library": "subprocess / os",
+      "category": "boundary",
+      "subcategory": "shell",
+      "primitive": "subprocess-execution",
+      "usage_level": "NON_PRODUCTION_ONLY",
+      "declared": false,
+      "production_import_sites": 0,
+      "production_call_sites": 0,
+      "test_sites": 0,
+      "production_modules": [],
+      "reachable_from_entrypoint": false,
+      "refined_primitives": {},
+      "evidence_id": "EV-0032"
+    },
+    {
+      "signature": "sqlite3",
+      "library": "sqlite3 (stdlib)",
+      "category": "storage",
+      "subcategory": "relational-store",
+      "primitive": "relational-store",
+      "usage_level": "CALLED",
+      "declared": true,
+      "production_import_sites": 8,
+      "production_call_sites": 7,
+      "test_sites": 10,
+      "production_modules": [
+        "llm.cli",
+        "llm.default_plugins.openai_models",
+        "llm.embeddings",
+        "llm.embeddings_migrations",
+        "llm.utils"
+      ],
+      "reachable_from_entrypoint": true,
+      "refined_primitives": {},
+      "evidence_id": "EV-0031"
+    }
+  ],
+  "ai": {
+    "status": "AI_PRESENT",
+    "classification": "DEFERRED_TO_INFERENCE",
+    "classification_options": [
+      "AI_CORE",
+      "AI_SUPPORTING",
+      "NO_AI_FOUND",
+      "UNKNOWN"
+    ],
+    "components": [
+      {
+        "signature": "openai",
+        "library": "openai",
+        "subcategory": "llm-provider-api",
+        "primitive": "hosted-llm-inference",
+        "usage_level": "CALLED",
+        "evidence_id": "EV-0030"
+      }
+    ],
+    "note": "Signature database is finite: NO_AI_SIGNATURE_FOUND is not proof of absence."
+  },
+  "config": {
+    "env_vars": [
+      "LLM_LOAD_PLUGINS",
+      "LLM_OPENAI_SHOW_RESPONSES",
+      "LLM_RAISE_ERRORS",
+      "LLM_USER_PATH"
+    ]
+  },
+  "complexity": {
+    "status": "measured",
+    "tool": "lizard 1.24.1",
+    "scope": "production Python modules",
+    "functions": 552,
+    "cyclomatic": {
+      "n": 552,
+      "median": 2.0,
+      "p90": 11.0,
+      "p95": 18.45,
+      "max": 119
+    },
+    "nloc": {
+      "n": 552,
+      "median": 9.0,
+      "p90": 44.9,
+      "p95": 68.45,
+      "max": 388
+    },
+    "functions_cc_gt_10": 58,
+    "functions_cc_gt_20": 23,
+    "hotspots": [
+      {
+        "module": "llm.cli",
+        "component": "llm.cli",
+        "file": "llm/cli.py",
+        "function": "prompt",
+        "line": 685,
+        "cc": 119,
+        "nloc": 326,
+        "params": 33
+      },
+      {
+        "module": "llm.cli",
+        "component": "llm.cli",
+        "file": "llm/cli.py",
+        "function": "logs_list",
+        "line": 1883,
+        "cc": 113,
+        "nloc": 362,
+        "params": 27
+      },
+      {
+        "module": "llm.models",
+        "component": "llm.models",
+        "file": "llm/models.py",
+        "function": "_build_message_parts",
+        "line": 1319,
+        "cc": 63,
+        "nloc": 147,
+        "params": 1
+      },
+      {
+        "module": "llm.default_plugins.openai_models",
+        "component": "llm.default_plugins",
+        "file": "llm/default_plugins/openai_models.py",
+        "function": "register_commands.endpoint",
+        "line": 605,
+        "cc": 60,
+        "nloc": 203,
+        "params": 23
+      },
+      {
+        "module": "llm.default_plugins.openai_models",
+        "component": "llm.default_plugins",
+        "file": "llm/default_plugins/openai_models.py",
+        "function": "execute",
+        "line": 2757,
+        "cc": 47,
+        "nloc": 177,
+        "params": 6
+      },
+      {
+        "module": "llm.default_plugins.openai_models",
+        "component": "llm.default_plugins",
+        "file": "llm/default_plugins/openai_models.py",
+        "function": "execute",
+        "line": 2513,
+        "cc": 43,
+        "nloc": 171,
+        "params": 6
+      },
+      {
+        "module": "llm.cli",
+        "component": "llm.cli",
+        "file": "llm/cli.py",
+        "function": "tools_list",
+        "line": 2832,
+        "cc": 38,
+        "nloc": 137,
+        "params": 4
+      },
+      {
+        "module": "llm.models",
+        "component": "llm.models",
+        "file": "llm/models.py",
+        "function": "execute_tool_calls",
+        "line": 2247,
+        "cc": 37,
+        "nloc": 150,
+        "params": 5
+      },
+      {
+        "module": "llm.cli",
+        "component": "llm.cli",
+        "file": "llm/cli.py",
+        "function": "chat",
+        "line": 1247,
+        "cc": 31,
+        "nloc": 122,
+        "params": 18
+      },
+      {
+        "module": "llm.cli",
+        "component": "llm.cli",
+        "file": "llm/cli.py",
+        "function": "render_model_with_aliases",
+        "line": 2416,
+        "cc": 30,
+        "nloc": 66,
+        "params": 4
+      }
+    ]
+  },
+  "duplication": {
+    "status": "not_implemented"
+  },
+  "tests": {
+    "test_modules": 33,
+    "test_functions": 810,
+    "test_code_lines": 17001,
+    "production_code_lines": 13930,
+    "test_to_production_ratio": 1.22,
+    "frameworks": [
+      "pytest",
+      "unittest"
+    ],
+    "components_imported_by_tests": [
+      "llm (root modules)",
+      "llm.cli",
+      "llm.default_plugins",
+      "llm.logs",
+      "llm.models"
+    ],
+    "components_not_imported_by_tests": [],
+    "note": "Static inventory only: 'imported by tests' is not coverage."
+  },
+  "smells": [
+    {
+      "rule": "cyclic_dependency",
+      "target": "llm, llm.embeddings, llm.logs, llm.models…",
+      "detail": "5-module cycle (only via function-level imports)",
+      "severity": "info",
+      "evidence_id": "EV-0010"
+    },
+    {
+      "rule": "oversized_module",
+      "target": "llm.cli",
+      "detail": "3817 code lines",
+      "severity": "info",
+      "evidence_id": "EV-0011"
+    },
+    {
+      "rule": "possibly_unused_dependency",
+      "target": "pyreadline3",
+      "detail": "declared in runtime scope, never imported",
+      "severity": "info",
+      "evidence_id": "EV-0024"
+    },
+    {
+      "rule": "component_cycle",
+      "target": "llm (root modules), llm.cli, llm.logs, llm.models",
+      "detail": "4-component cycle at import time (involves a merged bucket)",
+      "severity": "info",
+      "evidence_id": "EV-0039"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "22 more functions",
+      "detail": "CC 16–24",
+      "severity": "info",
+      "evidence_id": "EV-0048"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.cli::prompt",
+      "detail": "CC 119, 326 NLOC",
+      "severity": "warn",
+      "evidence_id": "EV-0049"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.cli::logs_list",
+      "detail": "CC 113, 362 NLOC",
+      "severity": "warn",
+      "evidence_id": "EV-0050"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.models::_build_message_parts",
+      "detail": "CC 63, 147 NLOC",
+      "severity": "warn",
+      "evidence_id": "EV-0051"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.default_plugins.openai_models::register_commands.endpoint",
+      "detail": "CC 60, 203 NLOC",
+      "severity": "warn",
+      "evidence_id": "EV-0052"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.default_plugins.openai_models::execute",
+      "detail": "CC 47, 177 NLOC",
+      "severity": "warn",
+      "evidence_id": "EV-0053"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.default_plugins.openai_models::execute",
+      "detail": "CC 43, 171 NLOC",
+      "severity": "warn",
+      "evidence_id": "EV-0054"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.cli::tools_list",
+      "detail": "CC 38, 137 NLOC",
+      "severity": "warn",
+      "evidence_id": "EV-0055"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.models::execute_tool_calls",
+      "detail": "CC 37, 150 NLOC",
+      "severity": "warn",
+      "evidence_id": "EV-0056"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.cli::chat",
+      "detail": "CC 31, 122 NLOC",
+      "severity": "warn",
+      "evidence_id": "EV-0057"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.cli::render_model_with_aliases",
+      "detail": "CC 30, 66 NLOC",
+      "severity": "warn",
+      "evidence_id": "EV-0058"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.default_plugins.openai_models::execute",
+      "detail": "CC 30, 107 NLOC",
+      "severity": "warn",
+      "evidence_id": "EV-0059"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.default_plugins.openai_models::execute",
+      "detail": "CC 30, 107 NLOC",
+      "severity": "warn",
+      "evidence_id": "EV-0060"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.default_plugins.openai_models::_build_responses_input",
+      "detail": "CC 29, 88 NLOC",
+      "severity": "warn",
+      "evidence_id": "EV-0061"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.cli::embed",
+      "detail": "CC 27, 71 NLOC",
+      "severity": "warn",
+      "evidence_id": "EV-0062"
+    },
+    {
+      "rule": "high_complexity",
+      "target": "llm.cli::embed_multi",
+      "detail": "CC 24, 74 NLOC",
+      "severity": "info",
+      "evidence_id": "EV-0063"
+    }
+  ],
+  "architecture_hypotheses": [],
+  "unknowns": [
+    {
+      "question": "Which modules are loaded dynamically at runtime?",
+      "reason": "importlib/`__import__` calls exist; the static import graph may be missing edges.",
+      "evidence_id": "EV-0037"
+    },
+    {
+      "question": "Do the tests pass, and what do they cover?",
+      "reason": "Tier 0/1 never executes repository code; coverage requires a sandboxed Tier 2 run.",
+      "evidence_id": "EV-0065"
+    },
+    {
+      "question": "How much code is duplicated?",
+      "reason": "Duplication analysis is not implemented in v0.1.",
+      "evidence_id": "EV-0066"
+    }
+  ],
+  "checklist": [
+    {
+      "gate": "Repository pinned to commit",
+      "status": "done",
+      "note": ""
+    },
+    {
+      "gate": "Languages identified",
+      "status": "done",
+      "note": ""
+    },
+    {
+      "gate": "Build systems identified",
+      "status": "done",
+      "note": ""
+    },
+    {
+      "gate": "Entry points located",
+      "status": "done",
+      "note": "Python only"
+    },
+    {
+      "gate": "Internal modules mapped",
+      "status": "done",
+      "note": "Python only"
+    },
+    {
+      "gate": "Dependency inventory generated",
+      "status": "done",
+      "note": "direct Python deps only; SBOM/transitive in v0.2"
+    },
+    {
+      "gate": "Dependency graph generated",
+      "status": "done",
+      "note": ""
+    },
+    {
+      "gate": "Cycles calculated",
+      "status": "done",
+      "note": ""
+    },
+    {
+      "gate": "Fan-in/fan-out calculated",
+      "status": "done",
+      "note": ""
+    },
+    {
+      "gate": "Components inferred",
+      "status": "partial",
+      "note": "directory-based; responsibilities deferred to inference step"
+    },
+    {
+      "gate": "External boundaries mapped",
+      "status": "done",
+      "note": "signature-based"
+    },
+    {
+      "gate": "Storage mechanisms mapped",
+      "status": "done",
+      "note": "signature-based"
+    },
+    {
+      "gate": "Computational primitives identified",
+      "status": "done",
+      "note": "signature-based; CENTRAL level deferred to inference"
+    },
+    {
+      "gate": "AI/ML usage identified",
+      "status": "partial",
+      "note": "presence measured; core vs supporting deferred to inference"
+    },
+    {
+      "gate": "Complexity measured",
+      "status": "done",
+      "note": ""
+    },
+    {
+      "gate": "Duplication measured",
+      "status": "not_done",
+      "note": "v0.2"
+    },
+    {
+      "gate": "Tests inventoried",
+      "status": "done",
+      "note": "static only"
+    },
+    {
+      "gate": "Architecture patterns hypothesized",
+      "status": "deferred_to_inference",
+      "note": ""
+    },
+    {
+      "gate": "Architecture smells identified",
+      "status": "done",
+      "note": "signals, not verdicts"
+    },
+    {
+      "gate": "Evidence confidence attached",
+      "status": "done",
+      "note": ""
+    },
+    {
+      "gate": "Counter-evidence recorded",
+      "status": "partial",
+      "note": "mechanical counter-evidence only; hypotheses must add their own"
+    },
+    {
+      "gate": "Unknowns explicitly listed",
+      "status": "done",
+      "note": ""
+    }
+  ],
+  "evidence_summary": {
+    "CONFIRMED": 59,
+    "SUPPORTED": 2,
+    "INFERRED": 2,
+    "UNKNOWN": 3
+  },
+  "evidence_digest": "sha256:3a8165cbc71de548a45f5a0c2191578a"
+}

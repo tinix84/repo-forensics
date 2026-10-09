@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+[project]
+name = "repo-forensics"
+version = "0.1.0"
+description = "Evidence-first static reconnaissance of software repositories: facts are measured, architecture is inferred."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+authors = [{ name = "Riccardo (tinix84)" }]
+keywords = ["static-analysis", "architecture", "reverse-engineering", "dependency-graph", "claude-code"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = ["pyyaml>=6.0", "jsonschema>=4.18"]
+
+[project.urls]
+Homepage = "https://github.com/tinix84/repo-forensics"
+Issues = "https://github.com/tinix84/repo-forensics/issues"
+Changelog = "https://github.com/tinix84/repo-forensics/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+complexity = ["lizard>=1.17"]
+dev = ["pytest>=8", "lizard>=1.17", "ruff>=0.6"]
+
+[project.scripts]
+repo-forensics = "repo_forensics.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/repo_forensics"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 130
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E731"]

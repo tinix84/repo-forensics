@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/tinix84/repo-forensics/blob/main/src/repo_forensics/schemas/hypotheses.schema.json",
+  "title": "repo-forensics inference layer (written by the LLM, validated by the CLI)",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "commit_sha",
+    "evidence_digest",
+    "components",
+    "architecture_hypotheses",
+    "primitive_roles",
+    "ai_assessment",
+    "unknowns"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "commit_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "responsibility",
+          "status",
+          "confidence",
+          "evidence_ids",
+          "files_read"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "responsibility": {
+            "type": "string",
+            "minLength": 10
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "outputs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "enum": [
+              "SUPPORTED",
+              "INFERRED",
+              "UNKNOWN"
+            ]
+          },
+          "confidence": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 0.95
+          },
+          "evidence_ids": {
+            "$ref": "#/$defs/ids"
+          },
+          "files_read": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "architecture_hypotheses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "pattern",
+          "claim",
+          "status",
+          "confidence",
+          "evidence_ids",
+          "counter_evidence_ids",
+          "counter_evidence_notes",
+          "how_to_falsify"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^HY-[0-9]{2,}$"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "claim": {
+            "type": "string",
+            "minLength": 10
+          },
+          "status": {
+            "enum": [
+              "SUPPORTED",
+              "INFERRED",
+              "UNKNOWN"
+            ]
+          },
+          "confidence": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 0.95
+          },
+          "evidence_ids": {
+            "$ref": "#/$defs/ids",
+            "minItems": 1
+          },
+          "counter_evidence_ids": {
+            "$ref": "#/$defs/ids"
+          },
+          "counter_evidence_notes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "how_to_falsify": {
+            "type": "string",
+            "minLength": 10
+          }
+        }
+      }
+    },
+    "primitive_roles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "signature",
+          "role",
+          "evidence_ids",
+          "rationale"
+        ],
+        "properties": {
+          "signature": {
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "CENTRAL",
+              "SUPPORTING",
+              "INCIDENTAL",
+              "UNKNOWN"
+            ]
+          },
+          "evidence_ids": {
+            "$ref": "#/$defs/ids"
+          },
+          "rationale": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ai_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "evidence_ids",
+        "rationale"
+      ],
+      "properties": {
+        "classification": {
+          "enum": [
+            "AI_CORE",
+            "AI_SUPPORTING",
+            "NO_AI_FOUND",
+            "UNKNOWN"
+          ]
+        },
+        "deterministic_core": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/ids"
+        },
+        "rationale": {
+          "type": "string"
+        }
+      }
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "question",
+          "reason"
+        ],
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "evidence_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{32}$",
+      "description": "Copy of report.json evidence_digest: binds these inferences to one exact evidence set."
+    }
+  },
+  "$defs": {
+    "ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^EV-[0-9]{4,}$"
+      }
+    }
+  }
+}

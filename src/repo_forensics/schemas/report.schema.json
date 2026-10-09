@@ -1,0 +1,310 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/tinix84/repo-forensics/blob/main/src/repo_forensics/schemas/report.schema.json",
+  "title": "repo-forensics report",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "tool",
+    "provenance",
+    "fingerprint",
+    "entrypoints",
+    "repo_shape",
+    "dependencies",
+    "module_graph",
+    "components",
+    "signals",
+    "ai",
+    "config",
+    "complexity",
+    "duplication",
+    "tests",
+    "smells",
+    "architecture_hypotheses",
+    "unknowns",
+    "checklist",
+    "evidence_summary",
+    "evidence_digest"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "tool": {
+      "type": "object",
+      "required": [
+        "name",
+        "version",
+        "tier"
+      ],
+      "properties": {
+        "tier": {
+          "enum": [
+            0,
+            1,
+            2
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "url",
+        "commit_sha",
+        "analyzed_at",
+        "pinned"
+      ],
+      "properties": {
+        "commit_sha": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{40,64}$"
+        },
+        "pinned": {
+          "type": "boolean"
+        }
+      }
+    },
+    "fingerprint": {
+      "type": "object",
+      "required": [
+        "languages",
+        "analysis_coverage",
+        "file_classes",
+        "manifests",
+        "build_systems"
+      ]
+    },
+    "entrypoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "module",
+          "detection",
+          "status",
+          "evidence_id"
+        ],
+        "properties": {
+          "type": {
+            "enum": [
+              "cli",
+              "script",
+              "http",
+              "worker",
+              "ui",
+              "mcp-server",
+              "scheduled-job",
+              "library-api",
+              "plugin-entry-point"
+            ]
+          },
+          "status": {
+            "enum": [
+              "CONFIRMED",
+              "SUPPORTED",
+              "INFERRED"
+            ]
+          },
+          "evidence_id": {
+            "$ref": "#/$defs/evid"
+          }
+        }
+      }
+    },
+    "repo_shape": {
+      "type": "object",
+      "required": [
+        "hypothesis",
+        "status"
+      ]
+    },
+    "dependencies": {
+      "type": "object",
+      "required": [
+        "declared",
+        "third_party_imported",
+        "imported_not_declared",
+        "declared_not_imported"
+      ]
+    },
+    "module_graph": {
+      "type": "object",
+      "required": [
+        "production_modules",
+        "edges",
+        "cycles",
+        "import_time_cycles",
+        "hubs",
+        "orphans"
+      ]
+    },
+    "components": {
+      "type": "object",
+      "required": [
+        "method",
+        "items",
+        "cycles"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "modules",
+              "code_lines",
+              "depends_on",
+              "depended_on_by",
+              "evidence_id",
+              "responsibility"
+            ],
+            "properties": {
+              "evidence_id": {
+                "$ref": "#/$defs/evid"
+              },
+              "responsibility": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "signals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "signature",
+          "category",
+          "primitive",
+          "usage_level",
+          "evidence_id"
+        ],
+        "properties": {
+          "category": {
+            "enum": [
+              "ai",
+              "algorithm",
+              "storage",
+              "boundary"
+            ]
+          },
+          "usage_level": {
+            "enum": [
+              "DECLARED",
+              "IMPORTED",
+              "CALLED",
+              "NON_PRODUCTION_ONLY"
+            ]
+          },
+          "evidence_id": {
+            "$ref": "#/$defs/evid"
+          }
+        }
+      }
+    },
+    "ai": {
+      "type": "object",
+      "required": [
+        "status",
+        "classification",
+        "components"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "AI_PRESENT",
+            "AI_DECLARED_OR_NON_PRODUCTION_ONLY",
+            "NO_AI_SIGNATURE_FOUND"
+          ]
+        }
+      }
+    },
+    "complexity": {
+      "type": "object",
+      "required": [
+        "status"
+      ]
+    },
+    "smells": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "rule",
+          "target",
+          "severity",
+          "evidence_id"
+        ],
+        "properties": {
+          "severity": {
+            "enum": [
+              "info",
+              "warn"
+            ]
+          },
+          "evidence_id": {
+            "$ref": "#/$defs/evid"
+          }
+        }
+      }
+    },
+    "architecture_hypotheses": {
+      "type": "array"
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "question",
+          "reason",
+          "evidence_id"
+        ]
+      }
+    },
+    "checklist": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "gate",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "done",
+              "partial",
+              "not_done",
+              "deferred_to_inference"
+            ]
+          }
+        }
+      }
+    },
+    "evidence_summary": {
+      "type": "object"
+    },
+    "evidence_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{32}$"
+    }
+  },
+  "$defs": {
+    "evid": {
+      "type": "string",
+      "pattern": "^EV-[0-9]{4,}$"
+    }
+  }
+}

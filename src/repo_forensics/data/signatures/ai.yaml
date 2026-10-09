@@ -1,0 +1,151 @@
+# AI / ML signatures. Fields:
+#   id, library, category, subcategory, primitive: canonical abstraction
+#   modules: import/call qualified-name prefixes that identify the library
+#   distributions: package names as declared in manifests
+#   refine: call-name prefix -> more specific primitive (optional)
+- id: openai
+  library: openai
+  category: ai
+  subcategory: llm-provider-api
+  primitive: hosted-llm-inference
+  modules: [openai]
+  distributions: [openai]
+- id: anthropic
+  library: anthropic
+  category: ai
+  subcategory: llm-provider-api
+  primitive: hosted-llm-inference
+  modules: [anthropic]
+  distributions: [anthropic]
+- id: google-genai
+  library: google-genai
+  category: ai
+  subcategory: llm-provider-api
+  primitive: hosted-llm-inference
+  modules: [google.genai, google.generativeai]
+  distributions: [google-genai, google-generativeai]
+- id: mistralai
+  library: mistralai
+  category: ai
+  subcategory: llm-provider-api
+  primitive: hosted-llm-inference
+  modules: [mistralai]
+  distributions: [mistralai]
+- id: cohere
+  library: cohere
+  category: ai
+  subcategory: llm-provider-api
+  primitive: hosted-llm-inference
+  modules: [cohere]
+  distributions: [cohere]
+- id: litellm
+  library: litellm
+  category: ai
+  subcategory: llm-gateway
+  primitive: hosted-llm-inference
+  modules: [litellm]
+  distributions: [litellm]
+- id: ollama
+  library: ollama
+  category: ai
+  subcategory: local-model-runtime
+  primitive: local-llm-inference
+  modules: [ollama]
+  distributions: [ollama]
+- id: llama-cpp
+  library: llama-cpp-python
+  category: ai
+  subcategory: local-model-runtime
+  primitive: local-llm-inference
+  modules: [llama_cpp]
+  distributions: [llama-cpp-python]
+- id: vllm
+  library: vllm
+  category: ai
+  subcategory: local-model-runtime
+  primitive: local-llm-inference
+  modules: [vllm]
+  distributions: [vllm]
+- id: transformers
+  library: transformers
+  category: ai
+  subcategory: model-library
+  primitive: neural-network-inference
+  modules: [transformers]
+  distributions: [transformers]
+  refine:
+    transformers.pipeline: pretrained-model-pipeline
+    transformers.AutoModelForCausalLM: causal-language-model
+    transformers.AutoTokenizer: tokenization
+- id: sentence-transformers
+  library: sentence-transformers
+  category: ai
+  subcategory: embeddings
+  primitive: text-embedding
+  modules: [sentence_transformers]
+  distributions: [sentence-transformers]
+  refine:
+    sentence_transformers.CrossEncoder: cross-encoder-reranking
+- id: torch
+  library: pytorch
+  category: ai
+  subcategory: tensor-framework
+  primitive: tensor-computation-autodiff
+  modules: [torch]
+  distributions: [torch]
+- id: tensorflow
+  library: tensorflow
+  category: ai
+  subcategory: tensor-framework
+  primitive: tensor-computation-autodiff
+  modules: [tensorflow]
+  distributions: [tensorflow, tensorflow-cpu]
+- id: jax
+  library: jax
+  category: ai
+  subcategory: tensor-framework
+  primitive: tensor-computation-autodiff
+  modules: [jax]
+  distributions: [jax]
+- id: onnxruntime
+  library: onnxruntime
+  category: ai
+  subcategory: local-model-runtime
+  primitive: neural-network-inference
+  modules: [onnxruntime]
+  distributions: [onnxruntime, onnxruntime-gpu]
+- id: langchain
+  library: langchain
+  category: ai
+  subcategory: llm-orchestration-framework
+  primitive: llm-orchestration
+  modules: [langchain, langchain_core, langchain_community, langchain_openai, langgraph]
+  distributions: [langchain, langchain-core, langchain-community, langchain-openai, langgraph]
+- id: llama-index
+  library: llama-index
+  category: ai
+  subcategory: llm-orchestration-framework
+  primitive: retrieval-augmented-generation
+  modules: [llama_index]
+  distributions: [llama-index, llama-index-core]
+- id: dspy
+  library: dspy
+  category: ai
+  subcategory: llm-orchestration-framework
+  primitive: llm-program-optimization
+  modules: [dspy]
+  distributions: [dspy, dspy-ai]
+- id: tiktoken
+  library: tiktoken
+  category: ai
+  subcategory: tokenization
+  primitive: bpe-tokenization
+  modules: [tiktoken]
+  distributions: [tiktoken]
+- id: mcp
+  library: mcp
+  category: ai
+  subcategory: agent-tool-protocol
+  primitive: tool-calling-protocol
+  modules: [mcp, fastmcp]
+  distributions: [mcp, fastmcp]

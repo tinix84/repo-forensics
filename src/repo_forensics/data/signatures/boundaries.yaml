@@ -1,0 +1,106 @@
+# Process boundaries: anything that leaves the process.
+- id: http-client
+  library: requests / httpx / aiohttp / urllib
+  category: boundary
+  subcategory: http-client
+  primitive: outbound-http
+  modules: [requests, httpx, aiohttp.ClientSession, urllib.request, urllib3]
+  distributions: [requests, httpx, aiohttp, urllib3]
+- id: http-server
+  library: web frameworks
+  category: boundary
+  subcategory: http-server
+  primitive: inbound-http
+  modules: [fastapi, flask, starlette, django, sanic, aiohttp.web, tornado, litestar, quart, bottle]
+  distributions: [fastapi, flask, starlette, django, sanic, tornado, litestar, quart, bottle]
+- id: grpc
+  library: grpcio
+  category: boundary
+  subcategory: rpc
+  primitive: remote-procedure-call
+  modules: [grpc]
+  distributions: [grpcio]
+- id: websocket
+  library: websockets
+  category: boundary
+  subcategory: websocket
+  primitive: bidirectional-stream
+  modules: [websockets, websocket]
+  distributions: [websockets, websocket-client]
+- id: subprocess
+  library: subprocess / os
+  category: boundary
+  subcategory: shell
+  primitive: subprocess-execution
+  modules: [subprocess, os.system, os.popen, os.exec, asyncio.create_subprocess_exec, asyncio.create_subprocess_shell]
+  distributions: []
+- id: dynamic-code
+  library: builtins
+  category: boundary
+  subcategory: dynamic-code
+  primitive: dynamic-code-execution
+  modules: [builtins.eval, builtins.exec, builtins.compile]
+  distributions: []
+- id: dynamic-import
+  library: importlib
+  category: boundary
+  subcategory: dynamic-import
+  primitive: dynamic-import
+  modules: [importlib.import_module, builtins.__import__, importlib.metadata.entry_points]
+  distributions: []
+- id: filesystem
+  library: builtins / shutil
+  category: boundary
+  subcategory: filesystem
+  primitive: filesystem-io
+  modules: [builtins.open, shutil, tempfile]
+  distributions: []
+- id: message-queue
+  library: queue clients
+  category: boundary
+  subcategory: message-queue
+  primitive: message-queue
+  modules: [kafka, confluent_kafka, aiokafka, pika, aio_pika, nats, paho.mqtt]
+  distributions: [kafka-python, confluent-kafka, aiokafka, pika, aio-pika, nats-py, paho-mqtt]
+- id: task-queue
+  library: celery / rq / dramatiq
+  category: boundary
+  subcategory: task-queue
+  primitive: background-task-queue
+  modules: [celery, rq, dramatiq, arq]
+  distributions: [celery, rq, dramatiq, arq]
+- id: browser-automation
+  library: playwright / selenium
+  category: boundary
+  subcategory: browser-automation
+  primitive: browser-automation
+  modules: [playwright, selenium, pyppeteer]
+  distributions: [playwright, selenium, pyppeteer]
+- id: smtp
+  library: smtplib
+  category: boundary
+  subcategory: email
+  primitive: outbound-email
+  modules: [smtplib]
+  distributions: []
+- id: serial-hw
+  library: pyserial / pyvisa
+  category: boundary
+  subcategory: hardware-io
+  primitive: instrument-io
+  modules: [serial, pyvisa, can, usb]
+  distributions: [pyserial, pyvisa, python-can, pyusb]
+- id: socket
+  library: socket (stdlib)
+  category: boundary
+  subcategory: raw-network
+  primitive: raw-socket
+  modules: [socket]
+  distributions: []
+- id: plugin-system
+  library: pluggy / stevedore
+  category: boundary
+  subcategory: plugin-system
+  primitive: plugin-registry
+  modules: [pluggy, stevedore]
+  distributions: [pluggy, stevedore]

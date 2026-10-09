@@ -1,0 +1,40 @@
+# Distributions commonly declared but legitimately never imported
+# (servers, CLIs, plugins, build tools, type stubs). Excluded from the
+# "declared but not imported" signal.
+- uvicorn
+- gunicorn
+- hypercorn
+- pytest
+- pytest-cov
+- pytest-asyncio
+- pytest-mock
+- pytest-xdist
+- coverage
+- ruff
+- black
+- isort
+- flake8
+- pylint
+- mypy
+- pyright
+- pre-commit
+- setuptools
+- setuptools-scm
+- wheel
+- pip
+- build
+- twine
+- hatchling
+- hatch
+- poetry-core
+- tox
+- nox
+- sphinx
+- mkdocs
+- mkdocs-material
+- ipykernel
+- jupyter
+- psycopg2-binary
+- psycopg-binary
+- python-multipart
+- alembic

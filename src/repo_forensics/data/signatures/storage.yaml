@@ -1,0 +1,126 @@
+- id: sqlite3
+  library: sqlite3 (stdlib)
+  category: storage
+  subcategory: relational-store
+  primitive: relational-store
+  modules: [sqlite3, aiosqlite, sqlite_utils]
+  distributions: [aiosqlite, sqlite-utils]
+- id: sqlalchemy
+  library: sqlalchemy
+  category: storage
+  subcategory: orm
+  primitive: relational-store
+  modules: [sqlalchemy, sqlmodel]
+  distributions: [sqlalchemy, sqlmodel]
+- id: postgres
+  library: psycopg / asyncpg
+  category: storage
+  subcategory: relational-store
+  primitive: relational-store
+  modules: [psycopg, psycopg2, asyncpg]
+  distributions: [psycopg, psycopg2, psycopg2-binary, asyncpg]
+- id: mysql
+  library: mysql drivers
+  category: storage
+  subcategory: relational-store
+  primitive: relational-store
+  modules: [pymysql, MySQLdb, mysql.connector]
+  distributions: [pymysql, mysqlclient, mysql-connector-python]
+- id: pymongo
+  library: pymongo / motor
+  category: storage
+  subcategory: document-store
+  primitive: document-store
+  modules: [pymongo, motor]
+  distributions: [pymongo, motor]
+- id: redis
+  library: redis
+  category: storage
+  subcategory: key-value-store
+  primitive: key-value-store
+  modules: [redis]
+  distributions: [redis]
+- id: duckdb
+  library: duckdb
+  category: storage
+  subcategory: analytical-store
+  primitive: columnar-analytical-store
+  modules: [duckdb]
+  distributions: [duckdb]
+- id: chromadb
+  library: chromadb
+  category: storage
+  subcategory: vector-store
+  primitive: approximate-nearest-neighbor
+  modules: [chromadb]
+  distributions: [chromadb]
+- id: qdrant
+  library: qdrant-client
+  category: storage
+  subcategory: vector-store
+  primitive: approximate-nearest-neighbor
+  modules: [qdrant_client]
+  distributions: [qdrant-client]
+- id: pinecone
+  library: pinecone
+  category: storage
+  subcategory: vector-store
+  primitive: approximate-nearest-neighbor
+  modules: [pinecone]
+  distributions: [pinecone, pinecone-client]
+- id: lancedb
+  library: lancedb
+  category: storage
+  subcategory: vector-store
+  primitive: approximate-nearest-neighbor
+  modules: [lancedb]
+  distributions: [lancedb]
+- id: pgvector
+  library: pgvector
+  category: storage
+  subcategory: vector-store
+  primitive: approximate-nearest-neighbor
+  modules: [pgvector]
+  distributions: [pgvector]
+- id: pandas-io
+  library: pandas
+  category: storage
+  subcategory: tabular-data
+  primitive: dataframe
+  modules: [pandas, polars]
+  distributions: [pandas, polars]
+- id: parquet
+  library: pyarrow
+  category: storage
+  subcategory: columnar-file
+  primitive: columnar-file-format
+  modules: [pyarrow]
+  distributions: [pyarrow]
+- id: h5py
+  library: h5py
+  category: storage
+  subcategory: scientific-file
+  primitive: hierarchical-array-store
+  modules: [h5py, zarr]
+  distributions: [h5py, zarr]
+- id: s3
+  library: boto3
+  category: storage
+  subcategory: object-store
+  primitive: object-store
+  modules: [boto3, botocore, aioboto3]
+  distributions: [boto3, botocore, aioboto3]
+- id: gcs
+  library: google-cloud-storage
+  category: storage
+  subcategory: object-store
+  primitive: object-store
+  modules: [google.cloud.storage]
+  distributions: [google-cloud-storage]
+- id: pickle
+  library: pickle (stdlib)
+  category: storage
+  subcategory: serialization
+  primitive: object-serialization
+  modules: [pickle, joblib, dill, cloudpickle]
+  distributions: [joblib, dill, cloudpickle]

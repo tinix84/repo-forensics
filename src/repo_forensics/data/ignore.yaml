@@ -1,0 +1,27 @@
+# Path classification rules. Matching is on path components (directories)
+# or on file-name glob patterns. First matching class wins, in this order:
+# vendored > generated > migrations > test > auxiliary > docs.
+vendored_dirs: [vendor, vendored, third_party, third-party, node_modules, external, extern, .venv, venv, site-packages]
+generated_globs:
+  - "*_pb2.py"
+  - "*_pb2_grpc.py"
+  - "*_pb2.pyi"
+  - "*.min.js"
+  - "*.min.css"
+  - "*.generated.*"
+  - "*_generated.py"
+  - "poetry.lock"
+  - "uv.lock"
+  - "Pipfile.lock"
+  - "Cargo.lock"
+  - "package-lock.json"
+  - "yarn.lock"
+  - "pnpm-lock.yaml"
+  - "go.sum"
+migration_dirs: [migrations, alembic]
+test_dirs: [tests, test, testing, __tests__]
+test_globs: ["test_*.py", "*_test.py", "conftest.py", "*.test.ts", "*.test.js", "*.spec.ts", "*.spec.js", "*_test.go", "*_test.rs"]
+auxiliary_dirs: [examples, example, samples, sample, demo, demos, benchmarks, benchmark, bench]
+docs_dirs: [docs, doc, documentation]
+# Files above this size are fingerprinted but not AST-parsed.
+max_parse_bytes: 2000000

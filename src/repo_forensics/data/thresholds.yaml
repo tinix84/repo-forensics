@@ -1,0 +1,18 @@
+# Signal thresholds. Signals are not verdicts: they mark places worth reading.
+high_complexity_cc: 15          # function cyclomatic complexity above this -> signal
+very_high_complexity_cc: 25
+complexity_buckets: [10, 20]    # report counts of functions above each value
+god_module:                     # all three must hold (percentile AND absolute floor)
+  percentile: 95
+  min_fan_in: 5
+  min_fan_out: 5
+  min_loc: 300
+oversized_module:
+  percentile: 95
+  min_loc: 800
+hub_module:                     # high fan-in: candidate core abstraction
+  percentile: 95
+  min_fan_in: 8
+max_locations_per_evidence: 15
+max_hotspots: 10
+max_complexity_signals: 15   # individual high-complexity signals; the rest are aggregated

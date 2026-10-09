@@ -1,0 +1,23 @@
+{
+  "skill_name": "repo-forensics",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Can you tear down https://github.com/simonw/llm for me? I want to know how it's architected and how central the LLM providers really are.",
+      "expected_output": "Pinned-SHA analysis bundle, validated hypotheses.json, facts vs inferences separated, notes plugin-based loading (dynamic-import unknown) and that OpenAI calls live in default plugins.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Is zylon-ai/private-gpt actually doing anything clever algorithmically or is it just glue around llama-index? Don't guess, show me evidence.",
+      "expected_output": "Signals with usage levels; primitive roles with CENTRAL only for CALLED signals; AI assessment with deterministic core; explicit unknowns about env-var-selected models; no novelty verdict.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "What does pallets/flask look like structurally? Any dependency cycles I should know about?",
+      "expected_output": "Distinguishes lazy-import cycles from import-time cycles, marks cycles through synthetic buckets as possible artefacts, reports hubs (flask.globals).",
+      "files": []
+    }
+  ]
+}
