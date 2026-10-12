@@ -59,7 +59,7 @@ Always list the `deterministic_core`: graph traversal, scoring, filtering, parsi
 
 ```json
 {
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "commit_sha": "<copy provenance.commit_sha from report.json>",
   "evidence_digest": "<copy evidence_digest from report.json>",
   "components": [

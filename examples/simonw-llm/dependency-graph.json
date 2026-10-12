@@ -1785,25 +1785,25 @@
   }
  ],
  "components": {
-  "llm (root modules)": {
-   "llm.cli": 1,
-   "llm.models": 3
-  },
   "llm.default_plugins": {
    "llm (root modules)": 5,
-   "llm.models": 1,
+   "llm.cli": 1,
+   "llm.models": 1
+  },
+  "llm (root modules)": {
+   "llm.models": 3,
    "llm.cli": 1
   },
   "llm.models": {
-   "llm (root modules)": 5,
-   "llm.logs": 1
-  },
-  "llm.cli": {
    "llm.logs": 1,
+   "llm (root modules)": 5
+  },
+  "llm.logs": {
    "llm (root modules)": 4,
    "llm.models": 1
   },
-  "llm.logs": {
+  "llm.cli": {
+   "llm.logs": 1,
    "llm (root modules)": 4,
    "llm.models": 1
   }

@@ -1,7 +1,7 @@
 {
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "commit_sha": "fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4",
-  "evidence_digest": "sha256:d1b7c00eff2d2d1e33d7fcf639b2e311",
+  "evidence_digest": "sha256:799094db06c60dcd582df942622a19ce",
   "components": [
     {
       "name": "llm.models",

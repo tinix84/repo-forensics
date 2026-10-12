@@ -9,7 +9,7 @@ AI usage and complexity, and states explicitly what it cannot know.
 > The CLI measures. A language model (via the bundled Claude Code skill) infers.
 > A validator keeps the two apart.
 
-License: MIT · Status: v0.1 (alpha) · Deep analysis: Python
+License: MIT · Status: v0.2 (alpha) · Deep analysis: Python
 
 ---
 
@@ -147,8 +147,8 @@ run against a synthetic repository that plants each pattern the analyzer must de
 
 | Version | Scope |
 |---|---|
-| v0.2 | Corpus comparison (done, unreleased); adapter layer: Semgrep, Syft SBOM, PMD CPD duplication |
-| v0.3 | Tier 1 analyzers + Tier 2 dynamic Python (done, unreleased); next: container runner, import-linter contracts from hypotheses |
+| v0.2 | Released: HTML report, corpus comparison, Tier 1 analyzers, Tier 2 dynamic Python, fusion |
+| v0.3 | Container runner for Tier 2, import-linter contracts from hypotheses, Semgrep/Syft/duplication adapters |
 | v0.4 | Second ecosystem (TypeScript or Rust) through the same adapter contract |
 | later | Adversarial-reviewer skill consuming `report.json` + `hypotheses.json`; evidence graph export |
 

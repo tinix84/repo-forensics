@@ -1,8 +1,8 @@
 {
-  "schema_version": "0.1.0",
+  "schema_version": "0.2.0",
   "tool": {
     "name": "repo-forensics",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "tier": 2,
     "requested_tier": 2,
     "notes": []
@@ -13,7 +13,7 @@
     "requested_ref": "fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4",
     "default_branch": null,
     "dirty": false,
-    "analyzed_at": "2026-10-12T16:18:48+00:00",
+    "analyzed_at": "2026-10-12T18:19:07+00:00",
     "license": "Apache-2.0",
     "license_file": "LICENSE",
     "pinned": true
@@ -831,11 +831,11 @@
         "fan_out": 6
       },
       {
-        "module": "llm.default_plugins.openai_models",
+        "module": "llm.logs",
         "fan_out": 5
       },
       {
-        "module": "llm.logs",
+        "module": "llm.default_plugins.openai_models",
         "fan_out": 5
       },
       {
@@ -851,7 +851,7 @@
         "fan_out": 2
       },
       {
-        "module": "llm.__main__",
+        "module": "llm.migrations",
         "fan_out": 1
       },
       {
@@ -892,8 +892,8 @@
           "llm.models": 1
         },
         "depended_on_by": {
-          "llm (root modules)": 1,
-          "llm.default_plugins": 1
+          "llm.default_plugins": 1,
+          "llm (root modules)": 1
         },
         "dependency_depth": 0,
         "third_party": {
@@ -930,10 +930,10 @@
           "llm.logs": 1
         },
         "depended_on_by": {
-          "llm (root modules)": 3,
           "llm.default_plugins": 1,
-          "llm.cli": 1,
-          "llm.logs": 1
+          "llm (root modules)": 3,
+          "llm.logs": 1,
+          "llm.cli": 1
         },
         "dependency_depth": 0,
         "third_party": {
@@ -957,8 +957,8 @@
         "code_lines": 2846,
         "depends_on": {
           "llm (root modules)": 5,
-          "llm.models": 1,
-          "llm.cli": 1
+          "llm.cli": 1,
+          "llm.models": 1
         },
         "depended_on_by": {},
         "dependency_depth": 1,
@@ -996,8 +996,8 @@
         "depended_on_by": {
           "llm.default_plugins": 5,
           "llm.models": 5,
-          "llm.cli": 4,
-          "llm.logs": 4
+          "llm.logs": 4,
+          "llm.cli": 4
         },
         "dependency_depth": 0,
         "third_party": {
@@ -1400,7 +1400,7 @@
       ],
       "status": "ok",
       "exit_code": 0,
-      "duration_s": 0.04,
+      "duration_s": 0.26,
       "note": null,
       "findings": 73
     },
@@ -1435,7 +1435,7 @@
       ],
       "status": "ok",
       "exit_code": 3,
-      "duration_s": 0.39,
+      "duration_s": 0.37,
       "note": null,
       "findings": 126
     },
@@ -1472,7 +1472,7 @@
       ],
       "status": "ok",
       "exit_code": 1,
-      "duration_s": 1.2,
+      "duration_s": 1.1,
       "note": null,
       "findings": 24
     }
@@ -1489,7 +1489,7 @@
       "note": "demo-grade isolation; not safe for hostile code"
     },
     "python": "3.12.3",
-    "elapsed_s": 259.3,
+    "elapsed_s": 237.8,
     "install": {
       "requested": [
         "PyYAML",
@@ -1577,17 +1577,17 @@
           "/usr/bin/python3",
           "-m",
           "venv",
-          "/tmp/rf-tier2-ae5qle6m/venv"
+          "/tmp/rf-tier2-bfsel3gg/venv"
         ],
         "exit": 0,
         "status": "ok",
-        "duration_s": 3.0,
+        "duration_s": 2.7,
         "stderr_tail": ""
       },
       {
         "step": "install analysis tools",
         "command": [
-          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
+          "/tmp/rf-tier2-bfsel3gg/venv/bin/python",
           "-m",
           "pip",
           "install",
@@ -1602,13 +1602,13 @@
         ],
         "exit": 0,
         "status": "ok",
-        "duration_s": 40.7,
+        "duration_s": 15.5,
         "stderr_tail": ""
       },
       {
         "step": "install dependencies (wheels only)",
         "command": [
-          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
+          "/tmp/rf-tier2-bfsel3gg/venv/bin/python",
           "-m",
           "pip",
           "install",
@@ -1655,45 +1655,45 @@
         ],
         "exit": 0,
         "status": "ok",
-        "duration_s": 54.0,
+        "duration_s": 76.6,
         "stderr_tail": ""
       },
       {
         "step": "entry probe llm.cli:cli",
         "command": [
-          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
-          "/tmp/rf-tier2-ae5qle6m/probes/rf_entry_probe.py",
-          "/tmp/rf-tier2-ae5qle6m/entry_llm_cli_cli.json",
+          "/tmp/rf-tier2-bfsel3gg/venv/bin/python",
+          "/tmp/rf-tier2-bfsel3gg/probes/rf_entry_probe.py",
+          "/tmp/rf-tier2-bfsel3gg/entry_llm_cli_cli.json",
           "llm.cli:cli",
           "llm"
         ],
         "exit": 0,
         "status": "ok",
-        "duration_s": 1.1,
+        "duration_s": 1.0,
         "stderr_tail": ""
       },
       {
         "step": "entry probe llm",
         "command": [
-          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
-          "/tmp/rf-tier2-ae5qle6m/probes/rf_entry_probe.py",
-          "/tmp/rf-tier2-ae5qle6m/entry_llm.json",
+          "/tmp/rf-tier2-bfsel3gg/venv/bin/python",
+          "/tmp/rf-tier2-bfsel3gg/probes/rf_entry_probe.py",
+          "/tmp/rf-tier2-bfsel3gg/entry_llm.json",
           "llm",
           "llm"
         ],
         "exit": 0,
         "status": "ok",
-        "duration_s": 0.4,
+        "duration_s": 0.5,
         "stderr_tail": ""
       },
       {
         "step": "tests under coverage + call graph",
         "command": [
-          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
+          "/tmp/rf-tier2-bfsel3gg/venv/bin/python",
           "-m",
           "coverage",
           "run",
-          "--data-file=/tmp/rf-tier2-ae5qle6m/cov.data",
+          "--data-file=/tmp/rf-tier2-bfsel3gg/cov.data",
           "--source=.",
           "-m",
           "pytest",
@@ -1703,39 +1703,39 @@
           "-p",
           "rf_pytest_callgraph",
           "--timeout=120",
-          "--junitxml=/tmp/rf-tier2-ae5qle6m/junit.xml"
+          "--junitxml=/tmp/rf-tier2-bfsel3gg/junit.xml"
         ],
         "exit": 0,
         "status": "ok",
-        "duration_s": 145.0,
+        "duration_s": 127.9,
         "stderr_tail": ""
       },
       {
         "step": "coverage json",
         "command": [
-          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
+          "/tmp/rf-tier2-bfsel3gg/venv/bin/python",
           "-m",
           "coverage",
           "json",
-          "--data-file=/tmp/rf-tier2-ae5qle6m/cov.data",
+          "--data-file=/tmp/rf-tier2-bfsel3gg/cov.data",
           "-o",
-          "/tmp/rf-tier2-ae5qle6m/coverage.json",
+          "/tmp/rf-tier2-bfsel3gg/coverage.json",
           "--ignore-errors"
         ],
         "exit": 0,
         "status": "ok",
         "duration_s": 1.3,
-        "stderr_tail": "Wrote JSON report to /tmp/rf-tier2-ae5qle6m/coverage.json\n"
+        "stderr_tail": "Wrote JSON report to /tmp/rf-tier2-bfsel3gg/coverage.json\n"
       },
       {
         "step": "deptry (installed environment)",
         "command": [
-          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
+          "/tmp/rf-tier2-bfsel3gg/venv/bin/python",
           "-m",
           "deptry",
           ".",
           "--json-output",
-          "/tmp/rf-tier2-ae5qle6m/deptry.json"
+          "/tmp/rf-tier2-bfsel3gg/deptry.json"
         ],
         "exit": 1,
         "status": "ok",
@@ -1745,7 +1745,7 @@
       {
         "step": "mypy (installed environment)",
         "command": [
-          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
+          "/tmp/rf-tier2-bfsel3gg/venv/bin/python",
           "-m",
           "mypy",
           "llm",
@@ -1754,11 +1754,11 @@
           "-O",
           "json",
           "--cache-dir",
-          "/tmp/rf-tier2-ae5qle6m/mypy_cache"
+          "/tmp/rf-tier2-bfsel3gg/mypy_cache"
         ],
         "status": "ok",
         "exit": 0,
-        "duration_s": 9.1
+        "duration_s": 10.2
       }
     ]
   },
@@ -2605,5 +2605,5 @@
     "INFERRED": 23,
     "UNKNOWN": 2
   },
-  "evidence_digest": "sha256:d1b7c00eff2d2d1e33d7fcf639b2e311"
+  "evidence_digest": "sha256:799094db06c60dcd582df942622a19ce"
 }

@@ -2,7 +2,7 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
-## [Unreleased]
+## [0.2.0] - 2026-10-12
 
 ### Added
 - `report.html`: self-contained visual report. Evidence status is encoded with technical-drawing line

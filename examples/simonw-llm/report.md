@@ -2,10 +2,10 @@
 
 - **Repository:** https://github.com/simonw/llm
 - **Commit:** `fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4`
-- **Analyzed:** 2026-10-12T16:18:48+00:00
-- **Evidence digest:** `sha256:d1b7c00eff2d2d1e33d7fcf639b2e311`
+- **Analyzed:** 2026-10-12T18:19:07+00:00
+- **Evidence digest:** `sha256:799094db06c60dcd582df942622a19ce`
 - **License (heuristic):** Apache-2.0
-- **Tool:** repo-forensics 0.1.0, tier 2
+- **Tool:** repo-forensics 0.2.0, tier 2
 
 > Measurements are facts. Architecture is an inference. Every row below links to an evidence id in `evidence.jsonl`. Status: CONFIRMED / SUPPORTED / INFERRED / UNKNOWN.
 
