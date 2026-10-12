@@ -9,7 +9,6 @@ AI usage and complexity, and states explicitly what it cannot know.
 > The CLI measures. A language model (via the bundled Claude Code skill) infers.
 > A validator keeps the two apart.
 
-[![CI](https://github.com/tinix84/repo-forensics/actions/workflows/ci.yml/badge.svg)](https://github.com/tinix84/repo-forensics/actions/workflows/ci.yml)
 License: MIT · Status: v0.1 (alpha) · Deep analysis: Python
 
 ---
