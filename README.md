@@ -44,10 +44,25 @@ ACQUIRE ─► FINGERPRINT ─► MEASURE ─► DECOMPOSE ─► INFER ─► R
 | Decompose | Directory-based components, component graph, dependency depth, import-time vs lazy component cycles; dominant components are split automatically |
 | Infer | Component responsibilities, architecture hypotheses with counter-evidence, primitive roles (CENTRAL/SUPPORTING/INCIDENTAL), AI classification, written to `hypotheses.json` |
 
+## Tiers: static, analyzers, dynamic
+
+| Tier | Runs | Executes the repo's code? |
+|---|---|---|
+| 0 | AST parsing, manifests, graph metrics | no |
+| 1 (default) | + lizard, ruff (SARIF), vulture, bandit | no |
+| 2 (`--tier 2`) | + wheel-only install, entry-point probes, tests under coverage, runtime call graph (PEP 669 `sys.monitoring`), deptry and mypy in the installed environment | **yes**, in a process-level sandbox (see SECURITY.md) |
+
+Tool findings are facts about tools, not about code; a fusion step turns them into calibrated claims
+using independent methods. On simonw/llm, vulture reports 99 "unused" functions or methods (60 %
+confidence); in the Tier 2 run 83 of them executed, so those claims are refuted with run-scoped
+evidence; plugin modules with no static importer were observed loaded by the CLI through pluggy.
+Agreement only counts between independent methods, and one execution can refute "never used"
+while non-execution can never confirm it.
+
 ## Quick start
 
 ```bash
-pip install "repo-forensics[complexity] @ git+https://github.com/tinix84/repo-forensics"
+pip install "repo-forensics[tier1] @ git+https://github.com/tinix84/repo-forensics"
 
 repo-forensics analyze pallets/flask --out analysis/flask          # GitHub shorthand
 repo-forensics analyze https://github.com/simonw/llm --ref fe283cb9 --out analysis/llm --keep-clone
@@ -56,7 +71,7 @@ repo-forensics validate analysis/llm
 repo-forensics render analysis/llm      # rebuild report.html including the validated inference layer
 ```
 
-Options: `--tier 0|1` (0 = parsing only; 1 = also lizard, default), `--component-depth 1|2`,
+Options: `--tier 0|1|2` (see Tiers), `--component-depth 1|2`,
 `--signatures DIR` (extra signature YAML), `--keep-clone`, `--workdir`.
 
 ### Claude Code skill
@@ -124,15 +139,17 @@ run against a synthetic repository that plants each pattern the analyzer must de
   is reported as an explicit unknown.
 - **Signature database is finite**: absence of a signature is not absence of a technique.
 - **Components are directory-based**; merged buckets are flagged `synthetic`.
-- **No duplication analysis, no SBOM/transitive dependencies, no test execution** yet.
+- **Tier 2 is process-level isolation only** (no container, network available): demo-grade.
+- **Dynamic evidence covers what the probes and tests exercise**; untested paths stay unknown.
+- **No duplication analysis, no SBOM, no vulnerability scan** yet.
 
 ## Roadmap
 
 | Version | Scope |
 |---|---|
 | v0.2 | Corpus comparison (done, unreleased); adapter layer: Semgrep, Syft SBOM, PMD CPD duplication |
-| v0.3 | Second ecosystem (TypeScript or Rust) via tree-sitter, to test language-neutral normalization |
-| v0.4 | Tier 2: build-aware analysis (mypy, tests) inside a disposable, network-less container |
+| v0.3 | Tier 1 analyzers + Tier 2 dynamic Python (done, unreleased); next: container runner, import-linter contracts from hypotheses |
+| v0.4 | Second ecosystem (TypeScript or Rust) through the same adapter contract |
 | later | Adversarial-reviewer skill consuming `report.json` + `hypotheses.json`; evidence graph export |
 
 ## Security model
@@ -144,6 +161,9 @@ The analyzed repository is treated as untrusted input. See [SECURITY.md](SECURIT
 - R. Tarjan, "Depth-first search and linear graph algorithms," *SIAM J. Computing* 1(2), 1972, [doi:10.1137/0201010](https://doi.org/10.1137/0201010). Used for cycle detection (iterative implementation).
 - T. J. McCabe, "A Complexity Measure," *IEEE TSE* SE-2(4), 1976, [doi:10.1109/TSE.1976.233837](https://doi.org/10.1109/TSE.1976.233837). Defines cyclomatic complexity.
 - lizard, the complexity analyzer used at tier 1: <https://github.com/terryyin/lizard>
+- ruff <https://github.com/astral-sh/ruff>, vulture <https://github.com/jendrikseipp/vulture>, bandit <https://github.com/PyCQA/bandit>, deptry <https://github.com/osprey-oss/deptry>, mypy <https://github.com/python/mypy>, coverage.py <https://github.com/nedbat/coveragepy>
+- SARIF 2.1.0 (OASIS): <https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html>
+- PEP 669, low-impact monitoring (`sys.monitoring`): <https://peps.python.org/pep-0669/>
 - Python `ast` (parsing without execution): <https://docs.python.org/3/library/ast.html>; `sys.stdlib_module_names`: <https://docs.python.org/3/library/sys.html#sys.stdlib_module_names>
 - PEP 503 (name normalization) <https://peps.python.org/pep-0503/>, PEP 621 (project metadata) <https://peps.python.org/pep-0621/>, PEP 735 (dependency groups) <https://peps.python.org/pep-0735/>
 - JSON Schema 2020-12: <https://json-schema.org/draft/2020-12>; Mermaid: <https://mermaid.js.org/>

@@ -18,6 +18,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 - Signatures: hierarchical Leiden / community detection (graspologic, graspologic_native, leidenalg),
   spaCy/NLTK, Azure Blob, Cosmos DB, Azure AI Search, pluggy/stevedore.
 
+- Tier 1 analyzer adapters: ruff (SARIF reader), vulture, bandit; tool findings recorded as tool-output facts
+  with tool versions and commands.
+- Tier 2 (`--tier 2`, executes code): disposable copy, fresh venv, wheels-only install, scrubbed environment,
+  CPU/file limits; entry-point probes (`--help`), pytest under coverage.py, runtime call graph via PEP 669
+  `sys.monitoring` (stdlib-only probe), deptry and mypy in the installed environment; full run manifest.
+- Fusion rules: dead code (static claim vs execution), runtime reachability of static orphans and signals,
+  runtime-only coupling and third-party dispatchers, dependency hygiene (deptry vs static scan), security
+  (bandit severity/confidence), test and type summaries. Independence and shared blind spots are explicit.
+- HTML report section "Analyzers and run" with fused findings; checklist gates for analyzers, dynamic run, fusion.
+
 ### Changed
 - `--ref` with an abbreviated SHA now fails with a clear message (shallow fetch needs the full SHA).
 
@@ -25,6 +35,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 - Corpus role table credited every library in a component to each of its roles (e.g. an S3 client as an
   LLM-adapter implementation); implementations are now filtered by the role's `implemented_by`.
 - Matrix cells counted declared-only libraries (e.g. `anthropic`) as used.
+- Found while building Tier 2 on simonw/llm: the call-graph probe took the starting function's own frame
+  as its caller; `<frozen ...>` pseudo-files were treated as repository files; vulture reports decorated
+  functions at the decorator line (no coverage match for all Click commands); `from pkg import x`
+  re-exports were reported as runtime-only coupling; dataclass-generated code was reported as an external
+  dispatcher; a platform-conditional dependency was "unused" by two methods sharing one blind spot.
 
 ## [0.1.0] - 2026-10-09
 

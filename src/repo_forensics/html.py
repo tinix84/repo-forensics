@@ -310,6 +310,71 @@ def sec_primitives(r: dict, hyp: dict | None, ctx: Ctx) -> str:
             f'</div></section>')
 
 
+VERDICT_LABEL = {
+    "refuted": "refuted by execution", "likely-dead": "likely dead (2 methods)", "possibly-dead": "possibly dead",
+    "public-api": "public API, unused internally", "unverified": "unverified (no run data)",
+}
+
+
+def sec_tooling(r: dict, ctx: Ctx) -> str:
+    tc = r.get("toolchain") or []
+    dyn = r.get("dynamic") or {"status": "not_run"}
+    fus = r.get("fusion") or {}
+    if not tc and dyn.get("status") == "not_run":
+        return ""
+    rows = "".join(
+        f'<tr><td><b>{e(t["tool"])}</b><br><span class="sub">{e(t.get("version") or "")}</span></td><td>{e(t["question"])}</td>'
+        f'<td class="num">{t["tier"]}</td><td>{e(t["status"])}</td><td class="num">{t["findings"]}</td>'
+        f'<td class="num">{e(t.get("duration_s"))}</td></tr>' for t in tc)
+    parts = [f'<section id="tooling"><h2>Analyzers and run</h2><p class="muted">Each finding below is first a fact about '
+             f'the tool\'s output; what it means for the code is decided by fusing independent methods.</p>'
+             f'<div class="scroll"><table class="grid"><thead><tr><th>Tool</th><th>Question</th><th>Tier</th><th>Status</th>'
+             f'<th>Findings</th><th>s</th></tr></thead><tbody>{rows}</tbody></table></div>']
+    if dyn.get("status") != "not_run":
+        iso = dyn["isolation"]
+        t = dyn.get("tests") or {}
+        cov = t.get("coverage_percent")
+        tests_line = (f'{t.get("tests", "?")} tests, {t.get("failures", "?")} failures, {t.get("errors", "?")} errors; '
+                      f'line coverage {cov:.1f}%; {t.get("callgraph_edges", 0):,} runtime call edges') if t.get("ran") else "not run"
+        probes = ", ".join(f'{e(p["spec"])} ({e(p["status"])}, {p["loaded_files"]} modules)' for p in dyn.get("entry_probes", []))
+        my = dyn.get("mypy") or {}
+        inst = dyn["install"]
+        comp_cov = ((fus.get("rules") or {}).get("tests_types") or {}).get("coverage_by_component") or {}
+        cc = ", ".join(f"{e(k.split('.')[-1])} {v:.0f}%" for k, v in sorted(comp_cov.items(), key=lambda kv: kv[1]))
+        parts.append(f"""<div class="card"><h3>Tier 2 run: {e(dyn["status"])}</h3>
+<dl><dt>Python</dt><dd>{e(dyn["python"])}, {e(dyn["elapsed_s"])} s</dd>
+<dt>Install</dt><dd>{len(inst["requested"])} requirements as wheels only (no build scripts executed); failed: {e(", ".join(inst["failed"]) or "none")}</dd>
+<dt>Tests</dt><dd>{tests_line}</dd><dt>Coverage by component</dt><dd>{cc or "n/a"}</dd>
+<dt>Entry probes</dt><dd>{probes or "none"}</dd>
+<dt>mypy</dt><dd>{e(my.get("errors", "n/a"))} errors with dependencies installed</dd></dl></div>
+<div class="unknown-box"><p><b>Isolation:</b> {e(iso["level"])}-level, {"in a container" if iso["container"] else "no container"}, network {e(iso["network"])}.
+{e(iso["environment"])}; {e(iso["limits"])}. {e(iso["note"])}. Observations hold for this run only: code that did not
+run here may still run elsewhere.</p></div>""")
+    claims = fus.get("claims") or []
+    if claims:
+        dc = ((fus.get("rules") or {}).get("dead_code") or {}).get("verdicts") or {}
+        dc_line = ", ".join(f"{VERDICT_LABEL.get(k, k)}: {v}" for k, v in sorted(dc.items(), key=lambda kv: -kv[1]))
+        by_rule = defaultdict(list)
+        for c in claims:
+            by_rule[c["rule"]].append(c)
+        blocks = []
+        order = {"likely-dead": 0, "likely-unused-module": 0, "possibly-dead": 1, "public-api": 2, "refuted": 3}
+        for rule, cs in by_rule.items():
+            per_verdict: dict = defaultdict(list)
+            for c in sorted(cs, key=lambda c: order.get(c["verdict"], 1)):
+                per_verdict[c["verdict"]].append(c)
+            shown = [c for v in per_verdict.values() for c in v[:4]]
+            items = "".join(f'<li><span class="tag {STATUS_CLASS.get(c["status"], "unknown")}">{e(c["status"].lower())}</span> '
+                            f'{e(c["claim"])} {ctx.chip(c["evidence_id"])}</li>' for c in shown)
+            more = (f'<li class="sub">+{len(cs) - len(shown)} more in the evidence register</li>'
+                    if len(cs) > len(shown) else "")
+            blocks.append(f'<h3>{e(rule.replace("_", " "))}</h3><ul class="fused">{items}{more}</ul>')
+        parts.append(f'<h3>Fused findings</h3><p class="muted">Dead-code verdicts for vulture\'s callable findings: '
+                     f'{e(dc_line or "n/a")}.</p>{"".join(blocks)}')
+    parts.append("</section>")
+    return "".join(parts)
+
+
 def sec_entry(r: dict, ctx: Ctx) -> str:
     rows = "".join(f'<tr><td><b>{e(x["type"])}</b>{(" " + e(x["name"])) if x.get("name") else ""}</td>'
                    f'<td>{ctx.src(x.get("path")) if x.get("path") else e(x.get("module"))}</td><td class="sub">{e(x["detection"])}</td>'
@@ -490,6 +555,8 @@ details.ev:target{outline:3px solid var(--link)}
 details.ev summary{cursor:pointer}
 .eid{font-weight:600;margin-right:6px}.st{font-size:.8rem;color:var(--ink-2);margin-right:6px}
 ul.locs{margin:4px 0;padding-left:18px;font-size:.9rem}
+ul.fused{list-style:none;padding:0;margin:6px 0 14px}ul.fused li{margin:0 0 6px}
+.tag.fact{border:1.5px solid var(--ink)}.tag.fact-weak{border:1px solid var(--ink)}.tag.unknown{border:1.5px dotted var(--phantom);color:var(--phantom)}
 footer{margin-top:48px;color:var(--ink-2);font-size:.85rem;border-top:1px solid var(--rule);padding-top:10px}
 [id]{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 56px)}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
@@ -521,7 +588,7 @@ def render_html(out_dir: Path) -> Path:
     body = "".join([
         sec_header(report, hyp, ctx),
         '<nav class="toc" aria-label="Sections"><a href="#map">Map</a><a href="#inference">Inference</a>'
-        '<a href="#components">Components</a><a href="#primitives">Primitives</a><a href="#entry">Entry points</a>'
+        '<a href="#components">Components</a><a href="#primitives">Primitives</a><a href="#tooling">Analyzers</a><a href="#entry">Entry points</a>'
         '<a href="#structure">Structure</a><a href="#complexity">Complexity</a><a href="#unknowns">Open questions</a>'
         '<a href="#evidence">Evidence</a></nav>',
         f'<section id="map"><h2>Component map</h2><div class="scroll">{component_svg(report, hyp_names)}</div>'
@@ -531,6 +598,7 @@ def render_html(out_dir: Path) -> Path:
         sec_hypotheses(hyp, ctx),
         sec_components(report, hyp, ctx),
         sec_primitives(report, hyp, ctx),
+        sec_tooling(report, ctx),
         sec_entry(report, ctx),
         sec_structure(report, ctx),
         sec_complexity(report, funcs, ctx, threshold),

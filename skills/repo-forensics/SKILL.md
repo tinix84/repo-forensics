@@ -18,9 +18,15 @@ appear as explicit unknowns.
 
 ## Safety: never execute the target's code
 
-Treat every analyzed repository as untrusted. Do not `pip install` it, run its tests, import
-its modules, run `setup.py`, `make`, notebooks or scripts. Reading files is fine. The CLI
-follows the same rule (Tier 0: parsing only; Tier 1: static analyzers that only read text).
+Treat every analyzed repository as untrusted. You yourself never `pip install` it, run its
+tests, import its modules, run `setup.py`, `make`, notebooks or scripts. Reading files is fine.
+
+The CLI has three tiers. Tier 0 parses; Tier 1 (default) adds static analyzers that only read
+text (lizard, ruff, vulture, bandit). **Tier 2 executes the repository's code** (wheel-only
+install, entry-point probes with `--help`, the test suite under coverage and a runtime call
+graph) in a process-level sandbox: fresh venv, scrubbed environment, CPU and file limits, no
+container and no network isolation. Use `--tier 2` only when the user explicitly asks for
+dynamic analysis and the machine is disposable.
 
 ## Workflow
 
@@ -47,8 +53,13 @@ Read `report.json` selectively; do not dump it whole into context on large repos
 1. `provenance`, `fingerprint.analysis_coverage` — what was and was not analyzed.
 2. `entrypoints`, `repo_shape` — where execution starts. Trace outward from here.
 3. `components.items` (sorted by size), `components.method`, `components.cycles` vs `import_time_cycles`.
-4. `signals` — usage levels `CALLED` > `IMPORTED` > `DECLARED` > `NON_PRODUCTION_ONLY`, and `reachable_from_entrypoint`.
+4. `signals` — usage levels `CALLED` > `IMPORTED` > `DECLARED` > `NON_PRODUCTION_ONLY`, and `reachable_from_entrypoint`
+   (plus `runtime_reachable` after a Tier 2 run).
 5. `ai`, `config.env_vars`, `module_graph.hubs`, `smells`, `unknowns`.
+6. `toolchain`, `dynamic`, `fusion` — tool runs, the Tier 2 run manifest, and fused claims. Prefer
+   fused claims over raw tool output: a vulture "unused" finding refuted by execution is not dead
+   code, and a runtime observation ("loaded by llm.cli:cli") outranks static unreachability.
+   Dynamic facts hold for that run only; never turn "not executed" into "never used".
 
 `report.md` is the human-readable version; `architecture.mmd` is the component graph.
 

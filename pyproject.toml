@@ -28,7 +28,8 @@ Changelog = "https://github.com/tinix84/repo-forensics/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 complexity = ["lizard>=1.17"]
-dev = ["pytest>=8", "lizard>=1.17", "ruff>=0.6"]
+tier1 = ["lizard>=1.17", "ruff>=0.6", "vulture>=2.10", "bandit>=1.7"]
+dev = ["pytest>=8", "lizard>=1.17", "ruff>=0.6", "vulture>=2.10", "bandit>=1.7"]
 
 [project.scripts]
 repo-forensics = "repo_forensics.cli:main"

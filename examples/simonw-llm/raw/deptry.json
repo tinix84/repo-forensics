@@ -1,0 +1,50 @@
+[
+    {
+        "error": {
+            "code": "DEP003",
+            "message": "'docutils' imported but it is a transitive dependency"
+        },
+        "module": "docutils",
+        "location": {
+            "file": "docs/conf.py",
+            "line": 3,
+            "column": 1
+        }
+    },
+    {
+        "error": {
+            "code": "DEP002",
+            "message": "'setuptools' defined as a dependency but not used in the codebase"
+        },
+        "module": "setuptools",
+        "location": {
+            "file": "pyproject.toml",
+            "line": null,
+            "column": null
+        }
+    },
+    {
+        "error": {
+            "code": "DEP002",
+            "message": "'pip' defined as a dependency but not used in the codebase"
+        },
+        "module": "pip",
+        "location": {
+            "file": "pyproject.toml",
+            "line": null,
+            "column": null
+        }
+    },
+    {
+        "error": {
+            "code": "DEP002",
+            "message": "'pyreadline3' defined as a dependency but not used in the codebase"
+        },
+        "module": "pyreadline3",
+        "location": {
+            "file": "pyproject.toml",
+            "line": null,
+            "column": null
+        }
+    }
+]

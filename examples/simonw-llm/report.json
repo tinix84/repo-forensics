@@ -3,8 +3,8 @@
   "tool": {
     "name": "repo-forensics",
     "version": "0.1.0",
-    "tier": 1,
-    "requested_tier": 1,
+    "tier": 2,
+    "requested_tier": 2,
     "notes": []
   },
   "provenance": {
@@ -13,7 +13,7 @@
     "requested_ref": "fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4",
     "default_branch": null,
     "dirty": false,
-    "analyzed_at": "2026-10-09T07:33:47+00:00",
+    "analyzed_at": "2026-10-12T16:18:48+00:00",
     "license": "Apache-2.0",
     "license_file": "LICENSE",
     "pinned": true
@@ -188,6 +188,7 @@
       "name": "llm",
       "type": "cli",
       "module": "llm.cli",
+      "spec": "llm.cli:cli",
       "path": "llm/cli.py",
       "detection": "declared console script",
       "status": "CONFIRMED",
@@ -197,6 +198,7 @@
       "name": null,
       "type": "cli",
       "module": "llm.__main__",
+      "spec": null,
       "path": "llm/__main__.py",
       "detection": "__main__.py (python -m)",
       "status": "CONFIRMED",
@@ -206,6 +208,7 @@
       "name": null,
       "type": "cli",
       "module": "llm.cli",
+      "spec": null,
       "path": "llm/cli.py",
       "detection": "decorator `click.group`",
       "status": "CONFIRMED",
@@ -215,6 +218,7 @@
       "name": null,
       "type": "library-api",
       "module": "llm",
+      "spec": null,
       "path": "llm/__init__.py",
       "detection": "importable top-level package declared by a package manifest",
       "status": "SUPPORTED",
@@ -819,11 +823,11 @@
         "fan_out": 8
       },
       {
-        "module": "llm.cli",
+        "module": "llm.models",
         "fan_out": 6
       },
       {
-        "module": "llm.models",
+        "module": "llm.cli",
         "fan_out": 6
       },
       {
@@ -847,11 +851,11 @@
         "fan_out": 2
       },
       {
-        "module": "llm.migrations",
+        "module": "llm.__main__",
         "fan_out": 1
       },
       {
-        "module": "llm.__main__",
+        "module": "llm.plugins",
         "fan_out": 1
       }
     ],
@@ -884,8 +888,8 @@
         "code_lines": 3817,
         "depends_on": {
           "llm (root modules)": 4,
-          "llm.models": 1,
-          "llm.logs": 1
+          "llm.logs": 1,
+          "llm.models": 1
         },
         "depended_on_by": {
           "llm (root modules)": 1,
@@ -991,8 +995,8 @@
         },
         "depended_on_by": {
           "llm.default_plugins": 5,
-          "llm.cli": 4,
           "llm.models": 5,
+          "llm.cli": 4,
           "llm.logs": 4
         },
         "dependency_depth": 0,
@@ -1033,8 +1037,8 @@
           "llm.models": 1
         },
         "depended_on_by": {
-          "llm.cli": 1,
-          "llm.models": 1
+          "llm.models": 1,
+          "llm.cli": 1
         },
         "dependency_depth": 0,
         "third_party": {
@@ -1084,7 +1088,9 @@
       ],
       "reachable_from_entrypoint": false,
       "refined_primitives": {},
-      "evidence_id": "EV-0030"
+      "evidence_id": "EV-0030",
+      "runtime_reachable": true,
+      "runtime_evidence_id": "EV-0115"
     },
     {
       "signature": "dynamic-code",
@@ -1356,6 +1362,941 @@
   "duplication": {
     "status": "not_implemented"
   },
+  "toolchain": [
+    {
+      "tool": "ruff",
+      "version": "ruff 0.16.10",
+      "tier": 1,
+      "question": "correctness",
+      "command": [
+        "ruff",
+        "check",
+        "--isolated",
+        "--select",
+        "F,E9,B,PLE",
+        "--output-format",
+        "sarif",
+        "--exit-zero",
+        "--no-cache",
+        "llm/__init__.py",
+        "llm/__main__.py",
+        "llm/cli.py",
+        "llm/default_plugins/__init__.py",
+        "llm/default_plugins/default_tools.py",
+        "llm/default_plugins/openai_models.py",
+        "llm/embeddings.py",
+        "llm/embeddings_migrations.py",
+        "llm/errors.py",
+        "llm/hookspecs.py",
+        "llm/logs.py",
+        "llm/migrations.py",
+        "llm/models.py",
+        "llm/parts.py",
+        "llm/plugins.py",
+        "llm/serialization.py",
+        "llm/templates.py",
+        "llm/tools.py",
+        "llm/utils.py"
+      ],
+      "status": "ok",
+      "exit_code": 0,
+      "duration_s": 0.04,
+      "note": null,
+      "findings": 73
+    },
+    {
+      "tool": "vulture",
+      "version": "vulture 2.16",
+      "tier": 1,
+      "question": "dead-code",
+      "command": [
+        "vulture",
+        "--min-confidence",
+        "60",
+        "llm/__init__.py",
+        "llm/__main__.py",
+        "llm/cli.py",
+        "llm/default_plugins/__init__.py",
+        "llm/default_plugins/default_tools.py",
+        "llm/default_plugins/openai_models.py",
+        "llm/embeddings.py",
+        "llm/embeddings_migrations.py",
+        "llm/errors.py",
+        "llm/hookspecs.py",
+        "llm/logs.py",
+        "llm/migrations.py",
+        "llm/models.py",
+        "llm/parts.py",
+        "llm/plugins.py",
+        "llm/serialization.py",
+        "llm/templates.py",
+        "llm/tools.py",
+        "llm/utils.py"
+      ],
+      "status": "ok",
+      "exit_code": 3,
+      "duration_s": 0.39,
+      "note": null,
+      "findings": 126
+    },
+    {
+      "tool": "bandit",
+      "version": "bandit 1.9.4",
+      "tier": 1,
+      "question": "security",
+      "command": [
+        "bandit",
+        "-r",
+        "llm/__init__.py",
+        "llm/__main__.py",
+        "llm/cli.py",
+        "llm/default_plugins/__init__.py",
+        "llm/default_plugins/default_tools.py",
+        "llm/default_plugins/openai_models.py",
+        "llm/embeddings.py",
+        "llm/embeddings_migrations.py",
+        "llm/errors.py",
+        "llm/hookspecs.py",
+        "llm/logs.py",
+        "llm/migrations.py",
+        "llm/models.py",
+        "llm/parts.py",
+        "llm/plugins.py",
+        "llm/serialization.py",
+        "llm/templates.py",
+        "llm/tools.py",
+        "llm/utils.py",
+        "-f",
+        "json",
+        "-q"
+      ],
+      "status": "ok",
+      "exit_code": 1,
+      "duration_s": 1.2,
+      "note": null,
+      "findings": 24
+    }
+  ],
+  "dynamic": {
+    "status": "ok",
+    "isolation": {
+      "level": "process",
+      "container": false,
+      "network": "available",
+      "environment": "scrubbed (no inherited variables or credentials)",
+      "limits": "CPU 1800 s per process, files 2 GB, no core dumps",
+      "source": "disposable copy",
+      "note": "demo-grade isolation; not safe for hostile code"
+    },
+    "python": "3.12.3",
+    "elapsed_s": 259.3,
+    "install": {
+      "requested": [
+        "PyYAML",
+        "black>=26.3.1",
+        "build",
+        "click",
+        "click-default-group>=1.2.3",
+        "click>=8.2.0",
+        "cogapp",
+        "condense-json>=1.1",
+        "furo==2023.9.10",
+        "httpx2",
+        "httpx2-pytest",
+        "llm-echo==0.3a3",
+        "mypy>=1.10.0",
+        "myst-parser",
+        "numpy",
+        "openai>3",
+        "pip",
+        "pluggy",
+        "puremagic",
+        "pydantic>=2.0.0",
+        "pyreadline3; sys_platform == 'win32'",
+        "pytest",
+        "pytest-asyncio",
+        "pytest-recording",
+        "python-ulid",
+        "ruff>=0.16.0",
+        "setuptools",
+        "sphinx-autobuild",
+        "sphinx-copybutton",
+        "sphinx-markdown-builder==0.6.8",
+        "sphinx==7.2.6",
+        "sqlite-utils>=4.0",
+        "syrupy",
+        "types-PyYAML",
+        "types-click",
+        "types-setuptools",
+        "typing-extensions"
+      ],
+      "only_binary": true,
+      "failed": [],
+      "tools_ok": true,
+      "deps_ok": true
+    },
+    "tests": {
+      "ran": true,
+      "exit": 0,
+      "status": "ok",
+      "tests": 1208,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "coverage_percent": 94.88550122088036,
+      "callgraph_edges": 4522
+    },
+    "entry_probes": [
+      {
+        "spec": "llm.cli:cli",
+        "status": "exit:0",
+        "loaded_files": 18,
+        "edges": 115
+      },
+      {
+        "spec": "llm",
+        "status": "ok",
+        "loaded_files": 11,
+        "edges": 75
+      }
+    ],
+    "deptry": {
+      "status": "ok",
+      "issues": 4
+    },
+    "mypy": {
+      "status": "ok",
+      "exit": 0,
+      "errors": 0,
+      "by_code": {}
+    },
+    "steps": [
+      {
+        "step": "create venv",
+        "command": [
+          "/usr/bin/python3",
+          "-m",
+          "venv",
+          "/tmp/rf-tier2-ae5qle6m/venv"
+        ],
+        "exit": 0,
+        "status": "ok",
+        "duration_s": 3.0,
+        "stderr_tail": ""
+      },
+      {
+        "step": "install analysis tools",
+        "command": [
+          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
+          "-m",
+          "pip",
+          "install",
+          "--only-binary",
+          ":all:",
+          "-q",
+          "pytest",
+          "pytest-timeout",
+          "coverage",
+          "deptry",
+          "mypy"
+        ],
+        "exit": 0,
+        "status": "ok",
+        "duration_s": 40.7,
+        "stderr_tail": ""
+      },
+      {
+        "step": "install dependencies (wheels only)",
+        "command": [
+          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
+          "-m",
+          "pip",
+          "install",
+          "--only-binary",
+          ":all:",
+          "-q",
+          "PyYAML",
+          "black>=26.3.1",
+          "build",
+          "click",
+          "click-default-group>=1.2.3",
+          "click>=8.2.0",
+          "cogapp",
+          "condense-json>=1.1",
+          "furo==2023.9.10",
+          "httpx2",
+          "httpx2-pytest",
+          "llm-echo==0.3a3",
+          "mypy>=1.10.0",
+          "myst-parser",
+          "numpy",
+          "openai>3",
+          "pip",
+          "pluggy",
+          "puremagic",
+          "pydantic>=2.0.0",
+          "pyreadline3; sys_platform == 'win32'",
+          "pytest",
+          "pytest-asyncio",
+          "pytest-recording",
+          "python-ulid",
+          "ruff>=0.16.0",
+          "setuptools",
+          "sphinx-autobuild",
+          "sphinx-copybutton",
+          "sphinx-markdown-builder==0.6.8",
+          "sphinx==7.2.6",
+          "sqlite-utils>=4.0",
+          "syrupy",
+          "types-PyYAML",
+          "types-click",
+          "types-setuptools",
+          "typing-extensions"
+        ],
+        "exit": 0,
+        "status": "ok",
+        "duration_s": 54.0,
+        "stderr_tail": ""
+      },
+      {
+        "step": "entry probe llm.cli:cli",
+        "command": [
+          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
+          "/tmp/rf-tier2-ae5qle6m/probes/rf_entry_probe.py",
+          "/tmp/rf-tier2-ae5qle6m/entry_llm_cli_cli.json",
+          "llm.cli:cli",
+          "llm"
+        ],
+        "exit": 0,
+        "status": "ok",
+        "duration_s": 1.1,
+        "stderr_tail": ""
+      },
+      {
+        "step": "entry probe llm",
+        "command": [
+          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
+          "/tmp/rf-tier2-ae5qle6m/probes/rf_entry_probe.py",
+          "/tmp/rf-tier2-ae5qle6m/entry_llm.json",
+          "llm",
+          "llm"
+        ],
+        "exit": 0,
+        "status": "ok",
+        "duration_s": 0.4,
+        "stderr_tail": ""
+      },
+      {
+        "step": "tests under coverage + call graph",
+        "command": [
+          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
+          "-m",
+          "coverage",
+          "run",
+          "--data-file=/tmp/rf-tier2-ae5qle6m/cov.data",
+          "--source=.",
+          "-m",
+          "pytest",
+          "-q",
+          "-p",
+          "no:cacheprovider",
+          "-p",
+          "rf_pytest_callgraph",
+          "--timeout=120",
+          "--junitxml=/tmp/rf-tier2-ae5qle6m/junit.xml"
+        ],
+        "exit": 0,
+        "status": "ok",
+        "duration_s": 145.0,
+        "stderr_tail": ""
+      },
+      {
+        "step": "coverage json",
+        "command": [
+          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
+          "-m",
+          "coverage",
+          "json",
+          "--data-file=/tmp/rf-tier2-ae5qle6m/cov.data",
+          "-o",
+          "/tmp/rf-tier2-ae5qle6m/coverage.json",
+          "--ignore-errors"
+        ],
+        "exit": 0,
+        "status": "ok",
+        "duration_s": 1.3,
+        "stderr_tail": "Wrote JSON report to /tmp/rf-tier2-ae5qle6m/coverage.json\n"
+      },
+      {
+        "step": "deptry (installed environment)",
+        "command": [
+          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
+          "-m",
+          "deptry",
+          ".",
+          "--json-output",
+          "/tmp/rf-tier2-ae5qle6m/deptry.json"
+        ],
+        "exit": 1,
+        "status": "ok",
+        "duration_s": 0.2,
+        "stderr_tail": "haviour.\nScanning 21 files...\n\n\u001b[1mdocs/conf.py\u001b[m\u001b[36m:\u001b[m3\u001b[36m:\u001b[m1\u001b[36m:\u001b[m \u001b[1m\u001b[31mDEP003\u001b[m 'docutils' imported but it is a transitive dependency\n\u001b[1mpyproject.toml\u001b[m\u001b[36m:\u001b[m \u001b[1m\u001b[31mDEP002\u001b[m 'setuptools' defined as a dependency but not used in the codebase\n\u001b[1mpyproject.toml\u001b[m\u001b[36m:\u001b[m \u001b[1m\u001b[31mDEP002\u001b[m 'pip' defined as a dependency but not used in the codebase\n\u001b[1mpyproject.toml\u001b[m\u001b[36m:\u001b[m \u001b[1m\u001b[31mDEP002\u001b[m 'pyreadline3' defined as a dependency but not used in the codebase\n\u001b[1m\u001b[31mFound 4 dependency issues.\u001b[m\n\nFor more information, see the documentation: https://deptry.com/\n"
+      },
+      {
+        "step": "mypy (installed environment)",
+        "command": [
+          "/tmp/rf-tier2-ae5qle6m/venv/bin/python",
+          "-m",
+          "mypy",
+          "llm",
+          "--ignore-missing-imports",
+          "--no-error-summary",
+          "-O",
+          "json",
+          "--cache-dir",
+          "/tmp/rf-tier2-ae5qle6m/mypy_cache"
+        ],
+        "status": "ok",
+        "exit": 0,
+        "duration_s": 9.1
+      }
+    ]
+  },
+  "fusion": {
+    "rules": {
+      "dead_code": {
+        "status": "ok",
+        "verdicts": {
+          "public-api": 1,
+          "refuted": 83,
+          "possibly-dead": 15,
+          "not-a-callable (imports/variables: name-binding only)": 27
+        },
+        "run_data": true
+      },
+      "reachability": {
+        "orphans_loaded_at_runtime": [
+          {
+            "module": "llm.default_plugins.default_tools",
+            "evidence_id": "EV-0113"
+          },
+          {
+            "module": "llm.default_plugins.openai_models",
+            "evidence_id": "EV-0114"
+          }
+        ],
+        "orphans_unused": [],
+        "signals_reached_at_runtime": [
+          "openai"
+        ],
+        "status": "ok"
+      },
+      "coupling": {
+        "status": "ok",
+        "runtime_only_module_pairs": 0,
+        "runtime_only_component_pairs": [],
+        "external_dispatchers": [
+          {
+            "dispatcher": "click",
+            "component": "llm.cli",
+            "calls": 1854
+          },
+          {
+            "dispatcher": "sqlite_utils",
+            "component": "llm (root modules)",
+            "calls": 1148
+          },
+          {
+            "dispatcher": "pluggy",
+            "component": "llm.default_plugins",
+            "calls": 827
+          },
+          {
+            "dispatcher": "llm_echo",
+            "component": "llm.models",
+            "calls": 635
+          },
+          {
+            "dispatcher": "yaml",
+            "component": "llm.cli",
+            "calls": 462
+          },
+          {
+            "dispatcher": "click",
+            "component": "llm.default_plugins",
+            "calls": 54
+          },
+          {
+            "dispatcher": "asyncio",
+            "component": "llm.models",
+            "calls": 35
+          },
+          {
+            "dispatcher": "asyncio",
+            "component": "llm.cli",
+            "calls": 16
+          }
+        ]
+      },
+      "dependencies": {
+        "status": "ok",
+        "counts": {
+          "DEP003": 1,
+          "DEP002": 3
+        }
+      },
+      "security": {
+        "status": "ok",
+        "rules": [
+          {
+            "rule": "B324",
+            "name": "hashlib",
+            "severity": "high",
+            "count": 3,
+            "status": "SUPPORTED",
+            "evidence_id": "EV-0126"
+          },
+          {
+            "rule": "B608",
+            "name": "hardcoded_sql_expressions",
+            "severity": "medium",
+            "count": 15,
+            "status": "INFERRED",
+            "evidence_id": "EV-0127"
+          },
+          {
+            "rule": "B102",
+            "name": "exec_used",
+            "severity": "medium",
+            "count": 1,
+            "status": "INFERRED",
+            "evidence_id": "EV-0128"
+          },
+          {
+            "rule": "B101",
+            "name": "assert_used",
+            "severity": "low",
+            "count": 4,
+            "status": "INFERRED",
+            "evidence_id": "EV-0129"
+          },
+          {
+            "rule": "B105",
+            "name": "hardcoded_password_string",
+            "severity": "low",
+            "count": 1,
+            "status": "INFERRED",
+            "evidence_id": "EV-0130"
+          }
+        ]
+      },
+      "tests_types": {
+        "status": "ok",
+        "coverage_by_component": {
+          "llm (root modules)": 92.4,
+          "llm.cli": 86.4,
+          "llm.default_plugins": 86.3,
+          "llm.logs": 95.6,
+          "llm.models": 92.6
+        }
+      }
+    },
+    "claims": [
+      {
+        "rule": "dead_code",
+        "verdict": "public-api",
+        "claim": "get_embedding_models is unused inside the repository but exported by library package llm",
+        "status": "INFERRED",
+        "evidence_id": "EV-0072"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports get_models unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0073"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports get_async_models unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0074"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports convert unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0075"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports keys_list unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0076"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports keys_path_command unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0077"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports keys_get unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0078"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports keys_set unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0079"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports logs_status unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0080"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports backup unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0081"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports logs_turn_on unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0082"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports logs_turn_off unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0083"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports logs_list unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0084"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports models_list unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0085"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "models_default: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0086"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports templates_list unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0087"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "templates_show: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0088"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "templates_edit: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0089"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "templates_path: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0090"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports templates_loaders unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0091"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports schemas_list unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0092"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "schemas_show: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0093"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports schemas_dsl_debug unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0094"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports tools_list unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0095"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports aliases_list unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0096"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports aliases_set unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0097"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports aliases_remove unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0098"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports fragments_list unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0099"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports fragments_set unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0100"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports fragments_show unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0101"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "refuted",
+        "claim": "vulture reports fragments_remove unused, but its body executed during the test run",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0102"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "install: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0103"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "uninstall: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0104"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "collections_path: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0105"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "get_history: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0106"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "validate_logit_bias: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0107"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "_build_parts: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0108"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "text_or_raise: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0109"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "tool_calls_or_raise: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0110"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "tool_calls_or_raise: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0111"
+      },
+      {
+        "rule": "dead_code",
+        "verdict": "possibly-dead",
+        "claim": "fake: unused by name and not executed, but the repo loads code dynamically",
+        "status": "INFERRED",
+        "evidence_id": "EV-0112"
+      },
+      {
+        "rule": "reachability",
+        "verdict": "loaded-dynamically",
+        "claim": "llm.default_plugins.default_tools has no static importer but was loaded at runtime by llm.cli:cli",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0113"
+      },
+      {
+        "rule": "reachability",
+        "verdict": "loaded-dynamically",
+        "claim": "llm.default_plugins.openai_models has no static importer but was loaded at runtime by llm.cli:cli",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0114"
+      },
+      {
+        "rule": "reachability",
+        "verdict": "reached-at-runtime",
+        "claim": "openai (hosted-llm-inference) is not statically reachable, yet its modules were loaded at runtime by llm.cli:cli",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0115"
+      },
+      {
+        "rule": "coupling",
+        "verdict": "external-dispatch",
+        "claim": "Code in component llm.cli is entered from click (1854 calls): control passes through a third-party dispatcher",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0116"
+      },
+      {
+        "rule": "coupling",
+        "verdict": "external-dispatch",
+        "claim": "Code in component llm (root modules) is entered from sqlite_utils (1148 calls): control passes through a third-party dispatcher",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0117"
+      },
+      {
+        "rule": "coupling",
+        "verdict": "external-dispatch",
+        "claim": "Code in component llm.default_plugins is entered from pluggy (827 calls): control passes through a third-party dispatcher",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0118"
+      },
+      {
+        "rule": "coupling",
+        "verdict": "external-dispatch",
+        "claim": "Code in component llm.models is entered from llm_echo (635 calls): control passes through a third-party dispatcher",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0119"
+      },
+      {
+        "rule": "coupling",
+        "verdict": "external-dispatch",
+        "claim": "Code in component llm.cli is entered from yaml (462 calls): control passes through a third-party dispatcher",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0120"
+      },
+      {
+        "rule": "coupling",
+        "verdict": "external-dispatch",
+        "claim": "Code in component llm.default_plugins is entered from click (54 calls): control passes through a third-party dispatcher",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0121"
+      },
+      {
+        "rule": "coupling",
+        "verdict": "external-dispatch",
+        "claim": "Code in component llm.models is entered from asyncio (35 calls): control passes through a third-party dispatcher",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0122"
+      },
+      {
+        "rule": "coupling",
+        "verdict": "external-dispatch",
+        "claim": "Code in component llm.cli is entered from asyncio (16 calls): control passes through a third-party dispatcher",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0123"
+      },
+      {
+        "rule": "dependencies",
+        "verdict": "unused-two-methods",
+        "claim": "pyreadline3 is declared but unused according to both deptry and the static import scan",
+        "status": "INFERRED",
+        "evidence_id": "EV-0124"
+      },
+      {
+        "rule": "dependencies",
+        "verdict": "transitive-imports",
+        "claim": "Imported directly but installed only as transitive dependencies: docutils",
+        "status": "SUPPORTED",
+        "evidence_id": "EV-0125"
+      },
+      {
+        "rule": "tests",
+        "verdict": "run",
+        "claim": "Test run: 1208 tests, 0 failures, 0 errors, 0 skipped; line coverage 94.9%",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0131"
+      },
+      {
+        "rule": "types",
+        "verdict": "mypy",
+        "claim": "mypy (dependencies installed) reports 0 errors (0.0 per 1k code lines)",
+        "status": "CONFIRMED",
+        "evidence_id": "EV-0132"
+      }
+    ],
+    "principles": "1. A tool finding is a fact about the tool's output, not about the code.\n2. Agreement only counts when methods are independent. ruff F401 and vulture's unused-import\n   check are both name-binding analyses: their agreement is one method, not two.\n3. Static analysis says what MAY happen; a run says what DID happen. One observed execution\n   refutes \"never used\"; absence of execution in one run is only weak support for it.\n4. Every dynamic claim names its run; a failed or partial run is never read as \"nothing ran\"."
+  },
   "tests": {
     "test_modules": 33,
     "test_functions": 810,
@@ -1526,14 +2467,9 @@
       "evidence_id": "EV-0037"
     },
     {
-      "question": "Do the tests pass, and what do they cover?",
-      "reason": "Tier 0/1 never executes repository code; coverage requires a sandboxed Tier 2 run.",
-      "evidence_id": "EV-0065"
-    },
-    {
       "question": "How much code is duplicated?",
       "reason": "Duplication analysis is not implemented in v0.1.",
-      "evidence_id": "EV-0066"
+      "evidence_id": "EV-0065"
     }
   ],
   "checklist": [
@@ -1615,12 +2551,27 @@
     {
       "gate": "Duplication measured",
       "status": "not_done",
-      "note": "v0.2"
+      "note": "planned"
+    },
+    {
+      "gate": "External static analyzers run",
+      "status": "done",
+      "note": "ruff:ok, vulture:ok, bandit:ok"
+    },
+    {
+      "gate": "Dynamic run (tests, entry probes)",
+      "status": "done",
+      "note": "process-level sandbox"
+    },
+    {
+      "gate": "Independent methods fused",
+      "status": "done",
+      "note": "56 fused claims"
     },
     {
       "gate": "Tests inventoried",
       "status": "done",
-      "note": "static only"
+      "note": "static + executed"
     },
     {
       "gate": "Architecture patterns hypothesized",
@@ -1649,10 +2600,10 @@
     }
   ],
   "evidence_summary": {
-    "CONFIRMED": 59,
-    "SUPPORTED": 2,
-    "INFERRED": 2,
-    "UNKNOWN": 3
+    "CONFIRMED": 103,
+    "SUPPORTED": 4,
+    "INFERRED": 23,
+    "UNKNOWN": 2
   },
-  "evidence_digest": "sha256:14a27ee1cf451a87553931578b05ce39"
+  "evidence_digest": "sha256:d1b7c00eff2d2d1e33d7fcf639b2e311"
 }

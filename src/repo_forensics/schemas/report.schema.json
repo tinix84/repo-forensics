@@ -299,6 +299,47 @@
     "evidence_digest": {
       "type": "string",
       "pattern": "^sha256:[0-9a-f]{32}$"
+    },
+    "toolchain": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "tool",
+          "tier",
+          "status",
+          "command"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "ok",
+              "failed",
+              "skipped",
+              "timeout"
+            ]
+          }
+        }
+      }
+    },
+    "dynamic": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "failed",
+            "not_run"
+          ]
+        }
+      }
+    },
+    "fusion": {
+      "type": "object"
     }
   },
   "$defs": {

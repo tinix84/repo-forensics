@@ -45,6 +45,21 @@ numpy says nothing about FFT.
 - Hubs = fan-in above P95 (and ≥ 8): candidate core abstractions. God-module candidates =
   above P95 in fan-in, fan-out and size simultaneously, with absolute floors.
 
+## Tool output, runs and fusion
+
+- **Tool findings** (`phase: toolchain`) are facts about a tool's output ("ruff reports F401 at
+  a.py:3"), not about the code. Tools that report their own confidence (vulture 60–100%, bandit
+  LOW/MEDIUM/HIGH) never yield CONFIRMED claims about the code on their own.
+- **Dynamic facts** (`phase: dynamic`, `source: dynamic`) are existential: observed in one run
+  whose manifest is in `report.json.dynamic`. One execution refutes "never used"; absence of
+  execution only weakly supports it. A failed run is missing data, not evidence.
+- **Fusion** (`phase: fusion`) upgrades a claim only when methods are independent. ruff F401 and
+  vulture's unused-import check are both name-binding analyses, so their agreement counts once.
+  Shared blind spots (e.g. platform-conditional dependencies for deptry and the static scan)
+  are recorded as counter-evidence.
+- Runtime-generated code (dataclass methods, namedtuples, `exec`) is attributed to its own
+  module, not to an external dispatcher; `from pkg import name` re-exports count as static paths.
+
 ## Binding inferences to evidence
 
 `report.json` carries `evidence_digest` (SHA-256 over the canonical evidence lines).

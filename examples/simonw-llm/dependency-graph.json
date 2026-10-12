@@ -1,0 +1,1811 @@
+{
+ "nodes": [
+  {
+   "module": "llm",
+   "path": "llm/__init__.py",
+   "component": "llm (root modules)",
+   "code_lines": 402,
+   "fan_in": 6,
+   "fan_out": 8,
+   "is_package": true,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "llm.__main__",
+   "path": "llm/__main__.py",
+   "component": "llm (root modules)",
+   "code_lines": 3,
+   "fan_in": 0,
+   "fan_out": 1,
+   "is_package": false,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "llm.cli",
+   "path": "llm/cli.py",
+   "component": "llm.cli",
+   "code_lines": 3817,
+   "fan_in": 2,
+   "fan_out": 6,
+   "is_package": false,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "llm.default_plugins",
+   "path": "llm/default_plugins/__init__.py",
+   "component": "llm.default_plugins",
+   "code_lines": 0,
+   "fan_in": 0,
+   "fan_out": 0,
+   "is_package": true,
+   "reachable_from_entrypoint": false
+  },
+  {
+   "module": "llm.default_plugins.default_tools",
+   "path": "llm/default_plugins/default_tools.py",
+   "component": "llm.default_plugins",
+   "code_lines": 6,
+   "fan_in": 0,
+   "fan_out": 2,
+   "is_package": false,
+   "reachable_from_entrypoint": false
+  },
+  {
+   "module": "llm.default_plugins.openai_models",
+   "path": "llm/default_plugins/openai_models.py",
+   "component": "llm.default_plugins",
+   "code_lines": 2840,
+   "fan_in": 0,
+   "fan_out": 5,
+   "is_package": false,
+   "reachable_from_entrypoint": false
+  },
+  {
+   "module": "llm.embeddings",
+   "path": "llm/embeddings.py",
+   "component": "llm (root modules)",
+   "code_lines": 329,
+   "fan_in": 1,
+   "fan_out": 3,
+   "is_package": false,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "llm.embeddings_migrations",
+   "path": "llm/embeddings_migrations.py",
+   "component": "llm (root modules)",
+   "code_lines": 68,
+   "fan_in": 1,
+   "fan_out": 0,
+   "is_package": false,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "llm.errors",
+   "path": "llm/errors.py",
+   "component": "llm (root modules)",
+   "code_lines": 6,
+   "fan_in": 2,
+   "fan_out": 0,
+   "is_package": false,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "llm.hookspecs",
+   "path": "llm/hookspecs.py",
+   "component": "llm (root modules)",
+   "code_lines": 21,
+   "fan_in": 2,
+   "fan_out": 0,
+   "is_package": false,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "llm.logs",
+   "path": "llm/logs.py",
+   "component": "llm.logs",
+   "code_lines": 1655,
+   "fan_in": 2,
+   "fan_out": 5,
+   "is_package": false,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "llm.migrations",
+   "path": "llm/migrations.py",
+   "component": "llm (root modules)",
+   "code_lines": 570,
+   "fan_in": 2,
+   "fan_out": 1,
+   "is_package": false,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "llm.models",
+   "path": "llm/models.py",
+   "component": "llm.models",
+   "code_lines": 3065,
+   "fan_in": 6,
+   "fan_out": 6,
+   "is_package": false,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "llm.parts",
+   "path": "llm/parts.py",
+   "component": "llm (root modules)",
+   "code_lines": 302,
+   "fan_in": 4,
+   "fan_out": 2,
+   "is_package": false,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "llm.plugins",
+   "path": "llm/plugins.py",
+   "component": "llm (root modules)",
+   "code_lines": 39,
+   "fan_in": 2,
+   "fan_out": 1,
+   "is_package": false,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "llm.serialization",
+   "path": "llm/serialization.py",
+   "component": "llm (root modules)",
+   "code_lines": 117,
+   "fan_in": 2,
+   "fan_out": 0,
+   "is_package": false,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "llm.templates",
+   "path": "llm/templates.py",
+   "component": "llm (root modules)",
+   "code_lines": 77,
+   "fan_in": 1,
+   "fan_out": 0,
+   "is_package": false,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "llm.tools",
+   "path": "llm/tools.py",
+   "component": "llm (root modules)",
+   "code_lines": 26,
+   "fan_in": 1,
+   "fan_out": 0,
+   "is_package": false,
+   "reachable_from_entrypoint": false
+  },
+  {
+   "module": "llm.utils",
+   "path": "llm/utils.py",
+   "component": "llm (root modules)",
+   "code_lines": 587,
+   "fan_in": 6,
+   "fan_out": 0,
+   "is_package": false,
+   "reachable_from_entrypoint": true
+  },
+  {
+   "module": "tests.conftest",
+   "path": "tests/conftest.py",
+   "component": "(tests)",
+   "code_lines": 484
+  },
+  {
+   "module": "tests.test_aliases",
+   "path": "tests/test_aliases.py",
+   "component": "(tests)",
+   "code_lines": 113
+  },
+  {
+   "module": "tests.test_async",
+   "path": "tests/test_async.py",
+   "component": "(tests)",
+   "code_lines": 50
+  },
+  {
+   "module": "tests.test_async_parity",
+   "path": "tests/test_async_parity.py",
+   "component": "(tests)",
+   "code_lines": 275
+  },
+  {
+   "module": "tests.test_attachments",
+   "path": "tests/test_attachments.py",
+   "component": "(tests)",
+   "code_lines": 216
+  },
+  {
+   "module": "tests.test_chat",
+   "path": "tests/test_chat.py",
+   "component": "(tests)",
+   "code_lines": 334
+  },
+  {
+   "module": "tests.test_chat_templates",
+   "path": "tests/test_chat_templates.py",
+   "component": "(tests)",
+   "code_lines": 78
+  },
+  {
+   "module": "tests.test_cli_openai_models",
+   "path": "tests/test_cli_openai_models.py",
+   "component": "(tests)",
+   "code_lines": 681
+  },
+  {
+   "module": "tests.test_cli_options",
+   "path": "tests/test_cli_options.py",
+   "component": "(tests)",
+   "code_lines": 121
+  },
+  {
+   "module": "tests.test_cli_streaming",
+   "path": "tests/test_cli_streaming.py",
+   "component": "(tests)",
+   "code_lines": 138
+  },
+  {
+   "module": "tests.test_connection_cleanup",
+   "path": "tests/test_connection_cleanup.py",
+   "component": "(tests)",
+   "code_lines": 83
+  },
+  {
+   "module": "tests.test_embed",
+   "path": "tests/test_embed.py",
+   "component": "(tests)",
+   "code_lines": 187
+  },
+  {
+   "module": "tests.test_embed_cli",
+   "path": "tests/test_embed_cli.py",
+   "component": "(tests)",
+   "code_lines": 703
+  },
+  {
+   "module": "tests.test_encode_decode",
+   "path": "tests/test_encode_decode.py",
+   "component": "(tests)",
+   "code_lines": 16
+  },
+  {
+   "module": "tests.test_fragments_cli",
+   "path": "tests/test_fragments_cli.py",
+   "component": "(tests)",
+   "code_lines": 142
+  },
+  {
+   "module": "tests.test_keys",
+   "path": "tests/test_keys.py",
+   "component": "(tests)",
+   "code_lines": 103
+  },
+  {
+   "module": "tests.test_llm",
+   "path": "tests/test_llm.py",
+   "component": "(tests)",
+   "code_lines": 922
+  },
+  {
+   "module": "tests.test_llm_logs",
+   "path": "tests/test_llm_logs.py",
+   "component": "(tests)",
+   "code_lines": 1215
+  },
+  {
+   "module": "tests.test_logs_store",
+   "path": "tests/test_logs_store.py",
+   "component": "(tests)",
+   "code_lines": 1904
+  },
+  {
+   "module": "tests.test_migrate",
+   "path": "tests/test_migrate.py",
+   "component": "(tests)",
+   "code_lines": 147
+  },
+  {
+   "module": "tests.test_openai_endpoint",
+   "path": "tests/test_openai_endpoint.py",
+   "component": "(tests)",
+   "code_lines": 1030
+  },
+  {
+   "module": "tests.test_openai_messages",
+   "path": "tests/test_openai_messages.py",
+   "component": "(tests)",
+   "code_lines": 543
+  },
+  {
+   "module": "tests.test_openai_responses",
+   "path": "tests/test_openai_responses.py",
+   "component": "(tests)",
+   "code_lines": 1415
+  },
+  {
+   "module": "tests.test_options_parameter",
+   "path": "tests/test_options_parameter.py",
+   "component": "(tests)",
+   "code_lines": 83
+  },
+  {
+   "module": "tests.test_parts",
+   "path": "tests/test_parts.py",
+   "component": "(tests)",
+   "code_lines": 2085
+  },
+  {
+   "module": "tests.test_pause_resume",
+   "path": "tests/test_pause_resume.py",
+   "component": "(tests)",
+   "code_lines": 299
+  },
+  {
+   "module": "tests.test_plugins",
+   "path": "tests/test_plugins.py",
+   "component": "(tests)",
+   "code_lines": 1066
+  },
+  {
+   "module": "tests.test_serialization",
+   "path": "tests/test_serialization.py",
+   "component": "(tests)",
+   "code_lines": 351
+  },
+  {
+   "module": "tests.test_supports_conversation",
+   "path": "tests/test_supports_conversation.py",
+   "component": "(tests)",
+   "code_lines": 141
+  },
+  {
+   "module": "tests.test_templates",
+   "path": "tests/test_templates.py",
+   "component": "(tests)",
+   "code_lines": 546
+  },
+  {
+   "module": "tests.test_tools",
+   "path": "tests/test_tools.py",
+   "component": "(tests)",
+   "code_lines": 981
+  },
+  {
+   "module": "tests.test_tools_streaming",
+   "path": "tests/test_tools_streaming.py",
+   "component": "(tests)",
+   "code_lines": 36
+  },
+  {
+   "module": "tests.test_utils",
+   "path": "tests/test_utils.py",
+   "component": "(tests)",
+   "code_lines": 513
+  }
+ ],
+ "edges": [
+  {
+   "src": "llm_markov",
+   "dst": "llm",
+   "line": 6,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm",
+   "dst": "llm.embeddings",
+   "line": 11,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm",
+   "dst": "llm.errors",
+   "line": 12,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm",
+   "dst": "llm.hookspecs",
+   "line": 17,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm",
+   "dst": "llm.models",
+   "line": 18,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm",
+   "dst": "llm.parts",
+   "line": 43,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm",
+   "dst": "llm.plugins",
+   "line": 50,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm",
+   "dst": "llm.templates",
+   "line": 51,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm",
+   "dst": "llm.utils",
+   "line": 52,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.__main__",
+   "dst": "llm.cli",
+   "line": 1,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.cli",
+   "dst": "llm",
+   "line": 29,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.cli",
+   "dst": "llm.models",
+   "line": 65,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.cli",
+   "dst": "llm.logs",
+   "line": 67,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.cli",
+   "dst": "llm.migrations",
+   "line": 73,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.cli",
+   "dst": "llm.plugins",
+   "line": 74,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.cli",
+   "dst": "llm.utils",
+   "line": 75,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.cli",
+   "dst": "llm",
+   "line": 3257,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.cli",
+   "dst": "llm",
+   "line": 3964,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.cli",
+   "dst": "llm",
+   "line": 3996,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.cli",
+   "dst": "llm",
+   "line": 4033,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.default_plugins.default_tools",
+   "dst": "llm",
+   "line": 1,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.default_plugins.default_tools",
+   "dst": "llm.tools",
+   "line": 2,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.default_plugins.openai_models",
+   "dst": "llm",
+   "line": 17,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.default_plugins.openai_models",
+   "dst": "llm",
+   "line": 18,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.default_plugins.openai_models",
+   "dst": "llm.models",
+   "line": 29,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.default_plugins.openai_models",
+   "dst": "llm.parts",
+   "line": 30,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.default_plugins.openai_models",
+   "dst": "llm.utils",
+   "line": 31,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.default_plugins.openai_models",
+   "dst": "llm.cli",
+   "line": 515,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.default_plugins.openai_models",
+   "dst": "llm.cli",
+   "line": 638,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.default_plugins.openai_models",
+   "dst": "llm",
+   "line": 865,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.default_plugins.openai_models",
+   "dst": "llm.parts",
+   "line": 1247,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.default_plugins.openai_models",
+   "dst": "llm.parts",
+   "line": 1964,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.default_plugins.openai_models",
+   "dst": "llm.parts",
+   "line": 2970,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.embeddings",
+   "dst": "llm.embeddings_migrations",
+   "line": 12,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.embeddings",
+   "dst": "llm.models",
+   "line": 13,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.embeddings",
+   "dst": "llm",
+   "line": 52,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.embeddings",
+   "dst": "llm",
+   "line": 93,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.embeddings",
+   "dst": "llm",
+   "line": 137,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.embeddings",
+   "dst": "llm",
+   "line": 200,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.embeddings",
+   "dst": "llm",
+   "line": 270,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.embeddings",
+   "dst": "llm",
+   "line": 324,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.logs",
+   "dst": "llm.migrations",
+   "line": 26,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.logs",
+   "dst": "llm.models",
+   "line": 27,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.logs",
+   "dst": "llm.parts",
+   "line": 28,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.logs",
+   "dst": "llm.utils",
+   "line": 37,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.logs",
+   "dst": "llm",
+   "line": 1053,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.migrations",
+   "dst": "llm.utils",
+   "line": 621,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.errors",
+   "line": 34,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.serialization",
+   "line": 35,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 38,
+   "kind": "type_checking",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.utils",
+   "line": 45,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 561,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 664,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 783,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm",
+   "line": 937,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm",
+   "line": 1074,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 1193,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 1298,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 1343,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm",
+   "line": 1539,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.logs",
+   "line": 1659,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 1713,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm",
+   "line": 1716,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 1741,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 1757,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 1807,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 2179,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 2740,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 2803,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 3040,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm.parts",
+   "line": 3170,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.models",
+   "dst": "llm",
+   "line": 3210,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.parts",
+   "dst": "llm.models",
+   "line": 18,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.parts",
+   "dst": "llm.serialization",
+   "line": 19,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "llm.plugins",
+   "dst": "llm.hookspecs",
+   "line": 8,
+   "kind": "module",
+   "resolution": "from-name"
+  },
+  {
+   "src": "tests.conftest",
+   "dst": "llm",
+   "line": 11,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.conftest",
+   "dst": "llm.plugins",
+   "line": 12,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_aliases",
+   "dst": "llm",
+   "line": 7,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_aliases",
+   "dst": "llm.cli",
+   "line": 8,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_async",
+   "dst": "llm",
+   "line": 3,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_async_parity",
+   "dst": "llm",
+   "line": 12,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_async_parity",
+   "dst": "llm.migrations",
+   "line": 95,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_async_parity",
+   "dst": "llm.cli",
+   "line": 140,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_async_parity",
+   "dst": "llm.migrations",
+   "line": 141,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_attachments",
+   "dst": "llm",
+   "line": 9,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_attachments",
+   "dst": "llm.cli",
+   "line": 10,
+   "kind": "module",
+   "resolution": "from-name"
+  },
+  {
+   "src": "tests.test_chat",
+   "dst": "llm.cli",
+   "line": 10,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_chat",
+   "dst": "llm.logs",
+   "line": 11,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_chat_templates",
+   "dst": "llm.cli",
+   "line": 6,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_chat_templates",
+   "dst": "llm.logs",
+   "line": 7,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_cli_openai_models",
+   "dst": "llm",
+   "line": 6,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_cli_openai_models",
+   "dst": "llm.cli",
+   "line": 7,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_cli_openai_models",
+   "dst": "llm.logs",
+   "line": 8,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_cli_options",
+   "dst": "llm.cli",
+   "line": 6,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_cli_streaming",
+   "dst": "llm",
+   "line": 8,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_cli_streaming",
+   "dst": "llm.cli",
+   "line": 9,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_connection_cleanup",
+   "dst": "llm.cli",
+   "line": 7,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_embed",
+   "dst": "llm",
+   "line": 6,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_embed",
+   "dst": "llm.embeddings",
+   "line": 7,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_embed_cli",
+   "dst": "llm",
+   "line": 9,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_embed_cli",
+   "dst": "llm.cli",
+   "line": 10,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_encode_decode",
+   "dst": "llm",
+   "line": 4,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_fragments_cli",
+   "dst": "llm.cli",
+   "line": 10,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_fragments_cli",
+   "dst": "llm.migrations",
+   "line": 11,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_keys",
+   "dst": "llm.cli",
+   "line": 8,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_llm",
+   "dst": "llm",
+   "line": 15,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_llm",
+   "dst": "llm.cli",
+   "line": 16,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_llm",
+   "dst": "llm.models",
+   "line": 17,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_llm",
+   "dst": "llm.default_plugins.openai_models",
+   "line": 450,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_llm_logs",
+   "dst": "llm",
+   "line": 14,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_llm_logs",
+   "dst": "llm.cli",
+   "line": 15,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_llm_logs",
+   "dst": "llm.migrations",
+   "line": 16,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_llm_logs",
+   "dst": "llm.utils",
+   "line": 17,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_llm_logs",
+   "dst": "llm",
+   "line": 1254,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_llm_logs",
+   "dst": "llm",
+   "line": 1390,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_llm_logs",
+   "dst": "llm.logs",
+   "line": 1391,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_llm_logs",
+   "dst": "llm.logs",
+   "line": 1411,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_logs_store",
+   "dst": "llm",
+   "line": 16,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_logs_store",
+   "dst": "llm.cli",
+   "line": 17,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_logs_store",
+   "dst": "llm.logs",
+   "line": 18,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_logs_store",
+   "dst": "llm.migrations",
+   "line": 25,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_logs_store",
+   "dst": "llm.models",
+   "line": 26,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_logs_store",
+   "dst": "llm.parts",
+   "line": 27,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_logs_store",
+   "dst": "llm.utils",
+   "line": 35,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_logs_store",
+   "dst": "llm.logs",
+   "line": 1997,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_logs_store",
+   "dst": "llm.logs",
+   "line": 2022,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_logs_store",
+   "dst": "llm.logs",
+   "line": 2033,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_logs_store",
+   "dst": "llm.logs",
+   "line": 2042,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_logs_store",
+   "dst": "llm.logs",
+   "line": 2047,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_logs_store",
+   "dst": "llm.logs",
+   "line": 2054,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_logs_store",
+   "dst": "llm.logs",
+   "line": 2065,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_migrate",
+   "dst": "llm",
+   "line": 4,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_migrate",
+   "dst": "llm.embeddings_migrations",
+   "line": 5,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_migrate",
+   "dst": "llm.migrations",
+   "line": 6,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_endpoint",
+   "dst": "llm.cli",
+   "line": 8,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_endpoint",
+   "dst": "llm.migrations",
+   "line": 9,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_messages",
+   "dst": "llm",
+   "line": 6,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_messages",
+   "dst": "llm.default_plugins.openai_models",
+   "line": 7,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_messages",
+   "dst": "llm.models",
+   "line": 8,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_responses",
+   "dst": "llm",
+   "line": 9,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_responses",
+   "dst": "llm.default_plugins.openai_models",
+   "line": 10,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_responses",
+   "dst": "llm.default_plugins.openai_models",
+   "line": 346,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_responses",
+   "dst": "llm.default_plugins.openai_models",
+   "line": 580,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_responses",
+   "dst": "llm.default_plugins.openai_models",
+   "line": 727,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_responses",
+   "dst": "llm.parts",
+   "line": 774,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_responses",
+   "dst": "llm.parts",
+   "line": 822,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_responses",
+   "dst": "llm.parts",
+   "line": 1233,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_responses",
+   "dst": "llm.parts",
+   "line": 1285,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_openai_responses",
+   "dst": "llm.parts",
+   "line": 1606,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_options_parameter",
+   "dst": "llm",
+   "line": 9,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_options_parameter",
+   "dst": "llm",
+   "line": 105,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm",
+   "line": 6,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.models",
+   "line": 1016,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.models",
+   "line": 1022,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.models",
+   "line": 1030,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.models",
+   "line": 1039,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm",
+   "line": 1054,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.models",
+   "line": 1055,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.models",
+   "line": 1073,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.models",
+   "line": 1088,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.models",
+   "line": 1096,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.migrations",
+   "line": 1355,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.cli",
+   "line": 1399,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.migrations",
+   "line": 1400,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.cli",
+   "line": 1429,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.migrations",
+   "line": 1430,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.parts",
+   "line": 1772,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.parts",
+   "line": 1822,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.parts",
+   "line": 1860,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.parts",
+   "line": 1992,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_parts",
+   "dst": "llm.parts",
+   "line": 2030,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_pause_resume",
+   "dst": "llm",
+   "line": 8,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_pause_resume",
+   "dst": "llm.parts",
+   "line": 9,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_plugins",
+   "dst": "llm",
+   "line": 12,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_plugins",
+   "dst": "llm.cli",
+   "line": 13,
+   "kind": "module",
+   "resolution": "from-name"
+  },
+  {
+   "src": "tests.test_plugins",
+   "dst": "llm.plugins",
+   "line": 13,
+   "kind": "module",
+   "resolution": "from-name"
+  },
+  {
+   "src": "tests.test_plugins",
+   "dst": "llm.tools",
+   "line": 14,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_plugins",
+   "dst": "llm.logs",
+   "line": 1200,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_serialization",
+   "dst": "llm",
+   "line": 14,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_serialization",
+   "dst": "llm.serialization",
+   "line": 15,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_serialization",
+   "dst": "llm.serialization",
+   "line": 466,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_supports_conversation",
+   "dst": "llm",
+   "line": 6,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_supports_conversation",
+   "dst": "llm.cli",
+   "line": 7,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_supports_conversation",
+   "dst": "llm.plugins",
+   "line": 8,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_templates",
+   "dst": "llm",
+   "line": 12,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_templates",
+   "dst": "llm.cli",
+   "line": 13,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_templates",
+   "dst": "llm.plugins",
+   "line": 14,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_tools",
+   "dst": "llm",
+   "line": 12,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_tools",
+   "dst": "llm.cli",
+   "line": 13,
+   "kind": "module",
+   "resolution": "from-name"
+  },
+  {
+   "src": "tests.test_tools",
+   "dst": "llm.logs",
+   "line": 14,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_tools",
+   "dst": "llm.migrations",
+   "line": 15,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_tools",
+   "dst": "llm.tools",
+   "line": 16,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_tools",
+   "dst": "llm",
+   "line": 500,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_tools",
+   "dst": "llm.parts",
+   "line": 1163,
+   "kind": "lazy",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_tools_streaming",
+   "dst": "llm",
+   "line": 5,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_tools_streaming",
+   "dst": "llm.tools",
+   "line": 6,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_utils",
+   "dst": "llm.utils",
+   "line": 8,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_utils",
+   "dst": "llm",
+   "line": 9,
+   "kind": "module",
+   "resolution": "exact"
+  },
+  {
+   "src": "tests.test_utils",
+   "dst": "llm.utils",
+   "line": 10,
+   "kind": "module",
+   "resolution": "exact"
+  }
+ ],
+ "components": {
+  "llm (root modules)": {
+   "llm.cli": 1,
+   "llm.models": 3
+  },
+  "llm.default_plugins": {
+   "llm (root modules)": 5,
+   "llm.models": 1,
+   "llm.cli": 1
+  },
+  "llm.models": {
+   "llm (root modules)": 5,
+   "llm.logs": 1
+  },
+  "llm.cli": {
+   "llm.logs": 1,
+   "llm (root modules)": 4,
+   "llm.models": 1
+  },
+  "llm.logs": {
+   "llm (root modules)": 4,
+   "llm.models": 1
+  }
+ }
+}

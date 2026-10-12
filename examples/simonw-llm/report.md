@@ -2,10 +2,10 @@
 
 - **Repository:** https://github.com/simonw/llm
 - **Commit:** `fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4`
-- **Analyzed:** 2026-10-09T07:33:47+00:00
-- **Evidence digest:** `sha256:14a27ee1cf451a87553931578b05ce39`
+- **Analyzed:** 2026-10-12T16:18:48+00:00
+- **Evidence digest:** `sha256:d1b7c00eff2d2d1e33d7fcf639b2e311`
 - **License (heuristic):** Apache-2.0
-- **Tool:** repo-forensics 0.1.0, tier 1
+- **Tool:** repo-forensics 0.1.0, tier 2
 
 > Measurements are facts. Architecture is an inference. Every row below links to an evidence id in `evidence.jsonl`. Status: CONFIRMED / SUPPORTED / INFERRED / UNKNOWN.
 
@@ -130,8 +130,7 @@ Components not imported by any test: none
 ## 11. Unknowns
 
 - **Which modules are loaded dynamically at runtime?** — importlib/`__import__` calls exist; the static import graph may be missing edges. (EV-0037)
-- **Do the tests pass, and what do they cover?** — Tier 0/1 never executes repository code; coverage requires a sandboxed Tier 2 run. (EV-0065)
-- **How much code is duplicated?** — Duplication analysis is not implemented in v0.1. (EV-0066)
+- **How much code is duplicated?** — Duplication analysis is not implemented in v0.1. (EV-0065)
 
 ## 12. Checklist
 
@@ -152,8 +151,11 @@ Components not imported by any test: none
 | Computational primitives identified | done | signature-based; CENTRAL level deferred to inference |
 | AI/ML usage identified | partial | presence measured; core vs supporting deferred to inference |
 | Complexity measured | done |  |
-| Duplication measured | not_done | v0.2 |
-| Tests inventoried | done | static only |
+| Duplication measured | not_done | planned |
+| External static analyzers run | done | ruff:ok, vulture:ok, bandit:ok |
+| Dynamic run (tests, entry probes) | done | process-level sandbox |
+| Independent methods fused | done | 56 fused claims |
+| Tests inventoried | done | static + executed |
 | Architecture patterns hypothesized | deferred_to_inference |  |
 | Architecture smells identified | done | signals, not verdicts |
 | Evidence confidence attached | done |  |
@@ -161,4 +163,4 @@ Components not imported by any test: none
 | Unknowns explicitly listed | done |  |
 
 
-Evidence by status: {'CONFIRMED': 59, 'SUPPORTED': 2, 'INFERRED': 2, 'UNKNOWN': 3}
+Evidence by status: {'CONFIRMED': 103, 'SUPPORTED': 4, 'INFERRED': 23, 'UNKNOWN': 2}

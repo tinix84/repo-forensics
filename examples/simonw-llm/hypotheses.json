@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1.0",
   "commit_sha": "fe283cb9b4d98ab71981181ae9b1fa2dfcaf7ed4",
-  "evidence_digest": "sha256:14a27ee1cf451a87553931578b05ce39",
+  "evidence_digest": "sha256:d1b7c00eff2d2d1e33d7fcf639b2e311",
   "components": [
     {
       "name": "llm.models",
@@ -97,20 +97,25 @@
       "id": "HY-01",
       "pattern_id": "plugin",
       "pattern": "plugin architecture (microkernel)",
-      "claim": "Model providers are plugins: the core defines pluggy hook specs and loads providers dynamically; OpenAI support is itself a default plugin.",
+      "claim": "Model providers are plugins: the core defines pluggy hook specs and loads providers dynamically; OpenAI support is itself a default plugin, observed loaded at runtime with no static importer.",
       "status": "SUPPORTED",
-      "confidence": 0.85,
+      "confidence": 0.92,
       "evidence_ids": [
         "EV-0036",
         "EV-0034",
         "EV-0030",
-        "EV-0043"
+        "EV-0043",
+        "EV-0113",
+        "EV-0114",
+        "EV-0115",
+        "EV-0118"
       ],
       "counter_evidence_ids": [],
       "counter_evidence_notes": [
-        "searched core components (llm.cli, llm.models, llm.logs) for direct openai imports: none; the openai signal is confined to llm.default_plugins and is not statically reachable from any entry point"
+        "searched core components (llm.cli, llm.models, llm.logs) for direct openai imports: none",
+        "the runtime observation covers one entry probe (llm --help) and the test suite, not all invocations"
       ],
-      "how_to_falsify": "Find a static import of llm.default_plugins.openai_models from llm.cli or llm.models in dependency-graph.json."
+      "how_to_falsify": "Find a static import of llm.default_plugins.openai_models from llm.cli or llm.models in dependency-graph.json, or a run where the OpenAI models load without pluggy in the call path."
     },
     {
       "id": "HY-02",

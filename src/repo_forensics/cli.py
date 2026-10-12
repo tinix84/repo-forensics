@@ -20,8 +20,10 @@ def main(argv: list[str] | None = None) -> int:
     a.add_argument("target")
     a.add_argument("--ref", help="branch, tag or commit SHA to analyze (remote targets only)")
     a.add_argument("--out", default="analysis", help="output directory (default: ./analysis)")
-    a.add_argument("--tier", type=int, choices=[0, 1], default=1,
-                   help="0 = pure inspection; 1 = also run static analyzers that never execute repo code (default)")
+    a.add_argument("--tier", type=int, choices=[0, 1, 2], default=1,
+                   help="0 = parsing only; 1 = also static analyzers (lizard, ruff, vulture, bandit), never executing "
+                        "repo code (default); 2 = ALSO EXECUTES the repository's code (install, entry probes, tests) "
+                        "in a process-level sandbox: only for disposable environments")
     a.add_argument("--workdir", type=Path, help="where to clone (default: a temp dir, deleted afterwards)")
     a.add_argument("--keep-clone", action="store_true", help="keep the clone for manual reading")
     a.add_argument("--component-depth", type=int, choices=[1, 2], help="override automatic component granularity")

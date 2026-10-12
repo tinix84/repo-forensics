@@ -49,7 +49,7 @@ def run(target: str, out_dir: Path, ref: str | None = None, tier: int = 1,
             raise acq_mod.AcquireError("--ref is only supported for remote targets; check out the ref locally instead")
         acq = acq_mod.open_local(Path(target))
     try:
-        an = Analyzer(cfg, acq, tier, component_depth)
+        an = Analyzer(cfg, acq, tier, component_depth, raw_dir=Path(out_dir) / "raw")
         report = an.run()
     finally:
         if tmp_created and not keep_clone:
@@ -62,8 +62,13 @@ def run(target: str, out_dir: Path, ref: str | None = None, tier: int = 1,
 
 
 class Analyzer:
-    def __init__(self, cfg: Config, acq: acq_mod.Acquired, tier: int = 1, component_depth: int | None = None):
+    def __init__(self, cfg: Config, acq: acq_mod.Acquired, tier: int = 1, component_depth: int | None = None,
+                 raw_dir: Path | None = None):
         self.cfg, self.acq, self.tier, self.component_depth = cfg, acq, tier, component_depth
+        self.raw_dir = raw_dir
+        self.tool_runs: dict = {}
+        self.dyn: dict | None = None
+        self.fusion: dict = {}
         self.th = cfg.thresholds
         self.ev = EvidenceStore(self.th.get("max_locations_per_evidence", 15))
         self.unknowns: list[dict] = []
@@ -95,7 +100,66 @@ class Analyzer:
         self.phase_decompose()
         self.phase_complexity()
         self.phase_tests()
+        self.phase_toolchain()
+        self.phase_dynamic()
+        self.phase_fusion()
         return self.assemble()
+
+    # ---------------------------------------------------- tier 1: external static analyzers
+    def phase_toolchain(self) -> None:
+        if self.tier < 1:
+            return
+        from .adapters import static_tools
+        paths = sorted(self.path_of[m] for m in self.prod)
+        if not paths:
+            return
+        root = self.acq.root
+        for name, fn in (("ruff", static_tools.ruff), ("vulture", static_tools.vulture), ("bandit", static_tools.bandit)):
+            tr = fn(root, paths)
+            self.tool_runs[name] = tr
+            if tr.status != "ok":
+                self.notes.append(f"{name}: {tr.status} ({tr.note or ''})".strip())
+        rt = self.tool_runs.get("ruff")
+        if rt and rt.status == "ok":
+            by_rule = defaultdict(list)
+            for f in rt.findings:
+                by_rule[f.rule].append(f)
+            for rule, fs in sorted(by_rule.items(), key=lambda kv: -len(kv[1])):
+                self.ev.add("toolchain", "tool.ruff", f"ruff reports {rule} at {len(fs)} location(s)", "CONFIRMED",
+                            evidence=[loc(file=f.file, line=f.line, detail=f.message[:120]) for f in fs], tool="ruff",
+                            source="tool-output", data={"rule": rule, "count": len(fs), "example": fs[0].message[:200]})
+        vt = self.tool_runs.get("vulture")
+        if vt and vt.status == "ok":
+            kinds = Counter(f.kind for f in vt.findings)
+            self.ev.add("toolchain", "tool.vulture", f"vulture reports {len(vt.findings)} possibly unused names "
+                        f"({', '.join(f'{n} {k}' for k, n in kinds.most_common())})", "CONFIRMED", tool="vulture",
+                        source="tool-output", data={"by_kind": dict(kinds)},
+                        counter=[loc(detail="name-usage heuristic; 60-100% confidence per finding; see fusion verdicts")])
+
+    # ---------------------------------------------------- tier 2: dynamic run (executes the target's code)
+    def phase_dynamic(self) -> None:
+        if self.tier < 2:
+            return
+        from .dynamic.sandbox import run_tier2
+        self.dyn = run_tier2(self, self.raw_dir)
+        d = self.dyn
+        self.ev.add("dynamic", "dynamic.run", f"Tier 2 run {d['status']}: dependencies installed as wheels only "
+                    f"({len(d['install']['failed'])} failed), {len(d['entry_probes'])} entry probes, tests "
+                    f"{'run' if d['tests'].get('ran') else 'not run'}", "CONFIRMED" if d["status"] != "failed" else "UNKNOWN",
+                    source="dynamic", tool="repo-forensics/sandbox",
+                    data={"isolation": d["isolation"], "python": d["python"], "elapsed_s": d["elapsed_s"],
+                          "install_failed": d["install"]["failed"]},
+                    counter=[loc(detail="observations hold for this run only; absence of execution is not proof of absence")])
+        if d["install"]["failed"]:
+            self.unknown("dynamic", "Which behaviour depends on dependencies that could not be installed as wheels?",
+                         f"{len(d['install']['failed'])} requirements have no compatible wheel: "
+                         f"{', '.join(d['install']['failed'][:8])}")
+
+    def phase_fusion(self) -> None:
+        if self.tier < 1:
+            return
+        from .fusion import Fusion
+        self.fusion = Fusion(self, self.tool_runs, self.dyn).run()
 
     # ================================================================ ACQUIRE
     def phase_provenance(self) -> None:
@@ -356,13 +420,13 @@ class Analyzer:
 
     # ---------------------------------------------------- entry points
     def _add_entry(self, module: str | None, etype: str, status: str, how: str, location: dict,
-                   name: str | None = None) -> None:
+                   name: str | None = None, spec: str | None = None) -> None:
         if any(e["module"] == module and e["type"] == etype and e.get("name") == name for e in self.entries):
             return
         eid = self.ev.add("measure", "entrypoint", f"{etype} entry point{f' `{name}`' if name else ''} "
                           f"at {module or location.get('file')} ({how})", status, evidence=[location],
                           data={"type": etype, "module": module, "detection": how})
-        self.entries.append({"name": name, "type": etype, "module": module,
+        self.entries.append({"name": name, "type": etype, "module": module, "spec": spec,
                              "path": self.path_of.get(module, location.get("file")),
                              "detection": how, "status": status, "evidence_id": eid})
 
@@ -372,7 +436,8 @@ class Analyzer:
                 for nm, spec in items.items():
                     mod = str(spec).split(":")[0].strip()
                     self._add_entry(mod if mod in self.fact_of else None, group, "CONFIRMED",
-                                    "declared console script", loc(file=meta["manifest"], symbol=f"{nm} = {spec}"), nm)
+                                    "declared console script", loc(file=meta["manifest"], symbol=f"{nm} = {spec}"), nm,
+                                    str(spec).strip())
             for grp, items in (meta.get("entry_points") or {}).items():
                 for nm, spec in items.items():
                     mod = str(spec).split(":")[0].strip()
@@ -727,8 +792,9 @@ class Analyzer:
         self.ev.add("measure", "tests.inventory", f"{len(tests)} test modules with {self.tests_rep['test_functions']} "
                     f"test functions; test/production code ratio {self.tests_rep['test_to_production_ratio']}",
                     "CONFIRMED", data=self.tests_rep)
-        self.unknown("measure", "Do the tests pass, and what do they cover?",
-                     "Tier 0/1 never executes repository code; coverage requires a sandboxed Tier 2 run.")
+        if self.tier < 2:
+            self.unknown("measure", "Do the tests pass, and what do they cover?",
+                         "Tier 0/1 never executes repository code; coverage requires a sandboxed Tier 2 run.")
         self.unknown("measure", "How much code is duplicated?", "Duplication analysis is not implemented in v0.1.")
 
     # ============================================================== REPORT
@@ -746,9 +812,14 @@ class Analyzer:
             "components": {c: dict(v) for c, v in self.cg.items()},
         }
         measured = self.complexity["status"] == "measured"
+        tier_done = 2 if (self.dyn and self.dyn["status"] != "failed") else (1 if (measured or any(
+            t.status == "ok" for t in self.tool_runs.values())) else 0)
+        if self.dyn and (self.dyn["status"] == "failed" or not (self.dyn.get("tests") or {}).get("ran")):
+            self.unknown("dynamic", "Do the tests pass, and what do they cover?",
+                         "The Tier 2 run did not complete a test run; this is missing data, not evidence of no execution.")
         report = {
             "schema_version": SCHEMA_VERSION,
-            "tool": {"name": "repo-forensics", "version": __version__, "tier": 1 if measured else 0,
+            "tool": {"name": "repo-forensics", "version": __version__, "tier": tier_done,
                      "requested_tier": self.tier, "notes": self.notes},
             "provenance": {"url": acq.url, "commit_sha": acq.commit_sha, "requested_ref": acq.requested_ref,
                            "default_branch": acq.default_branch, "dirty": acq.dirty, "analyzed_at": acq.analyzed_at,
@@ -789,6 +860,9 @@ class Analyzer:
             "config": {"env_vars": self.env_vars},
             "complexity": self.complexity,
             "duplication": {"status": "not_implemented"},
+            "toolchain": [t.summary() for t in self.tool_runs.values()],
+            "dynamic": self._dynamic_summary(),
+            "fusion": self.fusion,
             "tests": self.tests_rep,
             "smells": self.smells,
             "architecture_hypotheses": [],
@@ -799,6 +873,23 @@ class Analyzer:
             "_functions": self.funcs,
         }
         return report
+
+    def _dynamic_summary(self) -> dict:
+        if not self.dyn:
+            return {"status": "not_run", "reason": "tier < 2"}
+        d = self.dyn
+        t = dict(d.get("tests") or {})
+        cov = t.pop("coverage", None) or {}
+        cg = t.pop("callgraph", None) or {}
+        t["coverage_percent"] = (cov.get("totals") or {}).get("percent_covered")
+        t["callgraph_edges"] = len(cg.get("edges", []))
+        return {"status": d["status"], "isolation": d["isolation"], "python": d["python"], "elapsed_s": d["elapsed_s"],
+                "install": d["install"], "tests": t,
+                "entry_probes": [{"spec": p["spec"], "status": p["status"], "loaded_files": len(p["loaded_files"]),
+                                  "edges": len(p["edges"])} for p in d["entry_probes"]],
+                "deptry": {"status": d["deptry"].get("status"), "issues": len(d["deptry"].get("issues", []))},
+                "mypy": {k: v for k, v in (d.get("mypy") or {}).items() if k != "by_file"},
+                "steps": [{k: v for k, v in s.items() if k not in ("stdout_tail",)} for s in d["steps"]]}
 
     def checklist(self) -> list[dict]:
         def g(gate, status, note=""):
@@ -820,8 +911,14 @@ class Analyzer:
             g("Computational primitives identified", "done", "signature-based; CENTRAL level deferred to inference"),
             g("AI/ML usage identified", "partial", "presence measured; core vs supporting deferred to inference"),
             g("Complexity measured", "done" if self.complexity["status"] == "measured" else "not_done"),
-            g("Duplication measured", "not_done", "v0.2"),
-            g("Tests inventoried", "done", "static only"),
+            g("Duplication measured", "not_done", "planned"),
+            g("External static analyzers run", "done" if any(t.status == "ok" for t in self.tool_runs.values())
+              else "not_done", ", ".join(f"{k}:{t.status}" for k, t in self.tool_runs.items()) or "tier < 1"),
+            g("Dynamic run (tests, entry probes)", ("done" if self.dyn["status"] == "ok" else "partial")
+              if self.dyn else "not_done", "process-level sandbox" if self.dyn else "tier < 2"),
+            g("Independent methods fused", "done" if self.fusion else "not_done",
+              f"{len(self.fusion.get('claims', []))} fused claims" if self.fusion else ""),
+            g("Tests inventoried", "done", "static + executed" if self.dyn else "static only"),
             g("Architecture patterns hypothesized", "deferred_to_inference"),
             g("Architecture smells identified", "done", "signals, not verdicts"),
             g("Evidence confidence attached", "done"),
